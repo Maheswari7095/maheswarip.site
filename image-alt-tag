@@ -1,0 +1,77 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+from google.colab import files
+
+# Constants
+FILTER_PREFIX = "https://static.bankbazaar.com/images/india/infographic"
+EXCLUDE_URL = "https://static.bankbazaar.com/images/india/infographic/apple-store-button.svg"
+OUTPUT_FILE = "filtered_image_report.xlsx"
+
+def get_urls_from_user():
+    print("Paste all the URLs (separated by commas or spaces):\n")
+    raw_input = input().strip()
+    urls = [url.strip() for url in raw_input.replace(",", " ").split()]
+    return urls
+
+def extract_filtered_images(url):
+    filtered_data = []
+    try:
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        images = soup.find_all('img')
+
+        found = False
+        for img in images:
+            src = img.get('src', '')
+            if src.startswith(FILTER_PREFIX) and src != EXCLUDE_URL:
+                alt = img.get('alt', 'No alt text')
+                filtered_data.append({
+                    "Page URL": url,
+                    "Image Path": src,
+                    "Alt Text": alt
+                })
+                found = True
+
+        if not found:
+            filtered_data.append({
+                "Page URL": url,
+                "Image Path": "No images found",
+                "Alt Text": "N/A"
+            })
+
+    except Exception as e:
+        filtered_data.append({
+            "Page URL": url,
+            "Image Path": "Failed to fetch",
+            "Alt Text": str(e)
+        })
+
+    return filtered_data
+
+def run_filtered_image_extractor():
+    urls = get_urls_from_user()
+    if not urls:
+        print("No URLs entered.")
+        return
+
+    print(f"\n🔍 Extracting images that start with: {FILTER_PREFIX}")
+    print(f"❌ Excluding image: {EXCLUDE_URL}\n")
+
+    all_data = []
+
+    for url in urls:
+        print(f"Processing: {url}")
+        page_data = extract_filtered_images(url)
+        all_data.extend(page_data)
+
+    # Save to Excel
+    df = pd.DataFrame(all_data)
+    df.to_excel(OUTPUT_FILE, index=False)
+
+    print(f"\n✅ Report saved as {OUTPUT_FILE}")
+    print("⬇️ Initiating file download...")
+    files.download(OUTPUT_FILE)
+
+# Run the tool
+run_filtered_image_extractor()

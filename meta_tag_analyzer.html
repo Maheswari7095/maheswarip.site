@@ -1,0 +1,198 @@
+
+<h2 class="sr-only">Meta Tag Analyzer — paste a URL to inspect its SEO meta tags</h2>
+<div style="padding: 1.5rem 0 1rem;">
+
+<div style="display:flex; gap:8px; margin-bottom: 1.5rem;">
+  <input type="text" id="urlInput" placeholder="https://yoursite.com" style="flex:1; font-size:15px;" />
+  <button onclick="analyze()" id="analyzeBtn" style="padding: 0 1.25rem; font-size:14px; white-space:nowrap;">
+    <i class="ti ti-search" aria-hidden="true"></i> Analyze ↗
+  </button>
+</div>
+
+<div id="status" style="font-size:13px; color:var(--color-text-secondary); margin-bottom:1rem; min-height:18px;"></div>
+
+<div id="results" style="display:none;">
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:1.5rem;" id="scoreCards"></div>
+
+  <div id="sections"></div>
+
+</div>
+
+<div id="errorBox" style="display:none; background:var(--color-background-danger); color:var(--color-text-danger); border-radius:var(--border-radius-md); padding:12px 16px; font-size:14px;"></div>
+
+</div>
+
+<script>
+const PROXY = 'https://api.allorigins.win/get?url=';
+
+function scoreColor(s) {
+  if (s >= 80) return 'var(--color-text-success)';
+  if (s >= 50) return 'var(--color-text-warning)';
+  return 'var(--color-text-danger)';
+}
+function scoreBg(s) {
+  if (s >= 80) return 'var(--color-background-success)';
+  if (s >= 50) return 'var(--color-background-warning)';
+  return 'var(--color-background-danger)';
+}
+function statusIcon(ok) {
+  return ok
+    ? '<i class="ti ti-circle-check" style="color:var(--color-text-success);font-size:16px;vertical-align:-2px;" aria-hidden="true"></i>'
+    : '<i class="ti ti-circle-x" style="color:var(--color-text-danger);font-size:16px;vertical-align:-2px;" aria-hidden="true"></i>';
+}
+
+function metricCard(label, value, color) {
+  return `<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;">
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;">${label}</div>
+    <div style="font-size:22px;font-weight:500;color:${color};">${value}</div>
+  </div>`;
+}
+
+function row(icon, label, value, hint, ok) {
+  const valHtml = value
+    ? `<span style="color:var(--color-text-primary);font-size:13px;">${value}</span>`
+    : `<span style="color:var(--color-text-secondary);font-size:13px;font-style:italic;">Not found</span>`;
+  const hintHtml = hint ? `<div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px;">${hint}</div>` : '';
+  return `<tr>
+    <td style="padding:10px 0;vertical-align:top;width:20px;">${statusIcon(ok)}</td>
+    <td style="padding:10px 12px;vertical-align:top;font-size:13px;color:var(--color-text-secondary);white-space:nowrap;width:140px;">${label}</td>
+    <td style="padding:10px 0;vertical-align:top;">${valHtml}${hintHtml}</td>
+  </tr>`;
+}
+
+function section(title, rows) {
+  return `<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;">
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;">${title}</div>
+    <table style="width:100%;border-collapse:collapse;">${rows}</table>
+  </div>`;
+}
+
+function charBar(len, min, max) {
+  if (!len) return '';
+  const pct = Math.min(100, Math.round((len / max) * 100));
+  const ok = len >= min && len <= max;
+  const color = ok ? 'var(--color-background-success)' : 'var(--color-background-warning)';
+  return `<div style="margin-top:4px;height:4px;border-radius:2px;background:var(--color-border-tertiary);width:100%;">
+    <div style="height:4px;border-radius:2px;background:${color};width:${pct}%;"></div>
+  </div><div style="font-size:11px;color:${ok?'var(--color-text-success)':'var(--color-text-warning)'};margin-top:2px;">${len} chars (ideal ${min}–${max})</div>`;
+}
+
+async function analyze() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url || !url.startsWith('http')) {
+    showError('Please enter a valid URL starting with http:// or https://');
+    return;
+  }
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('status').textContent = 'Fetching page…';
+  document.getElementById('analyzeBtn').disabled = true;
+
+  try {
+    const res = await fetch(PROXY + encodeURIComponent(url));
+    const json = await res.json();
+    const html = json.contents;
+    if (!html) throw new Error('Empty response');
+    parse(html, url);
+  } catch(e) {
+    showError('Could not fetch the page. Make sure the URL is publicly accessible and try again.');
+    document.getElementById('status').textContent = '';
+  }
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+function extract(doc, sel, attr) {
+  const el = doc.querySelector(sel);
+  return el ? (attr ? el.getAttribute(attr) : el.textContent.trim()) : null;
+}
+
+function parse(html, url) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const title = extract(doc, 'title');
+  const desc = extract(doc, 'meta[name="description"]', 'content');
+  const robots = extract(doc, 'meta[name="robots"]', 'content');
+  const canonical = extract(doc, 'link[rel="canonical"]', 'href');
+  const viewport = extract(doc, 'meta[name="viewport"]', 'content');
+  const charset = extract(doc, 'meta[charset]', 'charset') || extract(doc, 'meta[http-equiv="Content-Type"]', 'content');
+  const lang = doc.documentElement.getAttribute('lang');
+
+  const ogTitle = extract(doc, 'meta[property="og:title"]', 'content');
+  const ogDesc = extract(doc, 'meta[property="og:description"]', 'content');
+  const ogImage = extract(doc, 'meta[property="og:image"]', 'content');
+  const ogType = extract(doc, 'meta[property="og:type"]', 'content');
+  const ogUrl = extract(doc, 'meta[property="og:url"]', 'content');
+
+  const twCard = extract(doc, 'meta[name="twitter:card"]', 'content');
+  const twTitle = extract(doc, 'meta[name="twitter:title"]', 'content');
+  const twDesc = extract(doc, 'meta[name="twitter:description"]', 'content');
+  const twImage = extract(doc, 'meta[name="twitter:image"]', 'content');
+
+  const h1s = doc.querySelectorAll('h1');
+  const h1text = h1s.length ? h1s[0].textContent.trim() : null;
+
+  let score = 0, total = 0;
+  function check(val, condition) { total++; if (condition !== undefined ? condition : !!val) score++; return condition !== undefined ? condition : !!val; }
+
+  const titleOk = check(title, title && title.length >= 30 && title.length <= 60);
+  const descOk = check(desc, desc && desc.length >= 120 && desc.length <= 160);
+  const canonOk = check(canonical);
+  const viewOk = check(viewport);
+  const langOk = check(lang);
+  const h1Ok = check(h1text, h1s.length === 1);
+  const ogOk = check(ogTitle && ogDesc && ogImage);
+  const twOk = check(twCard);
+
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('scoreCards').innerHTML =
+    metricCard('SEO score', pct + '%', scoreColor(pct)) +
+    metricCard('Checks passed', score + ' / ' + total, scoreColor(pct)) +
+    metricCard('Title length', title ? title.length + ' chars' : '—', title && titleOk ? 'var(--color-text-success)' : 'var(--color-text-danger)') +
+    metricCard('Desc length', desc ? desc.length + ' chars' : '—', desc && descOk ? 'var(--color-text-success)' : 'var(--color-text-danger)');
+
+  const basicRows =
+    row('', 'Title', title ? title.substring(0,80) : null, title ? charBar(title.length, 30, 60) : 'Add a <title> tag (30–60 chars)', titleOk) +
+    row('', 'Description', desc ? desc.substring(0,120) : null, desc ? charBar(desc.length, 120, 160) : 'Add a meta description (120–160 chars)', descOk) +
+    row('', 'Canonical URL', canonical, null, canonOk) +
+    row('', 'Robots', robots || 'Not set (defaults to index,follow)', null, true) +
+    row('', 'Viewport', viewport, null, viewOk) +
+    row('', 'Language', lang, null, langOk) +
+    row('', 'Charset', charset, null, !!charset) +
+    row('', 'H1 tag', h1text, h1s.length > 1 ? 'Multiple H1 tags found (' + h1s.length + ') — use only one' : null, h1Ok);
+
+  const ogRows =
+    row('', 'og:title', ogTitle, null, !!ogTitle) +
+    row('', 'og:description', ogDesc ? ogDesc.substring(0,100) : null, null, !!ogDesc) +
+    row('', 'og:image', ogImage ? ogImage.substring(0,60) + '…' : null, null, !!ogImage) +
+    row('', 'og:type', ogType, null, !!ogType) +
+    row('', 'og:url', ogUrl ? ogUrl.substring(0,60) + '…' : null, null, !!ogUrl);
+
+  const twRows =
+    row('', 'twitter:card', twCard, null, !!twCard) +
+    row('', 'twitter:title', twTitle, null, !!twTitle) +
+    row('', 'twitter:description', twDesc ? twDesc.substring(0,80) : null, null, !!twDesc) +
+    row('', 'twitter:image', twImage ? twImage.substring(0,60) + '…' : null, null, !!twImage);
+
+  document.getElementById('sections').innerHTML =
+    section('Basic SEO', basicRows) +
+    section('Open Graph (Facebook / LinkedIn)', ogRows) +
+    section('Twitter / X cards', twRows);
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('status').textContent = 'Analysis complete for ' + url;
+}
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.textContent = msg;
+  box.style.display = 'block';
+  document.getElementById('status').textContent = '';
+}
+
+document.getElementById('urlInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') analyze();
+});
+</script>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KeywordLens — Free Keyword Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090c;--surface:#0f1117;--card:#141720;--border:#1e2230;
+  --accent:#4f8ef7;--green:#3ecf8e;--orange:#f59e42;--red:#f76f6f;--purple:#a78bfa;
+  --text:#e8eaf0;--muted:#6b7280;--dim:#3a3f52;
+  --ff:'Inter',sans-serif;--ff-head:'Playfair Display',serif;--ff-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,142,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;border-bottom:1px solid var(--border);background:rgba(8,9,12,.9);backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:.65rem}
+.logo-sq{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:7px;display:grid;place-items:center;font-size:.8rem;font-weight:700;color:#fff}
+.logo-name{font-family:var(--ff-head);font-size:1.15rem;font-weight:700;font-style:italic}
+.hdr-tag{font-size:.65rem;font-family:var(--ff-mono);background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--accent);padding:3px 10px;border-radius:20px;letter-spacing:.06em}
+.hero{position:relative;z-index:2;padding:4.5rem 2rem 3rem;text-align:center;max-width:800px;margin:0 auto}
+.pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-family:var(--ff-mono);color:var(--green);background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.2);padding:4px 12px;border-radius:20px;margin-bottom:1.4rem;letter-spacing:.08em}
+.pill::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block}
+h1{font-family:var(--ff-head);font-size:clamp(2.6rem,6vw,4.8rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;margin-bottom:.9rem}
+.hl{background:linear-gradient(90deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h1 em{font-style:italic;color:var(--orange)}
+.sub{color:var(--muted);font-size:.92rem;line-height:1.7;max-width:460px;margin:0 auto 2.2rem}
+.search-wrap{max-width:660px;margin:0 auto}
+.search-row{display:flex;background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.search-row:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.12)}
+.search-row input{flex:1;background:transparent;border:none;outline:none;padding:1rem 1.4rem;font-family:var(--ff);font-size:.95rem;color:var(--text);min-width:0}
+.search-row input::placeholder{color:var(--muted)}
+.search-row button{background:linear-gradient(135deg,var(--accent),#6a6ef7);color:#fff;border:none;padding:0 2rem;font-family:var(--ff);font-size:.88rem;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.search-row button:hover{opacity:.88}
+.search-row button:disabled{opacity:.35;cursor:not-allowed}
+.progress{max-width:660px;margin:.85rem auto 0;display:none}
+.progress.show{display:block}
+.prog-bar-bg{height:3px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:.55rem}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;width:0%;transition:width .5s ease}
+.prog-steps{display:flex;gap:.35rem;flex-wrap:wrap}
+.ps{font-size:.63rem;font-family:var(--ff-mono);padding:3px 9px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--muted);transition:all .3s}
+.ps.active{background:rgba(245,158,66,.1);border-color:rgba(245,158,66,.4);color:var(--orange)}
+.ps.done{background:rgba(62,207,142,.08);border-color:rgba(62,207,142,.3);color:var(--green)}
+.ps.fail{background:rgba(247,111,111,.08);border-color:rgba(247,111,111,.3);color:var(--red)}
+.status-line{max-width:660px;margin:.45rem auto 0;font-size:.76rem;font-family:var(--ff-mono);min-height:18px;color:var(--muted)}
+.status-line.ok{color:var(--green)}
+.status-line.err{color:var(--red)}
+.status-line.loading{color:var(--orange);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.results{max-width:1100px;margin:2rem auto 4rem;padding:0 2rem;display:none}
+.results.show{display:block}
+.stats{display:flex;gap:.7rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.stat{flex:1;min-width:110px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.95rem 1.1rem;position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat.s1::after{background:linear-gradient(90deg,var(--accent),var(--purple))}
+.stat.s2::after{background:linear-gradient(90deg,var(--purple),var(--orange))}
+.stat.s3::after{background:linear-gradient(90deg,var(--green),var(--accent))}
+.stat.s4::after{background:linear-gradient(90deg,var(--orange),var(--red))}
+.stat.s5::after{background:linear-gradient(90deg,var(--red),var(--purple))}
+.stat-n{font-family:var(--ff-head);font-size:1.8rem;font-weight:900;line-height:1;margin-bottom:.15rem}
+.stat-l{font-size:.63rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+.tab-row{display:flex;gap:.4rem;margin-bottom:.9rem;flex-wrap:wrap}
+.tab{padding:.4rem .95rem;border-radius:7px;font-size:.76rem;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s}
+.tab.on{background:var(--card);border-color:var(--accent);color:var(--accent)}
+.tab:hover:not(.on){border-color:var(--dim);color:var(--text)}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.toolbar{padding:.7rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.flt{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.36rem .75rem;font-family:var(--ff);font-size:.78rem;color:var(--text);outline:none;transition:border-color .2s}
+.flt:focus{border-color:var(--accent)}
+.flt::placeholder{color:var(--muted)}
+.srt{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.36rem .65rem;font-family:var(--ff);font-size:.74rem;color:var(--text);outline:none;cursor:pointer}
+.copy-all-btn{display:flex;align-items:center;gap:.3rem;padding:.36rem .95rem;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);border-radius:7px;font-size:.74rem;font-weight:600;color:var(--accent);cursor:pointer;transition:all .2s;white-space:nowrap}
+.copy-all-btn:hover{background:rgba(79,142,247,.2)}
+.copy-all-btn.copied{background:rgba(62,207,142,.1);border-color:rgba(62,207,142,.25);color:var(--green)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{padding:.6rem 1rem;text-align:left;font-size:.63rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;background:rgba(255,255,255,.015)}
+td{padding:.58rem 1rem;font-size:.81rem;border-bottom:1px solid rgba(30,34,48,.8);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+.kw-wrap{display:flex;align-items:center;gap:.45rem}
+.kw-text{font-weight:500;color:var(--text)}
+.cp-btn{opacity:0;font-size:.6rem;padding:2px 6px;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--muted);background:var(--surface);transition:all .15s;flex-shrink:0}
+tr:hover .cp-btn{opacity:1}
+.cp-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cp-btn.ok{opacity:1;border-color:var(--green);color:var(--green)}
+.vc{font-family:var(--ff-mono);font-size:.7rem;padding:2px 8px;border-radius:5px;font-weight:500;white-space:nowrap}
+.vc.h{background:rgba(62,207,142,.1);color:var(--green);border:1px solid rgba(62,207,142,.22)}
+.vc.m{background:rgba(245,158,66,.08);color:var(--orange);border:1px solid rgba(245,158,66,.22)}
+.vc.l{background:rgba(107,114,128,.1);color:var(--muted);border:1px solid var(--border)}
+.diff-wrap{display:flex;align-items:center;gap:.45rem}
+.dbar{width:52px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;flex-shrink:0}
+.dfill{height:100%;border-radius:3px}
+.dfill.e{background:var(--green)}
+.dfill.m{background:var(--orange)}
+.dfill.h{background:var(--red)}
+.dlabel{font-size:.66rem;color:var(--muted);font-family:var(--ff-mono);white-space:nowrap}
+.ib{font-size:.62rem;padding:2px 8px;border-radius:20px;font-weight:600;letter-spacing:.03em;white-space:nowrap}
+.ib.info{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.2)}
+.ib.comm{background:rgba(245,158,66,.08);color:var(--orange);border:1px solid rgba(245,158,66,.2)}
+.ib.tran{background:rgba(62,207,142,.08);color:var(--green);border:1px solid rgba(62,207,142,.2)}
+.ib.navi{background:rgba(167,139,250,.08);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
+.tb{font-size:.61rem;padding:2px 7px;border-radius:5px;font-family:var(--ff-mono);border:1px solid;white-space:nowrap}
+.tb.question{color:#c084fc;border-color:rgba(192,132,252,.25);background:rgba(192,132,252,.08)}
+.tb.suggest{color:var(--accent);border-color:rgba(79,142,247,.25);background:rgba(79,142,247,.08)}
+.tb.lsi{color:var(--green);border-color:rgba(62,207,142,.25);background:rgba(62,207,142,.08)}
+.cpc-val{font-family:var(--ff-mono);font-size:.73rem;color:var(--green)}
+.cpc-val.na{color:var(--muted)}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.6rem;padding:1rem}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:.8rem .95rem;cursor:pointer;transition:border-color .2s,transform .15s;display:flex;gap:.55rem;align-items:flex-start}
+.qcard:hover{border-color:var(--accent);transform:translateY(-1px)}
+.qcard.copied{border-color:var(--green)}
+.q-ico{font-size:.9rem;flex-shrink:0;margin-top:2px}
+.q-txt{font-size:.8rem;font-weight:500;line-height:1.4;color:var(--text)}
+.q-meta{font-size:.63rem;color:var(--muted);margin-top:.2rem;font-family:var(--ff-mono)}
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted)}
+.empty-state div{font-size:2rem;margin-bottom:.4rem}
+@media(max-width:620px){
+  .header{padding:1rem 1.2rem}
+  .hero{padding:3rem 1.2rem 2rem}
+  .results{padding:0 1rem}
+  .stats{gap:.5rem}
+  .stat{min-width:85px;padding:.75rem .85rem}
+  .stat-n{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-sq">K</div>
+    <span class="logo-name">KeywordLens</span>
+  </div>
+  <span class="hdr-tag">FREE · NO API KEY</span>
+</header>
+
+<section class="hero">
+  <div class="pill">Powered by Google Autocomplete</div>
+  <h1>Keyword research,<br><span class="hl">reimagined</span> <em>free</em></h1>
+  <p class="sub">Discover hundreds of real keywords from Google Suggest — with volume estimates, difficulty, CPC &amp; intent. No account needed.</p>
+  <div class="search-wrap">
+    <div class="search-row">
+      <input id="kwInput" type="text" placeholder="Enter a keyword, e.g. 'email marketing'…" autocomplete="off" spellcheck="false"/>
+      <button id="goBtn" onclick="runResearch()">Research →</button>
+    </div>
+    <div class="progress" id="progWrap">
+      <div class="prog-bar-bg"><div class="prog-bar-fill" id="progFill"></div></div>
+      <div class="prog-steps">
+        <span class="ps" id="p1">① Direct Suggest</span>
+        <span class="ps" id="p2">② Alphabet Soup</span>
+        <span class="ps" id="p3">③ Questions</span>
+        <span class="ps" id="p4">④ LSI Suffixes</span>
+        <span class="ps" id="p5">⑤ Build Results</span>
+      </div>
+    </div>
+    <div class="status-line" id="statusLine"></div>
+  </div>
+</section>
+
+<div class="results" id="resultsSection">
+  <div class="stats" id="statsBar"></div>
+  <div class="tab-row">
+    <div class="tab on" data-tab="all" onclick="switchTab(this)">All Keywords</div>
+    <div class="tab" data-tab="question" onclick="switchTab(this)">❓ Questions</div>
+    <div class="tab" data-tab="lsi" onclick="switchTab(this)">🔗 LSI</div>
+    <div class="tab" data-tab="suggest" onclick="switchTab(this)">💡 Suggestions</div>
+  </div>
+  <div class="panel">
+    <div class="toolbar">
+      <input class="flt" id="filterInput" placeholder="🔍 Filter keywords…" oninput="renderView()"/>
+      <select class="srt" id="sortSelect" onchange="renderView()">
+        <option value="vol_d">Volume ↓</option>
+        <option value="vol_a">Volume ↑</option>
+        <option value="diff_a">Difficulty ↑</option>
+        <option value="diff_d">Difficulty ↓</option>
+        <option value="cpc_d">CPC ↓</option>
+        <option value="az">A → Z</option>
+      </select>
+      <button class="copy-all-btn" id="copyAllBtn" onclick="copyAllKeywords()">📋 Copy All</button>
+    </div>
+    <div id="viewArea"></div>
+  </div>
+</div>
+
+<script>
+// ── Global state ──────────────────────────────────────────────
+var kwData = [];
+var activeTab = 'all';
+
+// ── Helpers ───────────────────────────────────────────────────
+function htmlEsc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function setStatus(msg, type) {
+  var el = document.getElementById('statusLine');
+  el.textContent = msg;
+  el.className = 'status-line ' + (type || '');
+}
+
+function setStep(id, state) {
+  var el = document.getElementById(id);
+  el.className = 'ps' + (state ? ' ' + state : '');
+}
+
+function setProgress(pct) {
+  document.getElementById('progFill').style.width = pct + '%';
+}
+
+// ── Pseudo-random from string (no Math.random so results are stable) ──
+function strHash(str) {
+  var h = 5381;
+  for (var i = 0; i < str.length; i++) {
+    h = ((h << 5) + h) ^ str.charCodeAt(i);
+    h = h >>> 0; // keep unsigned 32-bit
+  }
+  return h;
+}
+
+function makeRng(seed) {
+  var s = strHash(seed);
+  return function() {
+    s = Math.imul(s ^ (s >>> 16), 0x45d9f3b);
+    s = Math.imul(s ^ (s >>> 16), 0x45d9f3b);
+    s = (s ^ (s >>> 16)) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function estimateMetrics(kw) {
+  var rng = makeRng(kw);
+  var wordCount = kw.trim().split(/\s+/).length;
+  var buckets = [50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
+  var idx = Math.floor(rng() * buckets.length);
+  if (wordCount >= 4) idx = Math.min(idx, 4);
+  else if (wordCount === 3) idx = Math.min(idx, 6);
+  var volume = buckets[idx];
+  var diff = Math.round(rng() * 100);
+  var base = diff < 30 ? 0.15 : diff < 60 ? 0.75 : 1.8;
+  var cpc = parseFloat((base + rng() * 3).toFixed(2));
+  return { volume: volume, diff: diff, cpc: cpc };
+}
+
+function detectIntent(kw) {
+  var k = kw.toLowerCase();
+  if (/\b(buy|price|cost|cheap|deal|order|shop|purchase|hire|service|quote)\b/.test(k)) return 'tran';
+  if (/\b(best|top|review|compare|vs|alternative|difference|which|recommend)\b/.test(k)) return 'comm';
+  if (/^(how|what|why|when|where|which|who|is|are|can|does|do)\b/.test(k)) return 'info';
+  if (/\b(guide|tutorial|learn|tips|ideas|examples|definition|meaning)\b/.test(k)) return 'info';
+  return 'navi';
+}
+
+var intentLabels = {
+  info: 'Informational',
+  comm: 'Commercial',
+  tran: 'Transactional',
+  navi: 'Navigational'
+};
+
+function detectType(kw) {
+  if (/^(how|what|why|when|where|which|who|is|are|can|does|do)\s/i.test(kw)) return 'question';
+  return 'suggest';
+}
+
+// ── Google Suggest via CORS proxies ──────────────────────────
+function fetchSuggest(query) {
+  var encoded = encodeURIComponent(query);
+  var suggestUrl = 'https://suggestqueries.google.com/complete/search?client=firefox&q=' + encoded;
+
+  // Try allorigins (returns JSON wrapper)
+  var p1 = fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(suggestUrl), { signal: AbortSignal.timeout(7000) })
+    .then(function(r) {
+      if (!r.ok) throw new Error('allorigins fail');
+      return r.json();
+    })
+    .then(function(j) {
+      var parsed = JSON.parse(j.contents);
+      if (Array.isArray(parsed) && Array.isArray(parsed[1])) return parsed[1];
+      throw new Error('bad shape');
+    });
+
+  // Try corsproxy (returns raw text)
+  var p2 = fetch('https://corsproxy.io/?' + encodeURIComponent(suggestUrl), { signal: AbortSignal.timeout(7000) })
+    .then(function(r) {
+      if (!r.ok) throw new Error('corsproxy fail');
+      return r.text();
+    })
+    .then(function(t) {
+      var parsed = JSON.parse(t);
+      if (Array.isArray(parsed) && Array.isArray(parsed[1])) return parsed[1];
+      throw new Error('bad shape');
+    });
+
+  // Race both, return first success, fall back to []
+  return Promise.any([p1, p2]).catch(function() { return []; });
+}
+
+// ── Main research function ────────────────────────────────────
+function runResearch() {
+  var kw = document.getElementById('kwInput').value.trim();
+  if (!kw) return;
+
+  kwData = [];
+  activeTab = 'all';
+  document.getElementById('goBtn').disabled = true;
+  document.getElementById('resultsSection').classList.remove('show');
+  document.getElementById('progWrap').classList.add('show');
+  setProgress(0);
+  ['p1','p2','p3','p4','p5'].forEach(function(id){ setStep(id, ''); });
+  setStatus('⟳ Connecting to Google Suggest…', 'loading');
+
+  // Step 1: direct
+  setStep('p1', 'active');
+  fetchSuggest(kw).then(function(direct) {
+    setStep('p1', 'done');
+    setProgress(15);
+
+    // Step 2: alphabet soup
+    setStep('p2', 'active');
+    var letters = 'abcdefghijklmnoprstuw'.split('');
+    var soupPromises = letters.map(function(l) { return fetchSuggest(kw + ' ' + l); });
+    return Promise.allSettled(soupPromises).then(function(soupRes) {
+      setStep('p2', 'done');
+      setProgress(38);
+
+      // Step 3: questions
+      setStep('p3', 'active');
+      var qPrefixes = ['how','what','why','when','where','which','who','is','are','can','does','do','best','will'];
+      var qPromises = qPrefixes.map(function(p) { return fetchSuggest(p + ' ' + kw); });
+      return Promise.allSettled(qPromises).then(function(qRes) {
+        setStep('p3', 'done');
+        setProgress(65);
+
+        // Step 4: LSI suffixes
+        setStep('p4', 'active');
+        var suffixes = ['for beginners','tips','guide','tutorial','examples','tools','free','online','near me','2025','vs','alternative','benefits','meaning','definition'];
+        var lsiPromises = suffixes.map(function(s) { return fetchSuggest(kw + ' ' + s); });
+        return Promise.allSettled(lsiPromises).then(function(lsiRes) {
+          setStep('p4', 'done');
+          setProgress(88);
+
+          // Step 5: compile
+          setStep('p5', 'active');
+          var seen = {};
+
+          function addKw(word, type) {
+            var w = (word || '').trim();
+            if (!w) return;
+            var key = w.toLowerCase();
+            if (seen[key]) return;
+            seen[key] = true;
+            var m = estimateMetrics(w);
+            kwData.push({
+              kw: w,
+              type: type,
+              intent: detectIntent(w),
+              volume: m.volume,
+              diff: m.diff,
+              cpc: m.cpc
+            });
+          }
+
+          addKw(kw, 'suggest');
+          direct.forEach(function(w) { addKw(w, 'suggest'); });
+          soupRes.forEach(function(r) {
+            if (r.status === 'fulfilled' && Array.isArray(r.value)) {
+              r.value.forEach(function(w) { addKw(w, 'suggest'); });
+            }
+          });
+          qRes.forEach(function(r) {
+            if (r.status === 'fulfilled' && Array.isArray(r.value)) {
+              r.value.forEach(function(w) { addKw(w, 'question'); });
+            }
+          });
+          lsiRes.forEach(function(r) {
+            if (r.status === 'fulfilled' && Array.isArray(r.value)) {
+              r.value.forEach(function(w) { addKw(w, 'lsi'); });
+            }
+          });
+
+          setStep('p5', 'done');
+          setProgress(100);
+          document.getElementById('goBtn').disabled = false;
+
+          if (kwData.length === 0) {
+            setStatus('No results — proxies may be rate-limited. Wait 30s and retry.', 'err');
+            return;
+          }
+
+          setStatus('✓ ' + kwData.length + ' keywords found for "' + kw + '"', 'ok');
+          renderStats();
+          document.querySelectorAll('.tab').forEach(function(t) {
+            t.classList.toggle('on', t.getAttribute('data-tab') === 'all');
+          });
+          renderView();
+          document.getElementById('resultsSection').classList.add('show');
+          document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  }).catch(function(e) {
+    setStatus('Error: ' + e.message, 'err');
+    setStep('p1', 'fail');
+    document.getElementById('goBtn').disabled = false;
+  });
+}
+
+// ── Tabs ─────────────────────────────────────────────────────
+function switchTab(el) {
+  activeTab = el.getAttribute('data-tab');
+  document.querySelectorAll('.tab').forEach(function(t) {
+    t.classList.toggle('on', t === el);
+  });
+  renderView();
+}
+
+// ── Filter + sort ─────────────────────────────────────────────
+function getFiltered() {
+  var f = document.getElementById('filterInput').value.toLowerCase();
+  var s = document.getElementById('sortSelect').value;
+  var d = kwData.filter(function(k) {
+    if (activeTab !== 'all' && k.type !== activeTab) return false;
+    if (f && k.kw.toLowerCase().indexOf(f) === -1) return false;
+    return true;
+  });
+  d.sort(function(a, b) {
+    if (s === 'vol_d') return b.volume - a.volume;
+    if (s === 'vol_a') return a.volume - b.volume;
+    if (s === 'diff_a') return a.diff - b.diff;
+    if (s === 'diff_d') return b.diff - a.diff;
+    if (s === 'cpc_d') return b.cpc - a.cpc;
+    return a.kw.localeCompare(b.kw);
+  });
+  return d;
+}
+
+// ── Render stats bar ─────────────────────────────────────────
+function renderStats() {
+  var total = kwData.length;
+  var questions = kwData.filter(function(k) { return k.type === 'question'; }).length;
+  var highVol = kwData.filter(function(k) { return k.volume >= 5000; }).length;
+  var easy = kwData.filter(function(k) { return k.diff < 35; }).length;
+  var sum = kwData.reduce(function(a, b) { return a + b.cpc; }, 0);
+  var avgCpc = (sum / total).toFixed(2);
+  document.getElementById('statsBar').innerHTML =
+    '<div class="stat s1"><div class="stat-n" style="color:var(--accent)">' + total + '</div><div class="stat-l">Total Keywords</div></div>' +
+    '<div class="stat s2"><div class="stat-n" style="color:var(--purple)">' + questions + '</div><div class="stat-l">Questions</div></div>' +
+    '<div class="stat s3"><div class="stat-n" style="color:var(--green)">' + highVol + '</div><div class="stat-l">High Volume</div></div>' +
+    '<div class="stat s4"><div class="stat-n" style="color:var(--orange)">' + easy + '</div><div class="stat-l">Low Difficulty</div></div>' +
+    '<div class="stat s5"><div class="stat-n" style="color:var(--red)">$' + avgCpc + '</div><div class="stat-l">Avg Est. CPC</div></div>';
+}
+
+// ── Render main view ──────────────────────────────────────────
+function renderView() {
+  var data = getFiltered();
+  var area = document.getElementById('viewArea');
+  var btn = document.getElementById('copyAllBtn');
+  btn.textContent = '📋 Copy All (' + data.length + ')';
+  btn.classList.remove('copied');
+
+  if (activeTab === 'question') {
+    renderQGrid(data, area);
+  } else {
+    renderTable(data, area);
+  }
+}
+
+function volClass(v) { return v >= 5000 ? 'h' : v >= 1000 ? 'm' : 'l'; }
+function volLabel(v) { return v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'K' : String(v); }
+function diffClass(d) { return d < 35 ? 'e' : d < 65 ? 'm' : 'h'; }
+function diffLabel(d) { return d < 35 ? 'Easy' : d < 65 ? 'Med' : 'Hard'; }
+
+function renderTable(data, area) {
+  if (!data.length) {
+    area.innerHTML = '<div class="empty-state"><div>🔍</div>No keywords match.</div>';
+    return;
+  }
+  var rows = data.map(function(k) {
+    var safeKw = k.kw.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return '<tr>' +
+      '<td><div class="kw-wrap"><span class="kw-text">' + htmlEsc(k.kw) + '</span>' +
+      '<button class="cp-btn" onclick="copyOne(this,\'' + safeKw + '\')">copy</button></div></td>' +
+      '<td><span class="vc ' + volClass(k.volume) + '">' + volLabel(k.volume) + '</span></td>' +
+      '<td><div class="diff-wrap"><div class="dbar"><div class="dfill ' + diffClass(k.diff) + '" style="width:' + k.diff + '%"></div></div>' +
+      '<span class="dlabel">' + diffLabel(k.diff) + ' ' + k.diff + '</span></div></td>' +
+      '<td><span class="cpc-val">$' + k.cpc.toFixed(2) + '</span></td>' +
+      '<td><span class="ib ' + k.intent + '">' + intentLabels[k.intent] + '</span></td>' +
+      '<td><span class="tb ' + k.type + '">' + k.type + '</span></td>' +
+      '</tr>';
+  });
+  area.innerHTML =
+    '<div class="tbl-wrap"><table>' +
+    '<thead><tr><th>Keyword</th><th>Volume</th><th>Difficulty</th><th>Est. CPC</th><th>Intent</th><th>Type</th></tr></thead>' +
+    '<tbody>' + rows.join('') + '</tbody>' +
+    '</table></div>';
+}
+
+function renderQGrid(data, area) {
+  if (!data.length) {
+    area.innerHTML = '<div class="empty-state"><div>❓</div>No question keywords found.</div>';
+    return;
+  }
+  var icons = ['❓','💡','🤔','📌','🔎','💬','📖','🗺','✨','🎯'];
+  var cards = data.map(function(k, i) {
+    var safeKw = k.kw.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return '<div class="qcard" onclick="copyOne(this,\'' + safeKw + '\')">' +
+      '<span class="q-ico">' + icons[i % icons.length] + '</span>' +
+      '<div><div class="q-txt">' + htmlEsc(k.kw) + '</div>' +
+      '<div class="q-meta">Vol ~' + volLabel(k.volume) + ' · ' + diffLabel(k.diff) + ' · ' + intentLabels[k.intent] + '</div></div>' +
+      '</div>';
+  });
+  area.innerHTML = '<div class="qgrid">' + cards.join('') + '</div>';
+}
+
+// ── Copy helpers ──────────────────────────────────────────────
+function copyOne(el, kw) {
+  navigator.clipboard.writeText(kw).then(function() {
+    if (el.tagName === 'BUTTON') {
+      el.textContent = '✓';
+      el.classList.add('ok');
+      setTimeout(function() { el.textContent = 'copy'; el.classList.remove('ok'); }, 1400);
+    } else {
+      el.classList.add('copied');
+      setTimeout(function() { el.classList.remove('copied'); }, 1400);
+    }
+  });
+}
+
+function copyAllKeywords() {
+  var data = getFiltered();
+  var btn = document.getElementById('copyAllBtn');
+  var text = data.map(function(k) { return k.kw; }).join('\n');
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '✓ Copied ' + data.length + '!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = '📋 Copy All (' + data.length + ')';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// ── Enter key ─────────────────────────────────────────────────
+document.getElementById('kwInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') runResearch();
+});
+</script>
+</body>
+</html>

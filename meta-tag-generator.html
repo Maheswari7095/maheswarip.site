@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MetaForge — Free Meta Tag Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090c;--surface:#0f1117;--card:#141720;--border:#1e2230;
+  --accent:#4f8ef7;--green:#3ecf8e;--orange:#f59e42;--red:#f76f6f;--purple:#a78bfa;
+  --text:#e8eaf0;--muted:#6b7280;--dim:#3a3f52;
+  --ff:'Inter',sans-serif;--ff-head:'Playfair Display',serif;--ff-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,142,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* HEADER */
+.header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;border-bottom:1px solid var(--border);background:rgba(8,9,12,.9);backdrop-filter:blur(12px)}
+.logo{display:flex;align-items:center;gap:.65rem}
+.logo-sq{width:32px;height:32px;background:linear-gradient(135deg,var(--orange),var(--purple));border-radius:7px;display:grid;place-items:center;font-size:.8rem;font-weight:700;color:#fff}
+.logo-name{font-family:var(--ff-head);font-size:1.15rem;font-weight:700;font-style:italic}
+.hdr-tag{font-size:.65rem;font-family:var(--ff-mono);background:rgba(245,158,66,.1);border:1px solid rgba(245,158,66,.25);color:var(--orange);padding:3px 10px;border-radius:20px;letter-spacing:.06em}
+.back-link{font-size:.72rem;font-family:var(--ff-mono);color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.back-link:hover{color:var(--accent)}
+
+/* HERO */
+.hero{position:relative;z-index:2;padding:4rem 2rem 2.5rem;text-align:center;max-width:780px;margin:0 auto}
+.pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.7rem;font-family:var(--ff-mono);color:var(--orange);background:rgba(245,158,66,.08);border:1px solid rgba(245,158,66,.2);padding:4px 12px;border-radius:20px;margin-bottom:1.4rem;letter-spacing:.08em}
+.pill::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;display:inline-block}
+h1{font-family:var(--ff-head);font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;margin-bottom:.8rem}
+.hl{background:linear-gradient(90deg,var(--orange),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--muted);font-size:.9rem;line-height:1.7;max-width:480px;margin:0 auto}
+
+/* MAIN LAYOUT */
+.main{max-width:1160px;margin:0 auto;padding:2rem 2rem 5rem;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+@media(max-width:860px){.main{grid-template-columns:1fr}}
+
+/* PANELS */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.panel-head{padding:.9rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;background:rgba(255,255,255,.015)}
+.panel-icon{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:.78rem}
+.panel-title{font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text)}
+.panel-body{padding:1.4rem}
+
+/* FORM */
+.field{margin-bottom:1.2rem}
+.field:last-child{margin-bottom:0}
+label{display:flex;align-items:center;justify-content:space-between;font-size:.72rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.45rem}
+.char-count{font-family:var(--ff-mono);font-size:.68rem;color:var(--dim);transition:color .2s}
+.char-count.warn{color:var(--orange)}
+.char-count.over{color:var(--red)}
+.char-count.ok{color:var(--green)}
+input[type=text],input[type=url],textarea,select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:var(--ff);font-size:.85rem;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical}
+input[type=text]:focus,input[type=url]:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,142,247,.1)}
+input::placeholder,textarea::placeholder{color:var(--dim)}
+select option{background:var(--card)}
+textarea{min-height:76px;line-height:1.55}
+.hint{font-size:.68rem;color:var(--dim);margin-top:.3rem;font-family:var(--ff-mono)}
+
+.gen-btn{width:100%;margin-top:1.4rem;padding:.85rem;background:linear-gradient(135deg,var(--orange),var(--purple));border:none;border-radius:10px;font-family:var(--ff);font-size:.88rem;font-weight:700;color:#fff;cursor:pointer;transition:opacity .15s,transform .12s;letter-spacing:.03em}
+.gen-btn:hover{opacity:.88;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+/* SERP PREVIEW */
+.serp-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.2rem}
+.serp-url{font-size:.72rem;color:var(--green);font-family:var(--ff-mono);margin-bottom:.25rem;word-break:break-all}
+.serp-title{font-size:1.08rem;color:#8ab4f8;font-weight:500;margin-bottom:.3rem;line-height:1.3;cursor:pointer}
+.serp-title:hover{text-decoration:underline}
+.serp-desc{font-size:.83rem;color:#bdc1c6;line-height:1.5}
+.serp-placeholder{color:var(--dim);font-size:.82rem;font-style:italic;text-align:center;padding:1rem 0}
+
+/* OUTPUT CODE */
+.output-wrap{position:relative}
+.output-code{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;font-family:var(--ff-mono);font-size:.73rem;line-height:1.8;color:#a9b1d6;white-space:pre;overflow-x:auto;min-height:80px;transition:opacity .2s}
+.output-code .tag{color:#7dcfff}
+.output-code .attr{color:#bb9af7}
+.output-code .val{color:#9ece6a}
+.output-code.empty{color:var(--dim);font-style:italic;white-space:normal}
+.copy-btn{position:absolute;top:.65rem;right:.65rem;display:flex;align-items:center;gap:.3rem;padding:.3rem .8rem;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);border-radius:7px;font-size:.68rem;font-weight:600;color:var(--accent);cursor:pointer;transition:all .2s;font-family:var(--ff-mono)}
+.copy-btn:hover{background:rgba(79,142,247,.22)}
+.copy-btn.copied{background:rgba(62,207,142,.1);border-color:rgba(62,207,142,.25);color:var(--green)}
+
+/* SCORE BADGES */
+.score-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.67rem;font-family:var(--ff-mono);padding:4px 10px;border-radius:20px;font-weight:500}
+.badge.good{background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.25);color:var(--green)}
+.badge.warn{background:rgba(245,158,66,.1);border:1px solid rgba(245,158,66,.25);color:var(--orange)}
+.badge.bad{background:rgba(247,111,111,.1);border:1px solid rgba(247,111,111,.25);color:var(--red)}
+.badge.na{background:rgba(107,114,128,.1);border:1px solid rgba(107,114,128,.2);color:var(--muted)}
+
+/* TABS */
+.tab-row{display:flex;gap:.4rem;margin-bottom:.9rem;flex-wrap:wrap}
+.tab{padding:.38rem .9rem;border-radius:7px;font-size:.74rem;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;font-family:var(--ff)}
+.tab.on{background:var(--card);border-color:var(--orange);color:var(--orange)}
+.tab:hover:not(.on){border-color:var(--dim);color:var(--text)}
+
+/* SECTION DIVIDER */
+.sec-label{font-size:.67rem;font-family:var(--ff-mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;display:flex;align-items:center;gap:.6rem}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* OG PREVIEW */
+.og-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.1rem}
+.og-img-slot{background:var(--bg);height:80px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--dim);font-family:var(--ff-mono);border-bottom:1px solid var(--border)}
+.og-body{padding:.85rem 1rem}
+.og-domain{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem;font-family:var(--ff-mono)}
+.og-title{font-size:.9rem;font-weight:600;line-height:1.3;margin-bottom:.25rem}
+.og-desc{font-size:.78rem;color:var(--muted);line-height:1.45}
+.og-placeholder{color:var(--dim);font-size:.82rem;font-style:italic;text-align:center;padding:.8rem 0}
+
+/* LOADER */
+.loader{display:none;align-items:center;gap:.6rem;font-size:.78rem;font-family:var(--ff-mono);color:var(--orange);margin-top:.6rem}
+.loader.show{display:flex}
+.spin{width:14px;height:14px;border:2px solid rgba(245,158,66,.2);border-top-color:var(--orange);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CHECKBOX ROW */
+.check-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem;cursor:pointer}
+.check-row input{width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
+.check-row span{font-size:.8rem;color:var(--muted)}
+.checks-group{display:grid;grid-template-columns:1fr 1fr;gap:.2rem;margin-bottom:1rem}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-sq">⟨/⟩</div>
+    <span class="logo-name">MetaForge</span>
+  </div>
+  <div class="hdr-tag">Free · No Login · AI-Powered</div>
+  <a href="keyword-research-tool.html" class="back-link">← Keyword Research</a>
+</header>
+
+<div class="hero">
+  <div class="pill">Meta Tag Generator</div>
+  <h1>Generate Perfect <span class="hl">Meta Tags</span></h1>
+  <p class="sub">Fill in your page details — get clean, optimised meta tags for SEO, Open Graph & Twitter Cards instantly.</p>
+</div>
+
+<div class="main">
+
+  <!-- LEFT: INPUT FORM -->
+  <div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-icon" style="background:rgba(245,158,66,.12);">✏️</div>
+        <span class="panel-title">Page Details</span>
+      </div>
+      <div class="panel-body">
+
+        <div class="field">
+          <label>Page URL <span class="hint" style="text-transform:none;letter-spacing:0">optional</span></label>
+          <input type="url" id="inp-url" placeholder="https://yoursite.com/page" oninput="liveUpdate()"/>
+        </div>
+
+        <div class="field">
+          <label>Page Title <span class="char-count" id="cc-title">0 / 60</span></label>
+          <input type="text" id="inp-title" placeholder="Best Credit Cards in India 2025 | BankBazaar" maxlength="100" oninput="updateCharCount('inp-title','cc-title',60);liveUpdate()"/>
+          <div class="hint">Ideal: 50–60 characters</div>
+        </div>
+
+        <div class="field">
+          <label>Meta Description <span class="char-count" id="cc-desc">0 / 160</span></label>
+          <textarea id="inp-desc" placeholder="Compare the best credit cards in India. Apply online for reward points, cashback, and travel cards. Zero fee options available." maxlength="320" oninput="updateCharCount('inp-desc','cc-desc',160);liveUpdate()"></textarea>
+          <div class="hint">Ideal: 150–160 characters</div>
+        </div>
+
+        <div class="field">
+          <label>Keywords <span class="hint" style="text-transform:none;letter-spacing:0">comma-separated</span></label>
+          <input type="text" id="inp-keywords" placeholder="credit cards, best credit card india, cashback card" oninput="liveUpdate()"/>
+        </div>
+
+        <div class="field">
+          <label>Canonical URL <span class="hint" style="text-transform:none;letter-spacing:0">optional</span></label>
+          <input type="url" id="inp-canonical" placeholder="https://yoursite.com/page" oninput="liveUpdate()"/>
+        </div>
+
+        <div class="field">
+          <label>Robots Directive</label>
+          <select id="inp-robots" onchange="liveUpdate()">
+            <option value="index, follow">index, follow (default — recommended)</option>
+            <option value="noindex, follow">noindex, follow</option>
+            <option value="index, nofollow">index, nofollow</option>
+            <option value="noindex, nofollow">noindex, nofollow</option>
+          </select>
+        </div>
+
+        <div class="sec-label">Open Graph / Social</div>
+
+        <div class="field">
+          <label>OG Title <span class="char-count" id="cc-og-title">0 / 95</span></label>
+          <input type="text" id="inp-og-title" placeholder="Leave blank to use Page Title" maxlength="200" oninput="updateCharCount('inp-og-title','cc-og-title',95);liveUpdate()"/>
+        </div>
+
+        <div class="field">
+          <label>OG Description <span class="char-count" id="cc-og-desc">0 / 200</span></label>
+          <textarea id="inp-og-desc" placeholder="Leave blank to use Meta Description" maxlength="400" oninput="updateCharCount('inp-og-desc','cc-og-desc',200);liveUpdate()" style="min-height:60px"></textarea>
+        </div>
+
+        <div class="field">
+          <label>OG Image URL <span class="hint" style="text-transform:none;letter-spacing:0">optional</span></label>
+          <input type="url" id="inp-og-image" placeholder="https://yoursite.com/og-image.jpg (1200×630)" oninput="liveUpdate()"/>
+          <div class="hint">Recommended: 1200 × 630 px</div>
+        </div>
+
+        <div class="field">
+          <label>Site Name</label>
+          <input type="text" id="inp-sitename" placeholder="BankBazaar" oninput="liveUpdate()"/>
+        </div>
+
+        <div class="field">
+          <label>Page Type</label>
+          <select id="inp-og-type" onchange="liveUpdate()">
+            <option value="website">website</option>
+            <option value="article">article</option>
+            <option value="product">product</option>
+            <option value="profile">profile</option>
+          </select>
+        </div>
+
+        <div class="sec-label" style="margin-top:1rem">Include Sections</div>
+        <div class="checks-group">
+          <label class="check-row"><input type="checkbox" id="chk-basic" checked onchange="liveUpdate()"><span>Basic SEO</span></label>
+          <label class="check-row"><input type="checkbox" id="chk-og" checked onchange="liveUpdate()"><span>Open Graph</span></label>
+          <label class="check-row"><input type="checkbox" id="chk-twitter" checked onchange="liveUpdate()"><span>Twitter Card</span></label>
+          <label class="check-row"><input type="checkbox" id="chk-viewport" checked onchange="liveUpdate()"><span>Viewport</span></label>
+        </div>
+
+        <button class="gen-btn" id="gen-btn" onclick="generateWithAI()">✦ Enhance with AI</button>
+        <div class="loader" id="loader"><div class="spin"></div>AI is optimising your tags…</div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: OUTPUT -->
+  <div style="display:flex;flex-direction:column;gap:1.4rem">
+
+    <!-- SERP PREVIEW -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-icon" style="background:rgba(62,207,142,.1);">🔍</div>
+        <span class="panel-title">SERP Preview</span>
+      </div>
+      <div class="panel-body">
+        <div id="serp-preview">
+          <div class="serp-placeholder">Fill in your page title and description to preview</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OG PREVIEW -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-icon" style="background:rgba(167,139,250,.1);">📱</div>
+        <span class="panel-title">Social Preview</span>
+      </div>
+      <div class="panel-body">
+        <div id="og-preview">
+          <div class="og-placeholder">Fill in Open Graph fields to preview social cards</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE OUTPUT -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-icon" style="background:rgba(79,142,247,.1);">⟨/⟩</div>
+        <span class="panel-title">Generated Tags</span>
+      </div>
+      <div class="panel-body">
+        <div id="score-row" class="score-row" style="display:none"></div>
+        <div class="tab-row" id="tab-row">
+          <button class="tab on" onclick="switchTab('all')" id="tab-all">All Tags</button>
+          <button class="tab" onclick="switchTab('basic')" id="tab-basic">Basic SEO</button>
+          <button class="tab" onclick="switchTab('og')" id="tab-og">Open Graph</button>
+          <button class="tab" onclick="switchTab('twitter')" id="tab-twitter">Twitter</button>
+        </div>
+        <div class="output-wrap">
+          <div class="output-code empty" id="output-code">Your meta tags will appear here as you type…</div>
+          <button class="copy-btn" id="copy-btn" onclick="copyCode()">⎘ Copy</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── State ──
+let currentTab = 'all';
+let generatedTags = { basic:'', og:'', twitter:'', all:'' };
+
+// ── Char counter ──
+function updateCharCount(inputId, counterId, limit) {
+  const el = document.getElementById(inputId);
+  const cc = document.getElementById(counterId);
+  const len = el.value.length;
+  cc.textContent = `${len} / ${limit}`;
+  cc.className = 'char-count';
+  if (len === 0) { cc.className = 'char-count'; return; }
+  if (len <= limit * 0.85) cc.classList.add('ok');
+  else if (len <= limit) cc.classList.add('warn');
+  else cc.classList.add('over');
+}
+
+// ── Get form values ──
+function getVals() {
+  return {
+    url:        document.getElementById('inp-url').value.trim(),
+    title:      document.getElementById('inp-title').value.trim(),
+    desc:       document.getElementById('inp-desc').value.trim(),
+    keywords:   document.getElementById('inp-keywords').value.trim(),
+    canonical:  document.getElementById('inp-canonical').value.trim(),
+    robots:     document.getElementById('inp-robots').value,
+    ogTitle:    document.getElementById('inp-og-title').value.trim(),
+    ogDesc:     document.getElementById('inp-og-desc').value.trim(),
+    ogImage:    document.getElementById('inp-og-image').value.trim(),
+    siteName:   document.getElementById('inp-sitename').value.trim(),
+    ogType:     document.getElementById('inp-og-type').value,
+    inclBasic:  document.getElementById('chk-basic').checked,
+    inclOG:     document.getElementById('chk-og').checked,
+    inclTwitter:document.getElementById('chk-twitter').checked,
+    inclViewport:document.getElementById('chk-viewport').checked,
+  };
+}
+
+// ── Build tags ──
+function buildTags(v) {
+  const ogT   = v.ogTitle  || v.title;
+  const ogD   = v.ogDesc   || v.desc;
+  const urlStr= v.url      || v.canonical || '';
+
+  let basic = '', og = '', twitter = '';
+
+  if (v.inclViewport) {
+    basic += `<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n`;
+  }
+  if (v.inclBasic) {
+    if (v.title)    basic += `<title>${esc(v.title)}</title>\n`;
+    if (v.desc)     basic += `<meta name="description" content="${esc(v.desc)}">\n`;
+    if (v.keywords) basic += `<meta name="keywords" content="${esc(v.keywords)}">\n`;
+                    basic += `<meta name="robots" content="${v.robots}">\n`;
+    if (v.canonical || v.url) basic += `<link rel="canonical" href="${esc(v.canonical || v.url)}">\n`;
+  }
+  if (v.inclOG) {
+    if (ogT)         og += `<meta property="og:title" content="${esc(ogT)}">\n`;
+    if (ogD)         og += `<meta property="og:description" content="${esc(ogD)}">\n`;
+    if (urlStr)      og += `<meta property="og:url" content="${esc(urlStr)}">\n`;
+    if (v.ogImage)   og += `<meta property="og:image" content="${esc(v.ogImage)}">\n`;
+    if (v.siteName)  og += `<meta property="og:site_name" content="${esc(v.siteName)}">\n`;
+                     og += `<meta property="og:type" content="${v.ogType}">\n`;
+  }
+  if (v.inclTwitter) {
+    twitter += `<meta name="twitter:card" content="summary_large_image">\n`;
+    if (ogT)       twitter += `<meta name="twitter:title" content="${esc(ogT)}">\n`;
+    if (ogD)       twitter += `<meta name="twitter:description" content="${esc(ogD)}">\n`;
+    if (v.ogImage) twitter += `<meta name="twitter:image" content="${esc(v.ogImage)}">\n`;
+  }
+
+  const all = [basic, og, twitter].filter(Boolean).join('\n');
+  return { basic: basic.trim(), og: og.trim(), twitter: twitter.trim(), all: all.trim() };
+}
+
+function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// ── Syntax highlight ──
+function highlight(code) {
+  if (!code) return '';
+  return code
+    .replace(/&lt;(\/?)([\w:]+)/g, '&lt;<span class="tag">$1$2</span>')
+    .replace(/([\w:-]+)=/g, '<span class="attr">$1</span>=')
+    .replace(/&quot;([^&]*)&quot;/g, '&quot;<span class="val">$1</span>&quot;');
+}
+
+// ── Live update (no AI) ──
+function liveUpdate() {
+  const v = getVals();
+  generatedTags = buildTags(v);
+  renderOutput();
+  renderSERP(v);
+  renderOG(v);
+  renderScores(v);
+}
+
+function renderOutput() {
+  const el = document.getElementById('output-code');
+  const code = generatedTags[currentTab] || '';
+  if (!code) {
+    el.className = 'output-code empty';
+    el.innerHTML = 'Your meta tags will appear here as you type…';
+  } else {
+    el.className = 'output-code';
+    el.innerHTML = highlight(code);
+  }
+}
+
+function switchTab(t) {
+  currentTab = t;
+  ['all','basic','og','twitter'].forEach(id => {
+    document.getElementById('tab-'+id).classList.toggle('on', id === t);
+  });
+  renderOutput();
+}
+
+// ── SERP Preview ──
+function renderSERP(v) {
+  const box = document.getElementById('serp-preview');
+  if (!v.title && !v.desc) {
+    box.innerHTML = '<div class="serp-placeholder">Fill in your page title and description to preview</div>';
+    return;
+  }
+  const displayUrl = v.url || v.canonical || 'https://yoursite.com/page';
+  const breadcrumb = displayUrl.replace(/^https?:\/\//,'').replace(/\/$/,'');
+  const title = v.title || '(No title set)';
+  const desc  = v.desc  || '(No meta description set)';
+  // Truncate for display
+  const tDisp = title.length > 60 ? title.slice(0,57)+'…' : title;
+  const dDisp = desc.length  > 160 ? desc.slice(0,157)+'…' : desc;
+
+  box.innerHTML = `
+    <div class="serp-box">
+      <div class="serp-url">${breadcrumb}</div>
+      <div class="serp-title">${tDisp}</div>
+      <div class="serp-desc">${dDisp}</div>
+    </div>
+    <div style="font-size:.67rem;font-family:var(--ff-mono);color:var(--dim);text-align:right">
+      Title: ${v.title.length} chars &nbsp;·&nbsp; Desc: ${v.desc.length} chars
+    </div>`;
+}
+
+// ── OG Preview ──
+function renderOG(v) {
+  const box = document.getElementById('og-preview');
+  const ogT = v.ogTitle || v.title;
+  const ogD = v.ogDesc  || v.desc;
+  const domain = (v.url || v.canonical || 'yoursite.com').replace(/^https?:\/\//,'').split('/')[0];
+  if (!ogT && !ogD) {
+    box.innerHTML = '<div class="og-placeholder">Fill in Open Graph fields to preview social cards</div>';
+    return;
+  }
+  const imgSlot = v.ogImage
+    ? `<img src="${v.ogImage}" style="width:100%;height:80px;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'height:80px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--dim);font-family:var(--ff-mono)\\'>Image not found</div>'">`
+    : `<div style="height:80px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--dim);font-family:var(--ff-mono)">No OG image set · 1200×630 recommended</div>`;
+  box.innerHTML = `
+    <div class="og-card">
+      <div class="og-img-slot">${imgSlot}</div>
+      <div class="og-body">
+        <div class="og-domain">${domain}</div>
+        <div class="og-title">${(ogT||'').slice(0,95)}${ogT && ogT.length>95?'…':''}</div>
+        <div class="og-desc">${(ogD||'').slice(0,200)}${ogD && ogD.length>200?'…':''}</div>
+      </div>
+    </div>`;
+}
+
+// ── Score badges ──
+function renderScores(v) {
+  const row = document.getElementById('score-row');
+  if (!v.title && !v.desc) { row.style.display='none'; return; }
+  row.style.display = 'flex';
+  const badges = [];
+
+  // Title
+  const tl = v.title.length;
+  if (!tl) badges.push(['bad','No Title']);
+  else if (tl < 30) badges.push(['warn',`Title too short (${tl})`]);
+  else if (tl <= 60) badges.push(['good',`Title OK (${tl})`]);
+  else badges.push(['warn',`Title too long (${tl})`]);
+
+  // Desc
+  const dl = v.desc.length;
+  if (!dl) badges.push(['bad','No Description']);
+  else if (dl < 120) badges.push(['warn',`Desc short (${dl})`]);
+  else if (dl <= 160) badges.push(['good',`Desc OK (${dl})`]);
+  else badges.push(['warn',`Desc long (${dl})`]);
+
+  // Canonical
+  if (v.canonical || v.url) badges.push(['good','Canonical Set']);
+  else badges.push(['na','No Canonical']);
+
+  // OG
+  if (v.ogImage) badges.push(['good','OG Image Set']);
+  else badges.push(['na','No OG Image']);
+
+  row.innerHTML = badges.map(([cls,txt])=>`<span class="badge ${cls}">${txt}</span>`).join('');
+}
+
+// ── AI Enhancement ──
+async function generateWithAI() {
+  const v = getVals();
+  if (!v.title && !v.desc && !v.url) {
+    alert('Please enter at least a page title or description first.');
+    return;
+  }
+  const btn = document.getElementById('gen-btn');
+  const loader = document.getElementById('loader');
+  btn.disabled = true;
+  loader.classList.add('show');
+
+  const prompt = `You are an expert SEO strategist. A user wants to optimise their meta tags for the following page:
+
+URL: ${v.url || '(not provided)'}
+Current Title: ${v.title || '(not provided)'}
+Current Description: ${v.desc || '(not provided)'}
+Keywords: ${v.keywords || '(not provided)'}
+Site Name: ${v.siteName || '(not provided)'}
+
+Your task: Generate optimised versions of the title and meta description following these strict rules:
+- Title: 50–60 characters, include primary keyword near the start, compelling and click-worthy
+- Meta Description: 150–160 characters, includes a call-to-action, mentions primary keyword naturally, accurate to the page
+- OG Title: Can be slightly more conversational, up to 95 chars
+- OG Description: Up to 200 chars, more engaging tone for social sharing
+
+Respond ONLY with valid JSON, no markdown, no explanation:
+{
+  "title": "...",
+  "description": "...",
+  "og_title": "...",
+  "og_description": "...",
+  "keywords": "..."
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if (!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    const text = data.content.map(i => i.text||'').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    const result = JSON.parse(clean);
+
+    // Populate fields
+    if (result.title)          { document.getElementById('inp-title').value = result.title; updateCharCount('inp-title','cc-title',60); }
+    if (result.description)    { document.getElementById('inp-desc').value = result.description; updateCharCount('inp-desc','cc-desc',160); }
+    if (result.og_title)       { document.getElementById('inp-og-title').value = result.og_title; updateCharCount('inp-og-title','cc-og-title',95); }
+    if (result.og_description) { document.getElementById('inp-og-desc').value = result.og_description; updateCharCount('inp-og-desc','cc-og-desc',200); }
+    if (result.keywords)       { document.getElementById('inp-keywords').value = result.keywords; }
+
+    liveUpdate();
+  } catch(err) {
+    alert('AI enhancement failed: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    loader.classList.remove('show');
+  }
+}
+
+// ── Copy ──
+function copyCode() {
+  const code = generatedTags[currentTab] || '';
+  if (!code) return;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

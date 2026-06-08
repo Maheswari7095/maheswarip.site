@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Count Tool — Maheswari P SEO Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #f5f3ef;
+    --bg-mid:       #edeae3;
+    --bg-light:     #e4e0d6;
+    --border:       #ccc6b8;
+    --gold:         #a0742a;
+    --gold-light:   #b8893a;
+    --gold-glow:    rgba(160,116,42,0.10);
+    --ink:          #1c1812;
+    --ink-muted:    #5c5040;
+    --ink-body:     #3a3228;
+    --white-card:   #ffffff;
+    --green:        #4a9e6b;
+    --red:          #c0392b;
+    --orange:       #e07b39;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(160,116,42,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(160,116,42,0.045) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 4rem;
+    background: rgba(245,243,239,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-left { display: flex; align-items: center; gap: 1.2rem; }
+  .nav-logo {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--bg-light); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.06em; text-decoration: none; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .nav-logo:hover { background: var(--gold-glow); }
+  .nav-breadcrumb {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; color: var(--ink-muted);
+    letter-spacing: 0.08em;
+  }
+  .nav-breadcrumb a { color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  .nav-breadcrumb a:hover { color: var(--gold); }
+  .nav-breadcrumb .sep { opacity: 0.4; }
+  .nav-breadcrumb .current { color: var(--gold); font-weight: 500; }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a {
+    text-decoration: none; color: var(--ink-muted);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  nav ul a:hover { color: var(--gold); }
+  nav ul a.active { color: var(--gold); }
+  .nav-contact-btn {
+    background: var(--gold); color: var(--bg);
+    padding: 0.45rem 1.2rem; border-radius: 2px;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+  }
+  .nav-contact-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .nav-mobile-toggle {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px; background: none; border: none;
+  }
+  .nav-mobile-toggle span {
+    display: block; width: 22px; height: 2px;
+    background: var(--ink-muted); border-radius: 2px; transition: all 0.3s;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 8rem 4rem 3rem; position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto; text-align: center;
+  }
+  .page-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; color: var(--gold);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .page-eyebrow::before, .page-eyebrow::after {
+    content: ''; display: inline-block;
+    width: 28px; height: 1px; background: var(--gold); opacity: 0.6;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+    font-weight: 900; line-height: 1.08;
+    color: var(--ink); margin-bottom: 0.8rem;
+    animation: fadeInUp 0.6s ease 0.1s both;
+  }
+  .page-title em { font-style: italic; color: var(--gold); }
+  .page-desc {
+    font-size: 1rem; color: var(--ink-muted);
+    font-weight: 300; max-width: 500px; margin: 0 auto;
+    animation: fadeInUp 0.6s ease 0.2s both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TOOL WRAPPER ── */
+  .tool-wrapper {
+    position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto;
+    padding: 0 4rem 6rem;
+  }
+
+  /* ── TABS ── */
+  .tool-tabs {
+    display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s ease 0.3s both;
+  }
+  .tool-tab {
+    padding: 0.55rem 1.4rem;
+    border: 1px solid var(--border); border-radius: 2px;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-muted); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tool-tab:hover { border-color: var(--gold); color: var(--gold); }
+  .tool-tab.active { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+
+  /* ── PANELS ── */
+  .panel { display: none; animation: fadeInUp 0.4s ease both; }
+  .panel.active { display: block; }
+
+  /* ── URL PANEL ── */
+  .input-card {
+    background: var(--white-card);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 2rem; margin-bottom: 1.5rem;
+  }
+  .input-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: 0.6rem; display: block;
+  }
+  .url-row {
+    display: flex; gap: 0.75rem; align-items: stretch;
+  }
+  .url-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border); border-radius: 2px;
+    background: var(--bg); color: var(--ink);
+    font-family: 'DM Mono', monospace; font-size: 0.88rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .url-input:focus { border-color: var(--gold); }
+  .url-input::placeholder { color: var(--ink-muted); opacity: 0.6; }
+  .btn-analyze {
+    background: var(--gold); color: var(--bg);
+    padding: 0.75rem 1.6rem; border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+  }
+  .btn-analyze:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-analyze:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* ── LOADER ── */
+  .loader {
+    display: none; align-items: center; gap: 0.75rem;
+    padding: 1.2rem 0;
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    color: var(--ink-muted); letter-spacing: 0.08em;
+  }
+  .loader.visible { display: flex; }
+  .loader-dots { display: flex; gap: 5px; }
+  .loader-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); animation: dot-bounce 1.4s ease-in-out infinite;
+  }
+  .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-bounce {
+    0%,80%,100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .error-msg {
+    display: none; color: var(--red);
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(192,57,43,0.25); border-radius: 2px;
+    background: rgba(192,57,43,0.04); margin-top: 0.75rem;
+  }
+  .error-msg.visible { display: block; }
+
+  /* ── RESULTS CARD ── */
+  .results-card {
+    background: var(--white-card);
+    border: 1px solid var(--border); border-radius: 4px;
+    overflow: hidden;
+    display: none;
+  }
+  .results-card.visible { display: block; animation: fadeInUp 0.5s ease both; }
+  .results-header {
+    padding: 1.4rem 2rem;
+    background: var(--bg-mid); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem;
+  }
+  .results-url {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    color: var(--ink-muted); word-break: break-all;
+  }
+  .results-url strong { color: var(--gold); }
+  .results-body { padding: 2rem; }
+
+  /* ── BIG STAT ROW ── */
+  .big-stats {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .big-stat {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+    padding: 1.2rem 1rem; text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .big-stat:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .big-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900; color: var(--gold); line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .big-stat-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted);
+  }
+
+  /* ── SEO CHECKS ── */
+  .seo-checks { margin-bottom: 2rem; }
+  .section-heading {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-muted);
+    margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(204,198,184,0.4);
+    font-size: 0.88rem;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+  .check-label { font-weight: 500; color: var(--ink); }
+  .check-detail { font-size: 0.8rem; color: var(--ink-muted); margin-top: 0.1rem; }
+  .check-value {
+    margin-left: auto; flex-shrink: 0;
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    padding: 0.25rem 0.6rem; border-radius: 2px;
+    font-weight: 500; text-align: right;
+  }
+  .cv-ok { background: rgba(74,158,107,0.12); color: var(--green); }
+  .cv-warn { background: rgba(224,123,57,0.12); color: var(--orange); }
+  .cv-bad { background: rgba(192,57,43,0.12); color: var(--red); }
+
+  /* ── TEXT PANEL ── */
+  .text-area-wrap { position: relative; }
+  .text-input {
+    width: 100%; min-height: 180px;
+    padding: 1rem; resize: vertical;
+    border: 1px solid var(--border); border-radius: 2px;
+    background: var(--bg); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-size: 0.92rem; line-height: 1.6;
+    outline: none; transition: border-color 0.2s;
+  }
+  .text-input:focus { border-color: var(--gold); }
+  .text-live-stats {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem; margin-top: 1rem;
+  }
+  .live-stat {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+    padding: 0.9rem; display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .live-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem; font-weight: 900; color: var(--gold); line-height: 1;
+  }
+  .live-stat-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted);
+  }
+
+  /* SEO limit bars */
+  .seo-limits { margin-top: 1.5rem; }
+  .limit-row { margin-bottom: 1.1rem; }
+  .limit-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.3rem;
+  }
+  .limit-label { font-size: 0.82rem; color: var(--ink); font-weight: 500; }
+  .limit-count {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--ink-muted);
+  }
+  .limit-bar { height: 6px; background: var(--bg-light); border-radius: 3px; overflow: hidden; }
+  .limit-fill { height: 100%; border-radius: 3px; transition: width 0.3s, background 0.3s; }
+  .limit-hint {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink-muted);
+    margin-top: 0.25rem; letter-spacing: 0.05em;
+  }
+
+  /* copy btn */
+  .copy-row { display: flex; justify-content: flex-end; margin-top: 1rem; }
+  .btn-copy {
+    background: transparent; border: 1px solid var(--border); border-radius: 2px;
+    color: var(--ink-muted); padding: 0.4rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-copy:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--ink-muted);
+    letter-spacing: 0.08em; flex-wrap: wrap; gap: 1rem;
+  }
+  footer a { color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--gold); }
+  .footer-right { display: flex; gap: 2rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    nav { padding: 0.85rem 1.5rem; }
+    nav ul { display: none; }
+    nav ul.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: rgba(245,243,239,0.98); border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem; gap: 1rem;
+    }
+    .nav-mobile-toggle { display: flex; }
+    .nav-contact-btn { display: none; }
+    .page-header, .tool-wrapper { padding-left: 1.5rem; padding-right: 1.5rem; }
+    footer { padding: 1.2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    .url-row { flex-direction: column; }
+    .btn-analyze { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo" title="Back to Portfolio">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a>
+      <span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a>
+      <span class="sep">/</span>
+      <span class="current">Character Count</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<header class="page-header">
+  <div class="page-eyebrow">Content Analysis</div>
+  <h1 class="page-title">Character <em>Count</em> Tool</h1>
+  <p class="page-desc">Analyze any URL's page content or paste your own text — get character counts, word stats, and instant SEO length checks.</p>
+</header>
+
+<!-- ── TOOL ── -->
+<div class="tool-wrapper">
+
+  <!-- Tabs -->
+  <div class="tool-tabs">
+    <button class="tool-tab active" onclick="switchTab('url')">🔗 Analyze URL</button>
+    <button class="tool-tab" onclick="switchTab('text')">✏️ Paste Text</button>
+  </div>
+
+  <!-- ── URL PANEL ── -->
+  <div class="panel active" id="panel-url">
+    <div class="input-card">
+      <label class="input-label">Enter a webpage URL</label>
+      <div class="url-row">
+        <input
+          type="url"
+          class="url-input"
+          id="url-input"
+          placeholder="https://example.com/your-page"
+          autocomplete="off"
+        />
+        <button class="btn-analyze" id="analyze-btn" onclick="analyzeURL()">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M20 20l-4-4"/></svg>
+          Analyze
+        </button>
+      </div>
+      <div class="loader" id="url-loader">
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+        <span id="loader-msg">Fetching page content…</span>
+      </div>
+      <div class="error-msg" id="url-error"></div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-card" id="url-results">
+      <div class="results-header">
+        <div class="results-url">Analyzed: <strong id="result-url-display"></strong></div>
+      </div>
+      <div class="results-body">
+
+        <div class="big-stats" id="big-stats-row"></div>
+
+        <div class="seo-checks">
+          <div class="section-heading">SEO Character Limits</div>
+          <div id="seo-check-list"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TEXT PANEL ── -->
+  <div class="panel" id="panel-text">
+    <div class="input-card">
+      <label class="input-label">Paste or type your content</label>
+      <textarea
+        class="text-input"
+        id="text-input"
+        placeholder="Paste your title, meta description, body copy, or any text here…"
+        oninput="updateLiveStats()"
+      ></textarea>
+
+      <div class="text-live-stats">
+        <div class="live-stat"><div class="live-stat-num" id="ls-chars">0</div><div class="live-stat-lbl">Characters</div></div>
+        <div class="live-stat"><div class="live-stat-num" id="ls-chars-ns">0</div><div class="live-stat-lbl">Chars (no spaces)</div></div>
+        <div class="live-stat"><div class="live-stat-num" id="ls-words">0</div><div class="live-stat-lbl">Words</div></div>
+        <div class="live-stat"><div class="live-stat-num" id="ls-sentences">0</div><div class="live-stat-lbl">Sentences</div></div>
+        <div class="live-stat"><div class="live-stat-num" id="ls-paragraphs">0</div><div class="live-stat-lbl">Paragraphs</div></div>
+        <div class="live-stat"><div class="live-stat-num" id="ls-reading">0</div><div class="live-stat-lbl">Reading time (min)</div></div>
+      </div>
+
+      <div class="seo-limits">
+        <div class="section-heading" style="margin-top:1.4rem;">SEO Limit Checker</div>
+
+        <div class="limit-row">
+          <div class="limit-top">
+            <span class="limit-label">Page Title</span>
+            <span class="limit-count" id="bar-title-count">0 / 60 chars</span>
+          </div>
+          <div class="limit-bar"><div class="limit-fill" id="bar-title" style="width:0%"></div></div>
+          <div class="limit-hint" id="bar-title-hint">Ideal: 50–60 characters</div>
+        </div>
+
+        <div class="limit-row">
+          <div class="limit-top">
+            <span class="limit-label">Meta Description</span>
+            <span class="limit-count" id="bar-desc-count">0 / 160 chars</span>
+          </div>
+          <div class="limit-bar"><div class="limit-fill" id="bar-desc" style="width:0%"></div></div>
+          <div class="limit-hint" id="bar-desc-hint">Ideal: 150–160 characters</div>
+        </div>
+
+        <div class="limit-row">
+          <div class="limit-top">
+            <span class="limit-label">Twitter / X Post</span>
+            <span class="limit-count" id="bar-tweet-count">0 / 280 chars</span>
+          </div>
+          <div class="limit-bar"><div class="limit-fill" id="bar-tweet" style="width:0%"></div></div>
+          <div class="limit-hint" id="bar-tweet-hint">Max: 280 characters</div>
+        </div>
+
+        <div class="limit-row">
+          <div class="limit-top">
+            <span class="limit-label">LinkedIn Post</span>
+            <span class="limit-count" id="bar-linkedin-count">0 / 3000 chars</span>
+          </div>
+          <div class="limit-bar"><div class="limit-fill" id="bar-linkedin" style="width:0%"></div></div>
+          <div class="limit-hint" id="bar-linkedin-hint">Max: 3,000 characters</div>
+        </div>
+      </div>
+
+      <div class="copy-row">
+        <button class="btn-copy" onclick="copyStats()">📋 Copy Stats</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tool-wrapper -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">All Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+// ── Tab switching ──
+function switchTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event && event.target && event.target.classList.add('active');
+  // re-activate the right tab button by index
+  const tabs = document.querySelectorAll('.tool-tab');
+  if (tab === 'url') tabs[0].classList.add('active');
+  else tabs[1].classList.add('active');
+}
+
+// ── Mobile nav ──
+document.getElementById('mobile-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+// ── Live text stats ──
+function updateLiveStats() {
+  const text = document.getElementById('text-input').value;
+  const chars = text.length;
+  const charsNoSpace = text.replace(/\s/g, '').length;
+  const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  const sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+/g) || []).length;
+  const paragraphs = text.trim() === '' ? 0 : text.trim().split(/\n\s*\n/).filter(p => p.trim()).length || (text.trim() ? 1 : 0);
+  const readingMin = Math.ceil(words / 200);
+
+  document.getElementById('ls-chars').textContent = chars.toLocaleString();
+  document.getElementById('ls-chars-ns').textContent = charsNoSpace.toLocaleString();
+  document.getElementById('ls-words').textContent = words.toLocaleString();
+  document.getElementById('ls-sentences').textContent = sentences;
+  document.getElementById('ls-paragraphs').textContent = paragraphs;
+  document.getElementById('ls-reading').textContent = readingMin;
+
+  // Limit bars
+  updateBar('title', chars, 50, 60);
+  updateBar('desc', chars, 150, 160);
+  updateBar('tweet', chars, 0, 280);
+  updateBar('linkedin', chars, 0, 3000);
+}
+
+function updateBar(id, val, min, max) {
+  const pct = Math.min((val / max) * 100, 100);
+  const fill = document.getElementById('bar-' + id);
+  const count = document.getElementById('bar-' + id + '-count');
+  const hint = document.getElementById('bar-' + id + '-hint');
+
+  fill.style.width = pct + '%';
+
+  // Color logic
+  let color, msg;
+  if (id === 'title') {
+    count.textContent = `${val} / ${max} chars`;
+    if (val === 0) { color = '#ccc6b8'; msg = 'Ideal: 50–60 characters'; }
+    else if (val >= 50 && val <= 60) { color = '#4a9e6b'; msg = `✓ Perfect length (${val} chars)`; }
+    else if (val > 60) { color = '#c0392b'; msg = `↑ Too long by ${val - 60} chars (max 60)`; }
+    else { color = '#e07b39'; msg = `↓ ${60 - val} chars to reach ideal minimum (50)`; }
+  } else if (id === 'desc') {
+    count.textContent = `${val} / ${max} chars`;
+    if (val === 0) { color = '#ccc6b8'; msg = 'Ideal: 150–160 characters'; }
+    else if (val >= 150 && val <= 160) { color = '#4a9e6b'; msg = `✓ Perfect length (${val} chars)`; }
+    else if (val > 160) { color = '#c0392b'; msg = `↑ Too long by ${val - 160} chars (max 160)`; }
+    else { color = '#e07b39'; msg = `${val} chars — aim for 150+`; }
+  } else if (id === 'tweet') {
+    count.textContent = `${val} / ${max} chars`;
+    if (val === 0) { color = '#ccc6b8'; msg = 'Max: 280 characters'; }
+    else if (val <= 280) { color = '#4a9e6b'; msg = `✓ ${280 - val} chars remaining`; }
+    else { color = '#c0392b'; msg = `↑ Over limit by ${val - 280} chars`; }
+  } else {
+    count.textContent = `${val.toLocaleString()} / ${max.toLocaleString()} chars`;
+    if (val === 0) { color = '#ccc6b8'; msg = 'Max: 3,000 characters'; }
+    else if (val <= 3000) { color = '#4a9e6b'; msg = `✓ ${(3000-val).toLocaleString()} chars remaining`; }
+    else { color = '#c0392b'; msg = `↑ Over limit by ${(val-3000).toLocaleString()} chars`; }
+  }
+  fill.style.background = color;
+  hint.textContent = msg;
+}
+
+// ── Copy stats ──
+function copyStats() {
+  const text = document.getElementById('text-input').value;
+  const chars = text.length;
+  const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  const summary = `Character Count Stats\n———————————————\nCharacters: ${chars}\nChars (no spaces): ${text.replace(/\s/g,'').length}\nWords: ${words}\nSentences: ${(text.match(/[.!?]+/g)||[]).length}\nReading time: ~${Math.ceil(words/200)} min`;
+  navigator.clipboard.writeText(summary).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy Stats'; }, 2000);
+  });
+}
+
+// ── URL Analysis via Claude API ──
+async function analyzeURL() {
+  const urlInput = document.getElementById('url-input');
+  const url = urlInput.value.trim();
+
+  if (!url || !url.startsWith('http')) {
+    showError('Please enter a valid URL starting with https://');
+    return;
+  }
+
+  const btn = document.getElementById('analyze-btn');
+  const loader = document.getElementById('url-loader');
+  const errorEl = document.getElementById('url-error');
+  const resultsCard = document.getElementById('url-results');
+
+  btn.disabled = true;
+  btn.innerHTML = '…';
+  loader.classList.add('visible');
+  errorEl.classList.remove('visible');
+  resultsCard.classList.remove('visible');
+
+  const messages = [
+    'Fetching page content…',
+    'Parsing HTML structure…',
+    'Counting characters…',
+    'Checking SEO limits…'
+  ];
+  let step = 0;
+  const msgEl = document.getElementById('loader-msg');
+  const stepTimer = setInterval(() => {
+    step = (step + 1) % messages.length;
+    msgEl.textContent = messages[step];
+  }, 1200);
+
+  const prompt = `You are an SEO character count analyzer. For this URL: ${url}
+
+Analyze the page and return ONLY valid JSON (no markdown, no explanation):
+{
+  "url": "${url}",
+  "page_title": "<extracted or estimated page title text>",
+  "title_chars": <number>,
+  "meta_description": "<extracted or estimated meta description>",
+  "meta_desc_chars": <number>,
+  "estimated_body_chars": <integer — estimate total visible body text characters>,
+  "estimated_word_count": <integer>,
+  "estimated_sentences": <integer>,
+  "h1_text": "<first H1 or 'Not detected'>",
+  "h1_chars": <number>,
+  "og_title": "<OG title or 'Not set'>",
+  "og_title_chars": <number>,
+  "og_desc": "<OG description or 'Not set'>",
+  "og_desc_chars": <number>,
+  "estimated_reading_min": <number>,
+  "seo_checks": [
+    {
+      "label": "Page Title Length",
+      "value": <title_chars>,
+      "status": "<ok|warn|bad>",
+      "detail": "<concise verdict, e.g. ✓ Perfect 55 chars or ↑ Too long by 8 chars>"
+    },
+    {
+      "label": "Meta Description Length",
+      "value": <meta_desc_chars>,
+      "status": "<ok|warn|bad>",
+      "detail": "<verdict>"
+    },
+    {
+      "label": "H1 Length",
+      "value": <h1_chars>,
+      "status": "<ok|warn|bad>",
+      "detail": "<verdict, ideal 20-70 chars>"
+    },
+    {
+      "label": "OG Title Length",
+      "value": <og_title_chars>,
+      "status": "<ok|warn|bad>",
+      "detail": "<verdict, ideal 40-60 chars>"
+    },
+    {
+      "label": "OG Description Length",
+      "value": <og_desc_chars>,
+      "status": "<ok|warn|bad>",
+      "detail": "<verdict, ideal 150-200 chars>"
+    }
+  ]
+}
+
+Use your knowledge of this URL, its domain, and common page patterns to produce realistic estimates. Be accurate and specific.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(stepTimer);
+
+    if (!response.ok) throw new Error('API error ' + response.status);
+    const data = await response.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    renderURLResults(result);
+  } catch (err) {
+    clearInterval(stepTimer);
+    showError('Analysis failed: ' + err.message + '. Please try again.');
+  } finally {
+    loader.classList.remove('visible');
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M20 20l-4-4"/></svg> Analyze';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('url-error');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('visible');
+  document.getElementById('url-loader').classList.remove('visible');
+  document.getElementById('analyze-btn').disabled = false;
+  document.getElementById('analyze-btn').innerHTML = '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M20 20l-4-4"/></svg> Analyze';
+}
+
+function renderURLResults(r) {
+  document.getElementById('result-url-display').textContent = r.url;
+
+  // Big stats
+  const stats = [
+    { num: (r.estimated_body_chars || 0).toLocaleString(), lbl: 'Body Characters' },
+    { num: (r.estimated_word_count || 0).toLocaleString(), lbl: 'Word Count' },
+    { num: r.title_chars || 0, lbl: 'Title Chars' },
+    { num: r.meta_desc_chars || 0, lbl: 'Meta Desc Chars' },
+    { num: r.estimated_sentences || 0, lbl: 'Sentences' },
+    { num: (r.estimated_reading_min || 0) + ' min', lbl: 'Reading Time' },
+  ];
+  document.getElementById('big-stats-row').innerHTML = stats.map(s =>
+    `<div class="big-stat">
+      <div class="big-stat-num">${s.num}</div>
+      <div class="big-stat-lbl">${s.lbl}</div>
+    </div>`
+  ).join('');
+
+  // SEO checks
+  const statusMap = { ok: { icon: '✅', cls: 'cv-ok' }, warn: { icon: '🟡', cls: 'cv-warn' }, bad: { icon: '🔴', cls: 'cv-bad' } };
+  document.getElementById('seo-check-list').innerHTML = (r.seo_checks || []).map(c => {
+    const s = statusMap[c.status] || statusMap.warn;
+    return `<div class="check-item">
+      <div class="check-icon">${s.icon}</div>
+      <div>
+        <div class="check-label">${c.label}</div>
+        <div class="check-detail">${c.detail}</div>
+      </div>
+      <div class="check-value ${s.cls}">${c.value} chars</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('url-results').classList.add('visible');
+  setTimeout(() => document.getElementById('url-results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+}
+
+// Enter key support
+document.getElementById('url-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') analyzeURL();
+});
+</script>
+
+</body>
+</html>

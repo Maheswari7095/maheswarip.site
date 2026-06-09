@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTM Link Builder — Maheswari P SEO Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef;--bg-mid:#edeae3;--bg-light:#e4e0d6;--border:#ccc6b8;
+    --gold:#a0742a;--gold-light:#b8893a;--gold-glow:rgba(160,116,42,0.10);
+    --ink:#1c1812;--ink-muted:#5c5040;--ink-body:#3a3228;--white-card:#ffffff;
+    --green:#4a9e6b;--red:#c0392b;--blue:#2563a8;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:0;
+    background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);
+    background-size:60px 60px;pointer-events:none}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;
+    padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .nav-left{display:flex;align-items:center;gap:1.2rem}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+    font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;transition:background 0.2s}
+  .nav-logo:hover{background:var(--gold-glow)}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  .nav-breadcrumb a:hover{color:var(--gold)}
+  .nav-breadcrumb .sep{opacity:0.4}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500}
+  nav ul{list-style:none;display:flex;gap:2.5rem}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;
+    letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s}
+  nav ul a:hover,nav ul a.active{color:var(--gold)}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;
+    font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    text-decoration:none;transition:background 0.2s,transform 0.15s}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px}
+
+  /* PAGE HEADER */
+  .page-header{padding:8rem 4rem 3rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;
+    text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;
+    animation:fadeUp 0.6s ease both}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;
+    line-height:1.08;color:var(--ink);margin-bottom:0.8rem;animation:fadeUp 0.6s ease 0.1s both}
+  .page-title em{font-style:italic;color:var(--gold)}
+  .page-desc{font-size:1rem;color:var(--ink-muted);font-weight:300;max-width:480px;margin:0 auto;animation:fadeUp 0.6s ease 0.2s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* LAYOUT */
+  .tool-wrapper{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 4rem 6rem;
+    display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;
+    animation:fadeUp 0.6s ease 0.3s both}
+  .col-left{display:flex;flex-direction:column;gap:1.5rem}
+  .col-right{position:sticky;top:5.5rem;display:flex;flex-direction:column;gap:1.2rem}
+
+  /* CARDS */
+  .card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .card-header{padding:1rem 1.5rem;background:var(--bg-mid);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:0.6rem}
+  .card-header-icon{font-size:1rem}
+  .card-title{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted)}
+  .card-body{padding:1.4rem 1.5rem}
+
+  /* FORM FIELDS */
+  .field{margin-bottom:1.1rem}
+  .field:last-child{margin-bottom:0}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--ink-muted);margin-bottom:0.35rem;display:flex;align-items:center;gap:0.4rem}
+  .field-required{color:var(--gold);font-size:0.9em}
+  .field-hint{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);opacity:0.7;
+    margin-top:0.25rem;letter-spacing:0.04em}
+  .field-input{width:100%;padding:0.6rem 0.9rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.88rem;
+    outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+  .field-input::placeholder{color:var(--ink-muted);opacity:0.5}
+  .field-input.error{border-color:var(--red)}
+
+  /* PRESET PILLS */
+  .preset-row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.45rem}
+  .preset-pill{padding:0.2rem 0.7rem;border:1px solid var(--border);border-radius:20px;
+    font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.06em;
+    color:var(--ink-muted);cursor:pointer;background:transparent;transition:all 0.18s;white-space:nowrap}
+  .preset-pill:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-glow)}
+  .preset-pill.active{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+
+  /* OUTPUT CARD */
+  .output-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--ink-muted);margin-bottom:0.5rem}
+  .url-output{width:100%;padding:0.75rem 0.9rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg-mid);color:var(--ink-body);font-family:'DM Mono',monospace;font-size:0.78rem;
+    line-height:1.6;word-break:break-all;min-height:60px;resize:none;outline:none;
+    transition:border-color 0.2s}
+  .url-output:focus{border-color:var(--gold)}
+  .output-empty{color:var(--ink-muted);opacity:0.5;font-style:italic}
+
+  /* URL BREAKDOWN */
+  .url-breakdown{margin-top:0.8rem;padding:0.9rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;
+    font-family:'DM Mono',monospace;font-size:0.72rem;line-height:1.8;display:none}
+  .url-breakdown.visible{display:block}
+  .param-row{display:flex;gap:0.5rem;align-items:baseline;flex-wrap:wrap}
+  .param-key{color:var(--ink-muted);min-width:110px;flex-shrink:0}
+  .param-val{color:var(--gold);word-break:break-all}
+
+  /* COPY BUTTON */
+  .btn-row{display:flex;gap:0.7rem;margin-top:1rem;flex-wrap:wrap}
+  .btn-copy{flex:1;background:var(--gold);color:var(--bg);padding:0.65rem 1.2rem;border:none;border-radius:2px;
+    font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    cursor:pointer;transition:background 0.2s,transform 0.15s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+  .btn-copy:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .btn-copy.copied{background:var(--green)}
+  .btn-secondary{background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--ink-muted);
+    padding:0.65rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;
+    letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+  .btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* HISTORY */
+  .history-list{display:flex;flex-direction:column;gap:0.6rem;max-height:320px;overflow-y:auto}
+  .history-item{padding:0.7rem 0.9rem;background:var(--bg);border:1px solid var(--border);border-radius:2px;
+    cursor:pointer;transition:border-color 0.2s,background 0.2s;position:relative}
+  .history-item:hover{border-color:var(--gold);background:var(--gold-glow)}
+  .history-url{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-body);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:0.2rem}
+  .history-meta{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);
+    display:flex;gap:0.8rem;flex-wrap:wrap}
+  .history-delete{position:absolute;top:0.5rem;right:0.6rem;background:none;border:none;
+    cursor:pointer;color:var(--ink-muted);font-size:0.85rem;opacity:0.5;transition:opacity 0.2s;line-height:1}
+  .history-delete:hover{opacity:1;color:var(--red)}
+  .empty-history{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--ink-muted);
+    text-align:center;padding:1.5rem 0;letter-spacing:0.06em;opacity:0.7}
+
+  /* CHAR COUNTER */
+  .char-counter{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted);
+    text-align:right;margin-top:0.2rem;transition:color 0.2s}
+  .char-counter.warn{color:var(--red)}
+
+  /* VALIDATION DOT */
+  .field-status{width:7px;height:7px;border-radius:50%;background:var(--border);display:inline-block;flex-shrink:0}
+  .field-status.ok{background:var(--green)}
+  .field-status.err{background:var(--red)}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.5rem 4rem;
+    display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;flex-wrap:wrap;gap:1rem}
+  footer a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  footer a:hover{color:var(--gold)}
+  .footer-right{display:flex;gap:2rem}
+
+  @media(max-width:720px){
+    nav{padding:0.85rem 1.5rem}
+    nav ul{display:none}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+      background:rgba(245,243,239,0.98);border-bottom:1px solid var(--border);padding:1rem 1.5rem;gap:1rem}
+    .nav-mobile-toggle{display:flex}
+    .nav-contact-btn{display:none}
+    .page-header{padding-left:1.5rem;padding-right:1.5rem}
+    .tool-wrapper{padding:0 1.5rem 4rem;grid-template-columns:1fr}
+    .col-right{position:static}
+    footer{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a><span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a><span class="sep">/</span>
+      <span class="current">UTM Builder</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+  <div class="page-eyebrow">Campaign Tracking</div>
+  <h1 class="page-title">UTM <em>Link Builder</em></h1>
+  <p class="page-desc">Build clean, trackable campaign URLs in seconds. Fill the fields, copy your link — no more manual parameter typing.</p>
+</header>
+
+<!-- TOOL -->
+<div class="tool-wrapper">
+
+  <!-- LEFT: Form -->
+  <div class="col-left">
+
+    <!-- Website URL -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-icon">🌐</span>
+        <span class="card-title">Destination URL</span>
+      </div>
+      <div class="card-body">
+        <div class="field">
+          <label class="field-label" for="f-url">
+            Website URL <span class="field-required">*</span>
+            <span class="field-status" id="dot-url"></span>
+          </label>
+          <input class="field-input" id="f-url" type="url" placeholder="https://yoursite.com/landing-page" oninput="build()">
+          <div class="field-hint">The full page URL you want to track</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campaign Params -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-icon">📊</span>
+        <span class="card-title">Campaign Parameters</span>
+      </div>
+      <div class="card-body">
+
+        <!-- Source -->
+        <div class="field">
+          <label class="field-label" for="f-source">
+            utm_source <span class="field-required">*</span>
+            <span class="field-status" id="dot-source"></span>
+          </label>
+          <input class="field-input" id="f-source" type="text" placeholder="e.g. google" oninput="build()">
+          <div class="preset-row" id="presets-source"></div>
+          <div class="field-hint">Where the traffic comes from</div>
+        </div>
+
+        <!-- Medium -->
+        <div class="field">
+          <label class="field-label" for="f-medium">
+            utm_medium <span class="field-required">*</span>
+            <span class="field-status" id="dot-medium"></span>
+          </label>
+          <input class="field-input" id="f-medium" type="text" placeholder="e.g. cpc" oninput="build()">
+          <div class="preset-row" id="presets-medium"></div>
+          <div class="field-hint">Marketing channel type</div>
+        </div>
+
+        <!-- Campaign -->
+        <div class="field">
+          <label class="field-label" for="f-campaign">
+            utm_campaign <span class="field-required">*</span>
+            <span class="field-status" id="dot-campaign"></span>
+          </label>
+          <input class="field-input" id="f-campaign" type="text" placeholder="e.g. summer-sale-2025" oninput="build()">
+          <div class="char-counter" id="cc-campaign">0 chars</div>
+          <div class="field-hint">Name of your campaign</div>
+        </div>
+
+        <!-- Term -->
+        <div class="field">
+          <label class="field-label" for="f-term">utm_term <span style="font-size:0.75em;opacity:0.6">(optional)</span></label>
+          <input class="field-input" id="f-term" type="text" placeholder="e.g. seo+tools" oninput="build()">
+          <div class="field-hint">Paid keyword (mostly for Google Ads)</div>
+        </div>
+
+        <!-- Content -->
+        <div class="field">
+          <label class="field-label" for="f-content">utm_content <span style="font-size:0.75em;opacity:0.6">(optional)</span></label>
+          <input class="field-input" id="f-content" type="text" placeholder="e.g. banner-a" oninput="build()">
+          <div class="field-hint">Differentiate ads or links (A/B testing)</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- RIGHT: Output + History -->
+  <div class="col-right">
+
+    <!-- Generated URL -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-icon">🔗</span>
+        <span class="card-title">Your UTM URL</span>
+      </div>
+      <div class="card-body">
+        <div class="output-label">Generated link</div>
+        <textarea class="url-output" id="url-output" readonly rows="4" spellcheck="false">Fill in the required fields to generate your UTM URL…</textarea>
+
+        <div class="url-breakdown" id="url-breakdown"></div>
+
+        <div class="btn-row">
+          <button class="btn-copy" id="btn-copy" onclick="copyURL()" disabled>
+            <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="1"/><path d="M4 12H3a1 1 0 01-1-1V3a1 1 0 011-1h8a1 1 0 011 1v1"/></svg>
+            Copy URL
+          </button>
+          <button class="btn-secondary" onclick="resetForm()">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-icon">🕘</span>
+        <span class="card-title">Recent Links</span>
+      </div>
+      <div class="card-body" style="padding:1rem 1.5rem">
+        <div class="history-list" id="history-list">
+          <div class="empty-history">No links built yet</div>
+        </div>
+        <button class="btn-secondary" style="width:100%;margin-top:0.8rem;font-size:0.72rem" onclick="clearHistory()">Clear history</button>
+      </div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /tool-wrapper -->
+
+<footer>
+  <div>© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">All Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+// ── Presets ──
+const PRESETS = {
+  source:   ['google','facebook','instagram','twitter','linkedin','newsletter','bing','tiktok','youtube'],
+  medium:   ['cpc','email','organic','social','referral','banner','affiliate','video','sms'],
+};
+
+function initPresets() {
+  Object.entries(PRESETS).forEach(([key, vals]) => {
+    const row = document.getElementById('presets-' + key);
+    vals.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'preset-pill';
+      btn.textContent = v;
+      btn.onclick = () => setPreset(key, v, btn);
+      row.appendChild(btn);
+    });
+  });
+}
+
+function setPreset(key, val, btn) {
+  const input = document.getElementById('f-' + key);
+  const wasActive = btn.classList.contains('active');
+  document.querySelectorAll('#presets-' + key + ' .preset-pill').forEach(b => b.classList.remove('active'));
+  if (!wasActive) { input.value = val; btn.classList.add('active'); }
+  else input.value = '';
+  build();
+}
+
+// ── Build URL ──
+let currentURL = '';
+let history = JSON.parse(localStorage.getItem('utm_history') || '[]');
+
+function build() {
+  const url      = document.getElementById('f-url').value.trim();
+  const source   = document.getElementById('f-source').value.trim();
+  const medium   = document.getElementById('f-medium').value.trim();
+  const campaign = document.getElementById('f-campaign').value.trim();
+  const term     = document.getElementById('f-term').value.trim();
+  const content  = document.getElementById('f-content').value.trim();
+
+  // char counter
+  const cc = document.getElementById('cc-campaign');
+  cc.textContent = campaign.length + ' chars';
+  cc.classList.toggle('warn', campaign.length > 60);
+
+  // dot indicators
+  setDot('url', url && isValidURL(url));
+  setDot('source', !!source);
+  setDot('medium', !!medium);
+  setDot('campaign', !!campaign);
+
+  if (!url || !source || !medium || !campaign || !isValidURL(url)) {
+    document.getElementById('url-output').value = 'Fill in the required fields (URL, source, medium, campaign) to generate your link…';
+    document.getElementById('url-output').classList.add('output-empty');
+    document.getElementById('btn-copy').disabled = true;
+    document.getElementById('url-breakdown').classList.remove('visible');
+    currentURL = '';
+    return;
+  }
+
+  // Build
+  const params = new URLSearchParams();
+  params.set('utm_source', slug(source));
+  params.set('utm_medium', slug(medium));
+  params.set('utm_campaign', slug(campaign));
+  if (term)    params.set('utm_term', slug(term));
+  if (content) params.set('utm_content', slug(content));
+
+  const base = url.replace(/\?.*/, '');
+  const existing = url.includes('?') ? url.split('?')[1] : '';
+  const sep = '?';
+  const final = base + sep + (existing ? existing + '&' : '') + params.toString();
+
+  currentURL = final;
+  const out = document.getElementById('url-output');
+  out.value = final;
+  out.classList.remove('output-empty');
+  document.getElementById('btn-copy').disabled = false;
+
+  // Breakdown
+  renderBreakdown({ base, source: slug(source), medium: slug(medium), campaign: slug(campaign),
+    term: term ? slug(term) : '', content: content ? slug(content) : '' });
+}
+
+function renderBreakdown(p) {
+  const rows = [
+    { k: 'Base URL', v: p.base },
+    { k: 'utm_source', v: p.source },
+    { k: 'utm_medium', v: p.medium },
+    { k: 'utm_campaign', v: p.campaign },
+  ];
+  if (p.term)    rows.push({ k: 'utm_term', v: p.term });
+  if (p.content) rows.push({ k: 'utm_content', v: p.content });
+
+  document.getElementById('url-breakdown').innerHTML =
+    rows.map(r => `<div class="param-row"><span class="param-key">${r.k}</span><span class="param-val">${esc(r.v)}</span></div>`).join('');
+  document.getElementById('url-breakdown').classList.add('visible');
+}
+
+function setDot(id, ok) {
+  const d = document.getElementById('dot-' + id);
+  if (!d) return;
+  d.className = 'field-status ' + (document.getElementById('f-' + id).value.trim() ? (ok ? 'ok' : 'err') : '');
+}
+
+function isValidURL(s) {
+  try { new URL(s); return true; } catch { return false; }
+}
+
+function slug(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-_+.]/g, '');
+}
+
+// ── Copy ──
+function copyURL() {
+  if (!currentURL) return;
+  navigator.clipboard.writeText(currentURL).then(() => {
+    const btn = document.getElementById('btn-copy');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="1"/><path d="M4 12H3a1 1 0 01-1-1V3a1 1 0 011-1h8a1 1 0 011 1v1"/></svg> Copy URL';
+      btn.classList.remove('copied');
+    }, 2000);
+    saveToHistory();
+  });
+}
+
+// ── History ──
+function saveToHistory() {
+  const src  = document.getElementById('f-source').value.trim();
+  const med  = document.getElementById('f-medium').value.trim();
+  const camp = document.getElementById('f-campaign').value.trim();
+  const entry = { url: currentURL, source: src, medium: med, campaign: camp, ts: Date.now() };
+  history = [entry, ...history.filter(h => h.url !== currentURL)].slice(0, 10);
+  localStorage.setItem('utm_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!history.length) { el.innerHTML = '<div class="empty-history">No links built yet</div>'; return; }
+  el.innerHTML = history.map((h, i) => `
+    <div class="history-item" onclick="loadHistory(${i})">
+      <button class="history-delete" onclick="deleteHistory(event,${i})">✕</button>
+      <div class="history-url">${esc(h.url)}</div>
+      <div class="history-meta">
+        <span>${esc(h.source)}</span>
+        <span>${esc(h.medium)}</span>
+        <span>${esc(h.campaign)}</span>
+      </div>
+    </div>`).join('');
+}
+
+function loadHistory(i) {
+  const h = history[i];
+  if (!h) return;
+  const params = new URLSearchParams(h.url.split('?')[1] || '');
+  const base = h.url.split('?')[0];
+  document.getElementById('f-url').value = base;
+  document.getElementById('f-source').value = params.get('utm_source') || '';
+  document.getElementById('f-medium').value = params.get('utm_medium') || '';
+  document.getElementById('f-campaign').value = params.get('utm_campaign') || '';
+  document.getElementById('f-term').value = params.get('utm_term') || '';
+  document.getElementById('f-content').value = params.get('utm_content') || '';
+  // Sync presets
+  ['source','medium'].forEach(key => {
+    document.querySelectorAll('#presets-' + key + ' .preset-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === document.getElementById('f-' + key).value);
+    });
+  });
+  build();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function deleteHistory(e, i) {
+  e.stopPropagation();
+  history.splice(i, 1);
+  localStorage.setItem('utm_history', JSON.stringify(history));
+  renderHistory();
+}
+
+function clearHistory() {
+  history = [];
+  localStorage.setItem('utm_history', JSON.stringify(history));
+  renderHistory();
+}
+
+// ── Reset ──
+function resetForm() {
+  ['f-url','f-source','f-medium','f-campaign','f-term','f-content'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.querySelectorAll('.preset-pill').forEach(b => b.classList.remove('active'));
+  ['url','source','medium','campaign'].forEach(id => setDot(id, false));
+  document.getElementById('cc-campaign').textContent = '0 chars';
+  document.getElementById('url-output').value = 'Fill in the required fields to generate your UTM URL…';
+  document.getElementById('btn-copy').disabled = true;
+  document.getElementById('url-breakdown').classList.remove('visible');
+  currentURL = '';
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Mobile nav
+document.getElementById('mobile-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+// Init
+initPresets();
+renderHistory();
+</script>
+</body>
+</html>

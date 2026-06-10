@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canonical Tag Checker — Maheswari P</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef; --bg-mid:#edeae3; --bg-light:#e4e0d6;
+    --border:#ccc6b8; --gold:#a0742a; --gold-light:#b8893a;
+    --gold-glow:rgba(160,116,42,0.10); --ink:#1c1812;
+    --ink-muted:#5c5040; --ink-body:#3a3228; --white-card:#ffffff;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;transition:all 0.3s;}
+
+  /* PAGE HEADER */
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:540px;margin:0 auto;animation:fadeInUp 0.6s ease 0.2s both;}
+
+  /* TOOL AREA */
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  /* INPUT CARD */
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#5c3d8a,#9b72cf);}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:0.8rem;}
+  .html-textarea{width:100%;height:210px;padding:0.9rem 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.78rem;line-height:1.6;resize:vertical;outline:none;transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:0.9rem;}
+  .html-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+  .html-textarea::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .input-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .btn-check{height:46px;padding:0 2rem;background:var(--gold);color:var(--bg);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .btn-check:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-check:active{transform:scale(0.98);}
+  .btn-clear{height:46px;padding:0 1.4rem;background:transparent;color:var(--ink-muted);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+  .btn-clear:hover{border-color:var(--ink-muted);color:var(--ink);}
+  .input-hint{font-size:0.75rem;color:var(--ink-muted);margin-top:0.7rem;line-height:1.6;}
+
+  /* SECTION DIVIDER */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:1.8rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem;}
+  .metric{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1rem 1.1rem;}
+  .metric-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+  .metric-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1;}
+  .metric-val.c-green{color:#2e7d32;}
+  .metric-val.c-amber{color:#a0742a;}
+  .metric-val.c-red{color:#c0392b;}
+  .metric-val.c-text{font-size:1rem;padding-top:6px;}
+
+  /* ISSUES */
+  .issue{display:flex;align-items:flex-start;gap:12px;padding:0.85rem 1.1rem;background:var(--white-card);border:1px solid var(--border);border-radius:4px;margin-bottom:8px;font-size:0.85rem;line-height:1.55;}
+  .issue-icon{flex-shrink:0;margin-top:2px;font-size:1.1rem;}
+  .issue-body{flex:1;}
+  .issue-sub{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--ink-muted);word-break:break-all;display:block;margin-top:4px;white-space:pre-line;}
+  .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-right:5px;vertical-align:1px;}
+  .b-error{background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.25);color:#c0392b;}
+  .b-warn{background:rgba(160,116,42,0.1);border:1px solid rgba(160,116,42,0.3);color:var(--gold);}
+  .b-info{background:rgba(92,61,138,0.08);border:1px solid rgba(92,61,138,0.25);color:#5c3d8a;}
+  .b-ok{background:rgba(46,125,50,0.1);border:1px solid rgba(46,125,50,0.3);color:#2e7d32;}
+
+  /* TAG BLOCKS */
+  .tag-block{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0.9rem 1.1rem;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:0.75rem;line-height:1.6;word-break:break-all;position:relative;}
+  .tag-block-label{font-family:'DM Sans',sans-serif;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px;}
+  .tag-block-value{color:var(--ink-body);}
+  .copy-btn{position:absolute;top:10px;right:10px;height:28px;padding:0 10px;background:var(--white-card);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:var(--ink-muted);cursor:pointer;transition:color 0.15s,border-color 0.15s;}
+  .copy-btn:hover{color:var(--gold);border-color:var(--gold);}
+
+  /* HREFLANG TABLE */
+  .hl-table{width:100%;border-collapse:collapse;font-size:0.78rem;}
+  .hl-table th{text-align:left;padding:0.6rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid);font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .hl-table td{padding:0.6rem 1rem;border-bottom:1px solid rgba(204,198,184,0.4);font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-body);word-break:break-all;}
+  .hl-table tr:last-child td{border-bottom:none;}
+  .hl-table tr:hover td{background:rgba(245,243,239,0.5);}
+  .table-wrap{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+
+  /* EMPTY STATE */
+  .empty-state{text-align:center;padding:4rem 2rem;color:var(--ink-muted);background:var(--white-card);border:1px solid var(--border);border-radius:4px;}
+  .empty-state .icon{font-size:2.8rem;margin-bottom:0.8rem;opacity:0.25;}
+  .empty-state p{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .empty-state small{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--ink-muted);display:block;margin-top:0.5rem;letter-spacing:0;text-transform:none;font-weight:300;}
+
+  /* CTA */
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light),transparent);}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.35rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);font-weight:300;}
+  .cta-actions{display:flex;gap:0.8rem;flex-wrap:wrap;}
+  .btn-gold{background:var(--gold);color:var(--bg);padding:0.65rem 1.6rem;border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:background 0.2s,transform 0.15s;}
+  .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
+  .btn-outline{background:transparent;color:var(--gold);padding:0.65rem 1.6rem;border:1px solid rgba(160,116,42,0.4);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:border-color 0.2s,transform 0.15s;}
+  .btn-outline:hover{border-color:var(--gold);transform:translateY(-2px);}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.8rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;background:rgba(237,234,227,0.5);}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;color:var(--ink-muted);text-transform:uppercase;}
+  .footer-right{display:flex;gap:2rem;}
+  .footer-right a{font-size:0.78rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+  @media(max-width:900px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(245,243,239,0.99);border-bottom:1px solid var(--border);padding:1rem 1.5rem 1.5rem;gap:1.2rem;}
+    .nav-mobile-toggle{display:flex;}
+    .nav-contact-btn{display:none;}
+    .page-header{padding:6.5rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .input-card{padding:1.4rem 1.2rem;}
+    .cta-banner{padding:0 1.5rem;margin-bottom:4rem;}
+    .cta-inner{padding:1.6rem 1.4rem;}
+    footer{padding:1.4rem 1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo" title="Portfolio">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a>
+      <span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a>
+      <span class="sep">/</span>
+      <span class="current">Canonical Tag Checker</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<header class="page-header">
+  <div class="page-eyebrow">Technical SEO</div>
+  <h1 class="page-title">Canonical Tag <em>Checker</em></h1>
+  <p class="page-desc">Paste your page's HTML source and instantly audit canonical tags for errors, mismatches, and indexability issues.</p>
+</header>
+
+<div class="tool-wrap">
+
+  <div class="input-card">
+    <div class="field-label">Paste Page HTML Source</div>
+    <textarea class="html-textarea" id="htmlInput" placeholder="Paste your full page HTML here...
+
+How to get it:
+  • Chrome / Firefox: Press Ctrl+U (or Cmd+U on Mac) to view source, then Ctrl+A + Ctrl+C to copy all
+  • Or right-click the page → View Page Source
+  • Or open DevTools → Elements tab → right-click &lt;html&gt; → Copy outerHTML"></textarea>
+    <div class="input-actions">
+      <button class="btn-check" onclick="runCheck()">Check Canonical Tags →</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+    </div>
+    <div class="input-hint">Tip: <strong>Ctrl/Cmd + Enter</strong> to run the check instantly.</div>
+  </div>
+
+  <div id="results">
+    <div class="empty-state">
+      <div class="icon">🔗</div>
+      <p>Paste HTML source above to begin</p>
+      <small>Works with any webpage HTML — no URL needed, fully private</small>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Need a Custom SEO Strategy?</h3>
+      <p>These tools reflect the kind of data-driven, AI-augmented SEO work I do for brands every day.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="index.html#contact" class="btn-gold">Get in Touch</a>
+      <a href="seo-tools.html" class="btn-outline">All Tools</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function clearAll() {
+    document.getElementById('htmlInput').value = '';
+    document.getElementById('results').innerHTML = `<div class="empty-state"><div class="icon">🔗</div><p>Paste HTML source above to begin</p><small>Works with any webpage HTML — no URL needed, fully private</small></div>`;
+  }
+
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1600);
+    });
+  }
+
+  function runCheck() {
+    const html = document.getElementById('htmlInput').value.trim();
+    if (!html) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const out = document.getElementById('results');
+
+    const canonicals    = [...doc.querySelectorAll('link[rel="canonical"]')];
+    const headCanon     = [...doc.head.querySelectorAll('link[rel="canonical"]')];
+    const bodyCanon     = [...doc.body.querySelectorAll('link[rel="canonical"]')];
+    const ogUrls        = [...doc.querySelectorAll('meta[property="og:url"]')];
+    const hreflangs     = [...doc.querySelectorAll('link[rel="alternate"][hreflang]')];
+    const robotsMeta    = doc.querySelector('meta[name="robots"], meta[name="ROBOTS"]');
+    const titleText     = doc.querySelector('title')?.textContent?.trim() || '';
+
+    const issues = [];
+
+    // ── 1. Presence ──
+    if (canonicals.length === 0) {
+      issues.push({ level:'error', msg:'No canonical tag found. Every indexable page should declare <code>&lt;link rel="canonical" href="..."&gt;</code> in the <code>&lt;head&gt;</code>.', sub:'' });
+    } else if (canonicals.length > 1) {
+      issues.push({ level:'error', msg:`${canonicals.length} canonical tags found on this page. Only one is allowed — having multiple means search engines may ignore all of them.`, sub: canonicals.map(c => c.getAttribute('href') || '(empty)').join('\n') });
+    }
+
+    // ── 2. Placement ──
+    if (bodyCanon.length > 0) {
+      issues.push({ level:'error', msg:'Canonical tag found inside <code>&lt;body&gt;</code>. It must be placed inside <code>&lt;head&gt;</code> to be recognised by search engines.', sub: bodyCanon.map(c=>c.outerHTML).join('\n') });
+    }
+
+    // ── 3. href checks ──
+    if (canonicals.length >= 1) {
+      const tag     = canonicals[0];
+      const rawHref = tag.getAttribute('href') || '';
+      const href    = tag.href || rawHref;
+
+      if (!rawHref) {
+        issues.push({ level:'error', msg:'Canonical tag is present but the <code>href</code> attribute is empty. It must contain the full canonical URL.', sub: tag.outerHTML });
+      } else {
+        if (rawHref.startsWith('http://')) {
+          issues.push({ level:'error', msg:'Canonical URL uses HTTP. Update it to HTTPS to point to the secure version of the page.', sub: rawHref });
+        }
+        if (!rawHref.startsWith('http') && !rawHref.startsWith('//')) {
+          issues.push({ level:'warn', msg:'Canonical uses a relative URL. Absolute URLs (starting with https://) are strongly recommended to avoid ambiguity across environments.', sub: rawHref });
+        }
+        if (rawHref.includes('#')) {
+          issues.push({ level:'error', msg:'Canonical URL contains a fragment identifier (#). Fragments are not indexable — remove it from the canonical href.', sub: rawHref });
+        }
+        if (rawHref.includes('?')) {
+          issues.push({ level:'warn', msg:'Canonical URL contains a query string (?). Unless intentional, canonicals should point to the clean, parameter-free URL.', sub: rawHref });
+        }
+        if (/\s/.test(rawHref)) {
+          issues.push({ level:'warn', msg:'Canonical href contains whitespace. This may cause parsing issues — trim spaces from the URL.', sub: rawHref });
+        }
+
+        // og:url mismatch
+        if (ogUrls.length > 0) {
+          const ogHref = ogUrls[0].getAttribute('content') || '';
+          if (ogHref && ogHref !== href && ogHref !== rawHref) {
+            issues.push({ level:'warn', msg:'The <code>og:url</code> does not match the canonical URL. Social sharing and indexing signals will be inconsistent — they should be identical.', sub: `canonical: ${rawHref}\nog:url:    ${ogHref}` });
+          } else if (ogHref && (ogHref === href || ogHref === rawHref)) {
+            issues.push({ level:'ok', msg:'<code>og:url</code> matches the canonical URL. Social and indexing signals are consistent.', sub: '' });
+          }
+        } else {
+          issues.push({ level:'info', msg:'No <code>og:url</code> tag detected. Adding one that matches the canonical URL is recommended for consistent social sharing.', sub: '' });
+        }
+      }
+    }
+
+    // ── 4. Robots meta ──
+    if (robotsMeta) {
+      const content = (robotsMeta.getAttribute('content') || '').toLowerCase();
+      if (content.includes('noindex')) {
+        issues.push({ level:'error', msg:'This page has a <code>noindex</code> directive in the robots meta tag. Search engines will not index it, making the canonical tag ineffective.', sub: robotsMeta.getAttribute('content') });
+      }
+      if (content.includes('nofollow')) {
+        issues.push({ level:'info', msg:'The robots meta tag contains <code>nofollow</code>. This affects link equity passing but does not directly impact canonicalisation.', sub: robotsMeta.getAttribute('content') });
+      }
+    }
+
+    // ── 5. Hreflang ──
+    if (hreflangs.length > 0) {
+      issues.push({ level:'info', msg:`${hreflangs.length} hreflang tag${hreflangs.length > 1 ? 's' : ''} detected. Ensure each hreflang URL has a matching canonical and that x-default is present if applicable.`, sub: '' });
+    }
+
+    // ── 6. All clear ──
+    if (!issues.length && canonicals.length === 1) {
+      issues.push({ level:'ok', msg:'No issues detected. The canonical tag is well-formed and correctly placed.', sub: '' });
+    }
+
+    // ── Counts ──
+    const errorCount = issues.filter(i => i.level === 'error').length;
+    const warnCount  = issues.filter(i => i.level === 'warn').length;
+    const canon      = canonicals[0];
+    const canonHref  = canon ? (canon.getAttribute('href') || '') : '';
+    const statusLabel = errorCount > 0 ? 'Issues found' : warnCount > 0 ? 'Warnings' : 'Looks good';
+    const statusClass = errorCount > 0 ? 'c-red' : warnCount > 0 ? 'c-amber' : 'c-green';
+
+    function issueRow(i) {
+      const map = {
+        error: { icon:'⛔', badge:'b-error', label:'Error' },
+        warn:  { icon:'⚠️',  badge:'b-warn',  label:'Warning' },
+        info:  { icon:'🔹', badge:'b-info',  label:'Info' },
+        ok:    { icon:'✅', badge:'b-ok',    label:'Pass' }
+      };
+      const m = map[i.level];
+      return `<div class="issue">
+        <span class="issue-icon">${m.icon}</span>
+        <div class="issue-body">
+          <span class="badge ${m.badge}">${m.label}</span>${i.msg}
+          ${i.sub ? `<span class="issue-sub">${esc(i.sub)}</span>` : ''}
+        </div>
+      </div>`;
+    }
+
+    out.innerHTML = `
+      <div class="sec-div"><span class="sec-div-label">Summary</span><div class="sec-div-line"></div></div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-lbl">Canonical tags</div>
+          <div class="metric-val ${canonicals.length === 1 ? 'c-green' : 'c-red'}">${canonicals.length}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Errors</div>
+          <div class="metric-val ${errorCount ? 'c-red' : 'c-green'}">${errorCount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Warnings</div>
+          <div class="metric-val ${warnCount ? 'c-amber' : 'c-green'}">${warnCount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Status</div>
+          <div class="metric-val c-text ${statusClass}">${statusLabel}</div>
+        </div>
+        ${ogUrls.length ? `<div class="metric"><div class="metric-lbl">og:url</div><div class="metric-val c-green" style="font-size:1rem;padding-top:6px">Present</div></div>` : ''}
+        ${hreflangs.length ? `<div class="metric"><div class="metric-lbl">Hreflang</div><div class="metric-val">${hreflangs.length}</div></div>` : ''}
+      </div>
+
+      ${canonHref ? `
+      <div class="sec-div"><span class="sec-div-label">Canonical Tag</span><div class="sec-div-line"></div></div>
+      <div class="tag-block">
+        <div class="tag-block-label">Resolved URL</div>
+        <div class="tag-block-value">${esc(canonHref)}</div>
+        <button class="copy-btn" onclick="copyText(${JSON.stringify(canonHref)}, this)">Copy</button>
+      </div>
+      <div class="tag-block">
+        <div class="tag-block-label">Full tag</div>
+        <div class="tag-block-value">${esc(canon.outerHTML)}</div>
+        <button class="copy-btn" onclick="copyText(${JSON.stringify(canon.outerHTML)}, this)">Copy</button>
+      </div>` : ''}
+
+      <div class="sec-div" style="margin-top:2rem"><span class="sec-div-label">Audit Results</span><div class="sec-div-line"></div></div>
+      ${issues.map(issueRow).join('')}
+
+      ${hreflangs.length ? `
+      <div class="sec-div" style="margin-top:2rem"><span class="sec-div-label">Hreflang Tags (${hreflangs.length})</span><div class="sec-div-line"></div></div>
+      <div class="table-wrap">
+        <table class="hl-table">
+          <thead><tr><th>hreflang</th><th>href</th></tr></thead>
+          <tbody>
+            ${hreflangs.slice(0, 20).map(h => `<tr>
+              <td>${esc(h.getAttribute('hreflang') || '')}</td>
+              <td>${esc(h.getAttribute('href') || '')}</td>
+            </tr>`).join('')}
+            ${hreflangs.length > 20 ? `<tr><td colspan="2" style="color:var(--ink-muted);font-size:0.68rem">…and ${hreflangs.length - 20} more</td></tr>` : ''}
+          </tbody>
+        </table>
+      </div>` : ''}
+    `;
+  }
+
+  document.getElementById('htmlInput').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runCheck();
+  });
+
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

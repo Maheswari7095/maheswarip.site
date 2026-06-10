@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duplicate Content Checker — Maheswari P SEO Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef;--bg-mid:#edeae3;--bg-light:#e4e0d6;--border:#ccc6b8;
+    --gold:#a0742a;--gold-light:#b8893a;--gold-glow:rgba(160,116,42,0.10);
+    --ink:#1c1812;--ink-muted:#5c5040;--ink-body:#3a3228;--white-card:#ffffff;
+    --green:#4a9e6b;--orange:#e07b39;--red:#c0392b;
+    --hl-a:rgba(160,116,42,0.22);--hl-b:rgba(74,158,107,0.22);
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:0;
+    background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);
+    background-size:60px 60px;pointer-events:none}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;
+    justify-content:space-between;padding:0.85rem 4rem;
+    background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .nav-left{display:flex;align-items:center;gap:1.2rem}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+    font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;transition:background 0.2s}
+  .nav-logo:hover{background:var(--gold-glow)}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  .nav-breadcrumb a:hover{color:var(--gold)}
+  .nav-breadcrumb .sep{opacity:0.4}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500}
+  nav ul{list-style:none;display:flex;gap:2.5rem}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;
+    letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s}
+  nav ul a:hover,nav ul a.active{color:var(--gold)}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;
+    font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    text-decoration:none;transition:background 0.2s,transform 0.15s}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px}
+
+  /* HEADER */
+  .page-header{padding:8rem 4rem 3rem;position:relative;z-index:1;max-width:960px;margin:0 auto;text-align:center}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;
+    text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;
+    animation:fadeUp 0.6s ease both}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;
+    line-height:1.08;color:var(--ink);margin-bottom:0.8rem;animation:fadeUp 0.6s ease 0.1s both}
+  .page-title em{font-style:italic;color:var(--gold)}
+  .page-desc{font-size:1rem;color:var(--ink-muted);font-weight:300;max-width:520px;margin:0 auto;
+    animation:fadeUp 0.6s ease 0.2s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* LAYOUT */
+  .tool-wrapper{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 4rem 6rem;
+    animation:fadeUp 0.6s ease 0.3s both}
+
+  /* INPUT PANELS */
+  .input-row{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+  .text-panel{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .text-panel-header{padding:0.8rem 1.2rem;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--border)}
+  .text-panel-label{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;
+    text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
+  .label-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .dot-a{background:var(--gold)}
+  .dot-b{background:var(--green)}
+  .text-panel-meta{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted)}
+  .text-area{width:100%;min-height:200px;padding:1rem;resize:vertical;border:none;
+    background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.88rem;
+    line-height:1.65;outline:none}
+  .text-area::placeholder{color:var(--ink-muted);opacity:0.5}
+  .text-area:focus{background:rgba(160,116,42,0.02)}
+
+  /* ACTION BAR */
+  .action-bar{display:flex;align-items:center;gap:0.8rem;margin-bottom:1.5rem;flex-wrap:wrap}
+  .btn-compare{background:var(--gold);color:var(--bg);padding:0.7rem 2rem;border:none;border-radius:2px;
+    font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    cursor:pointer;transition:background 0.2s,transform 0.15s;display:flex;align-items:center;gap:0.5rem}
+  .btn-compare:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .btn-swap{background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--ink-muted);
+    padding:0.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;
+    letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
+  .btn-swap:hover{border-color:var(--gold);color:var(--gold)}
+  .btn-clear{background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--ink-muted);
+    padding:0.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.8rem;
+    letter-spacing:0.06em;cursor:pointer;transition:all 0.2s}
+  .btn-clear:hover{border-color:var(--red);color:var(--red)}
+  .granularity-wrap{margin-left:auto;display:flex;align-items:center;gap:0.6rem}
+  .gran-label{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;color:var(--ink-muted);text-transform:uppercase}
+  .gran-select{background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:0.4rem 0.7rem;
+    color:var(--ink);font-family:'DM Mono',monospace;font-size:0.75rem;outline:none;cursor:pointer;transition:border-color 0.2s}
+  .gran-select:focus{border-color:var(--gold)}
+
+  /* SCORE SECTION */
+  .results-section{display:none}
+  .results-section.visible{display:block;animation:fadeUp 0.5s ease both}
+
+  .score-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;
+    padding:2rem;margin-bottom:1.2rem;display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:center}
+  .score-big{text-align:center}
+  .score-ring{position:relative;width:96px;height:96px}
+  .score-ring svg{transform:rotate(-90deg)}
+  .score-ring-track{fill:none;stroke:var(--bg-light);stroke-width:7}
+  .score-ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1),stroke 0.4s}
+  .score-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;color:var(--ink)}
+  .score-verdict{margin-top:0.4rem;font-family:'DM Mono',monospace;font-size:0.62rem;
+    letter-spacing:0.1em;text-transform:uppercase;text-align:center}
+
+  .score-details{}
+  .score-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.3rem}
+  .score-desc{font-size:0.9rem;color:var(--ink-muted);line-height:1.6;margin-bottom:1rem}
+  .score-bar-wrap{height:10px;background:var(--bg-light);border-radius:5px;overflow:hidden}
+  .score-bar-fill{height:100%;border-radius:5px;transition:width 0.8s cubic-bezier(.4,0,.2,1),background 0.4s}
+
+  .stats-mini{display:flex;flex-direction:column;gap:0.6rem;min-width:140px}
+  .stat-mini-row{background:var(--bg);border:1px solid var(--border);border-radius:2px;
+    padding:0.5rem 0.8rem;text-align:center}
+  .stat-mini-num{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--gold);line-height:1}
+  .stat-mini-lbl{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--ink-muted);margin-top:0.15rem}
+
+  /* METRICS ROW */
+  .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.2rem}
+  .metric-card{background:var(--white-card);border:1px solid var(--border);border-radius:3px;
+    padding:1rem;text-align:center;transition:border-color 0.2s,transform 0.2s}
+  .metric-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .metric-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--gold);line-height:1;margin-bottom:0.2rem}
+  .metric-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted)}
+
+  /* DIFF VIEW */
+  .diff-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .diff-header{padding:0.85rem 1.5rem;background:var(--bg-mid);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem}
+  .diff-title{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted)}
+  .diff-legend{display:flex;gap:1.2rem}
+  .legend-item{display:flex;align-items:center;gap:0.4rem;font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--ink-muted)}
+  .legend-swatch{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+  .swatch-match{background:var(--hl-a)}
+  .swatch-unique{background:rgba(192,57,43,0.15)}
+
+  .diff-panels{display:grid;grid-template-columns:1fr 1fr}
+  .diff-pane{padding:1.2rem 1.4rem;font-size:0.88rem;line-height:1.85;color:var(--ink-body);
+    max-height:360px;overflow-y:auto;border-right:1px solid var(--border);word-break:break-word}
+  .diff-pane:last-child{border-right:none}
+  .diff-pane-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--ink-muted);margin-bottom:0.6rem;padding-bottom:0.4rem;
+    border-bottom:1px solid var(--border)}
+  mark.match{background:var(--hl-a);border-radius:2px;padding:0 1px}
+  mark.match-b{background:var(--hl-b);border-radius:2px;padding:0 1px}
+  mark.unique{background:rgba(192,57,43,0.13);border-radius:2px;padding:0 1px;color:var(--red)}
+
+  /* NGRAM TABLE */
+  .shared-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;
+    overflow:hidden;margin-top:1.2rem}
+  .shared-header{padding:0.85rem 1.5rem;background:var(--bg-mid);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between}
+  .shared-title{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted)}
+  .shared-count{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold)}
+  .shared-table{width:100%;border-collapse:collapse}
+  .shared-table th{padding:0.6rem 1.2rem;text-align:left;font-family:'DM Mono',monospace;font-size:0.62rem;
+    letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--border);
+    background:var(--bg)}
+  .shared-table td{padding:0.55rem 1.2rem;border-bottom:1px solid rgba(204,198,184,0.35);
+    font-family:'DM Mono',monospace;font-size:0.8rem}
+  .shared-table tr:last-child td{border-bottom:none}
+  .shared-table tr:hover td{background:var(--bg)}
+  .phrase-text{color:var(--ink);font-weight:500}
+  .phrase-count{color:var(--ink-muted);text-align:center}
+  .phrase-bar-cell{width:100px}
+  .phrase-bar{height:4px;background:var(--bg-light);border-radius:2px;overflow:hidden}
+  .phrase-bar-fill{height:100%;background:var(--gold);border-radius:2px}
+
+  /* SEO TIP */
+  .seo-tip{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--gold);
+    border-radius:2px;padding:1rem 1.2rem;margin-top:1.2rem;
+    font-size:0.88rem;color:var(--ink-body);line-height:1.6}
+  .seo-tip strong{color:var(--gold);font-family:'DM Mono',monospace;font-size:0.75rem;
+    letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.25rem}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.5rem 4rem;
+    display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;flex-wrap:wrap;gap:1rem}
+  footer a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  footer a:hover{color:var(--gold)}
+  .footer-right{display:flex;gap:2rem}
+
+  @media(max-width:700px){
+    nav{padding:0.85rem 1.5rem}nav ul{display:none}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+      background:rgba(245,243,239,0.98);border-bottom:1px solid var(--border);padding:1rem 1.5rem;gap:1rem}
+    .nav-mobile-toggle{display:flex}.nav-contact-btn{display:none}
+    .page-header,.tool-wrapper{padding-left:1.5rem;padding-right:1.5rem}
+    .input-row,.diff-panels,.metrics-row{grid-template-columns:1fr}
+    .score-card{grid-template-columns:1fr;text-align:center}
+    .stats-mini{flex-direction:row;min-width:auto}
+    footer{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start}
+    .granularity-wrap{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a><span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a><span class="sep">/</span>
+      <span class="current">Duplicate Content Checker</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <div class="page-eyebrow">Content Quality</div>
+  <h1 class="page-title">Duplicate Content <em>Checker</em></h1>
+  <p class="page-desc">Paste two pieces of text and instantly see how similar they are — with a similarity score, highlighted diff view, and shared phrase breakdown.</p>
+</header>
+
+<div class="tool-wrapper">
+
+  <!-- Text inputs -->
+  <div class="input-row">
+    <div class="text-panel">
+      <div class="text-panel-header">
+        <div class="text-panel-label">
+          <span class="label-dot dot-a"></span>
+          <span style="color:var(--ink-muted)">Text A</span>
+        </div>
+        <span class="text-panel-meta" id="meta-a">0 words</span>
+      </div>
+      <textarea class="text-area" id="text-a" placeholder="Paste your first piece of content here…" oninput="updateMeta()"></textarea>
+    </div>
+    <div class="text-panel">
+      <div class="text-panel-header">
+        <div class="text-panel-label">
+          <span class="label-dot dot-b"></span>
+          <span style="color:var(--ink-muted)">Text B</span>
+        </div>
+        <span class="text-panel-meta" id="meta-b">0 words</span>
+      </div>
+      <textarea class="text-area" id="text-b" placeholder="Paste the second piece of content here…" oninput="updateMeta()"></textarea>
+    </div>
+  </div>
+
+  <!-- Action bar -->
+  <div class="action-bar">
+    <button class="btn-compare" onclick="compare()">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M20 20l-4-4"/></svg>
+      Compare Texts
+    </button>
+    <button class="btn-swap" onclick="swapTexts()">⇄ Swap</button>
+    <button class="btn-clear" onclick="clearAll()">✕ Clear</button>
+    <div class="granularity-wrap">
+      <span class="gran-label">Phrase size</span>
+      <select class="gran-select" id="gran-select">
+        <option value="3">3 words</option>
+        <option value="4" selected>4 words</option>
+        <option value="5">5 words</option>
+        <option value="6">6 words</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" id="results-section">
+
+    <!-- Score card -->
+    <div class="score-card">
+      <div class="score-big">
+        <div class="score-ring">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle class="score-ring-track" cx="48" cy="48" r="40"/>
+            <circle class="score-ring-fill" id="ring-fill" cx="48" cy="48" r="40"
+              stroke-dasharray="251.33" stroke-dashoffset="251.33" stroke="var(--border)"/>
+          </svg>
+          <div class="score-pct" id="score-pct">0%</div>
+        </div>
+        <div class="score-verdict" id="score-verdict" style="color:var(--ink-muted)">—</div>
+      </div>
+
+      <div class="score-details">
+        <div class="score-title" id="score-title">Similarity Score</div>
+        <div class="score-desc" id="score-desc">Run a comparison to see results.</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-fill" id="score-bar" style="width:0%;background:var(--border)"></div>
+        </div>
+      </div>
+
+      <div class="stats-mini">
+        <div class="stat-mini-row">
+          <div class="stat-mini-num" id="stat-shared">—</div>
+          <div class="stat-mini-lbl">Shared phrases</div>
+        </div>
+        <div class="stat-mini-row">
+          <div class="stat-mini-num" id="stat-unique-a">—</div>
+          <div class="stat-mini-lbl">Unique to A</div>
+        </div>
+        <div class="stat-mini-row">
+          <div class="stat-mini-num" id="stat-unique-b">—</div>
+          <div class="stat-mini-lbl">Unique to B</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-num" id="m-words-a">0</div>
+        <div class="metric-lbl">Words in A</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="m-words-b">0</div>
+        <div class="metric-lbl">Words in B</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="m-chars-a">0</div>
+        <div class="metric-lbl">Chars in A</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" id="m-chars-b">0</div>
+        <div class="metric-lbl">Chars in B</div>
+      </div>
+    </div>
+
+    <!-- Diff view -->
+    <div class="diff-card">
+      <div class="diff-header">
+        <span class="diff-title">Side-by-Side Diff View</span>
+        <div class="diff-legend">
+          <div class="legend-item"><div class="legend-swatch swatch-match"></div>Matched phrases</div>
+          <div class="legend-item"><div class="legend-swatch swatch-unique"></div>Unique content</div>
+        </div>
+      </div>
+      <div class="diff-panels">
+        <div class="diff-pane">
+          <div class="diff-pane-label"><span class="label-dot dot-a" style="display:inline-block;margin-right:0.4rem;vertical-align:middle"></span>Text A</div>
+          <div id="diff-a"></div>
+        </div>
+        <div class="diff-pane">
+          <div class="diff-pane-label"><span class="label-dot dot-b" style="display:inline-block;margin-right:0.4rem;vertical-align:middle"></span>Text B</div>
+          <div id="diff-b"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared phrases -->
+    <div class="shared-card">
+      <div class="shared-header">
+        <span class="shared-title">Top Shared Phrases</span>
+        <span class="shared-count" id="shared-phrase-count">—</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="shared-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Phrase</th>
+              <th style="text-align:center">Occurrences (A)</th>
+              <th style="text-align:center">Occurrences (B)</th>
+              <th style="width:100px">Frequency</th>
+            </tr>
+          </thead>
+          <tbody id="phrase-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SEO tip -->
+    <div class="seo-tip" id="seo-tip"></div>
+
+  </div><!-- /results -->
+
+</div>
+
+<footer>
+  <div>© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">All Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('mobile-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+function updateMeta() {
+  const wA = wordCount(document.getElementById('text-a').value);
+  const wB = wordCount(document.getElementById('text-b').value);
+  document.getElementById('meta-a').textContent = wA + ' words';
+  document.getElementById('meta-b').textContent = wB + ' words';
+}
+
+function wordCount(t) { return t.trim() ? t.trim().split(/\s+/).length : 0; }
+
+function swapTexts() {
+  const a = document.getElementById('text-a');
+  const b = document.getElementById('text-b');
+  [a.value, b.value] = [b.value, a.value];
+  updateMeta();
+}
+
+function clearAll() {
+  document.getElementById('text-a').value = '';
+  document.getElementById('text-b').value = '';
+  document.getElementById('results-section').classList.remove('visible');
+  updateMeta();
+}
+
+// ── Tokenise ──
+function tokenize(text) {
+  return text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').trim().split(/\s+/).filter(Boolean);
+}
+
+// ── Build n-grams ──
+function ngrams(tokens, n) {
+  const grams = [];
+  for (let i = 0; i <= tokens.length - n; i++) {
+    grams.push(tokens.slice(i, i + n).join(' '));
+  }
+  return grams;
+}
+
+function freq(arr) {
+  const m = {};
+  arr.forEach(x => m[x] = (m[x] || 0) + 1);
+  return m;
+}
+
+// ── Main compare ──
+function compare() {
+  const rawA = document.getElementById('text-a').value.trim();
+  const rawB = document.getElementById('text-b').value.trim();
+  if (!rawA || !rawB) { alert('Please paste content in both Text A and Text B.'); return; }
+
+  const n = parseInt(document.getElementById('gran-select').value);
+  const tokA = tokenize(rawA);
+  const tokB = tokenize(rawB);
+
+  const gramsA = ngrams(tokA, n);
+  const gramsB = ngrams(tokB, n);
+
+  const freqA = freq(gramsA);
+  const freqB = freq(gramsB);
+
+  const setA = new Set(gramsA);
+  const setB = new Set(gramsB);
+
+  // Shared grams
+  const shared = [...setA].filter(g => setB.has(g));
+  const sharedSet = new Set(shared);
+
+  // Similarity: Jaccard on n-gram sets
+  const union = new Set([...setA, ...setB]);
+  const similarity = union.size === 0 ? 0 : Math.round((sharedSet.size / union.size) * 100);
+
+  // Word-level similarity fallback (Dice coefficient on unique words)
+  const wordsA = new Set(tokA);
+  const wordsB = new Set(tokB);
+  const sharedWords = [...wordsA].filter(w => wordsB.has(w)).length;
+  const wordSim = Math.round((2 * sharedWords / (wordsA.size + wordsB.size)) * 100);
+
+  // Combined score
+  const score = Math.round((similarity * 0.6 + wordSim * 0.4));
+
+  // Unique n-grams
+  const uniqueA = [...setA].filter(g => !setB.has(g)).length;
+  const uniqueB = [...setB].filter(g => !setA.has(g)).length;
+
+  // Render score
+  renderScore(score, shared.length, uniqueA, uniqueB);
+
+  // Metrics
+  document.getElementById('m-words-a').textContent = tokA.length.toLocaleString();
+  document.getElementById('m-words-b').textContent = tokB.length.toLocaleString();
+  document.getElementById('m-chars-a').textContent = rawA.length.toLocaleString();
+  document.getElementById('m-chars-b').textContent = rawB.length.toLocaleString();
+
+  // Diff
+  renderDiff(rawA, rawB, sharedSet, n);
+
+  // Top shared phrases table
+  const topShared = shared
+    .map(g => ({ phrase: g, countA: freqA[g] || 0, countB: freqB[g] || 0 }))
+    .sort((a, b) => (b.countA + b.countB) - (a.countA + a.countB))
+    .slice(0, 20);
+  renderPhraseTable(topShared, score);
+
+  // SEO tip
+  renderTip(score, shared.length);
+
+  document.getElementById('results-section').classList.add('visible');
+  setTimeout(() => {
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function renderScore(score, sharedCount, uniqueA, uniqueB) {
+  const circ = 251.33;
+  const offset = circ - (score / 100) * circ;
+  const fill = document.getElementById('ring-fill');
+  fill.style.strokeDashoffset = offset;
+
+  let color, verdict, title, desc;
+  if (score >= 80) {
+    color = '#c0392b'; verdict = '🚨 High Risk';
+    title = 'Very High Similarity';
+    desc = 'These texts are nearly identical. Search engines may penalise one or both pages for duplicate content. Consider rewriting substantially.';
+  } else if (score >= 60) {
+    color = '#e07b39'; verdict = '⚠️ Moderate Risk';
+    title = 'Significant Overlap';
+    desc = 'Considerable shared content detected. This level of similarity can trigger duplicate content filters. Differentiate the texts further.';
+  } else if (score >= 40) {
+    color = '#c8a830'; verdict = '🟡 Some Overlap';
+    title = 'Partial Similarity';
+    desc = 'Moderate overlap found. Likely fine for SEO, but consider whether unique perspectives and value are being added in each piece.';
+  } else if (score >= 20) {
+    color = '#4a9e6b'; verdict = '✅ Low Overlap';
+    title = 'Mostly Unique';
+    desc = 'Only minor overlap detected. Both texts are substantially different — good for SEO. Shared phrases are likely just natural language.';
+  } else {
+    color = '#4a9e6b'; verdict = '✅ Unique';
+    title = 'Very Low Similarity';
+    desc = 'These texts are highly distinct. No meaningful duplicate content risk detected.';
+  }
+
+  fill.style.stroke = color;
+  document.getElementById('score-pct').textContent = score + '%';
+  document.getElementById('score-verdict').textContent = verdict;
+  document.getElementById('score-verdict').style.color = color;
+  document.getElementById('score-title').textContent = title;
+  document.getElementById('score-desc').textContent = desc;
+  document.getElementById('score-bar').style.width = score + '%';
+  document.getElementById('score-bar').style.background = color;
+
+  document.getElementById('stat-shared').textContent = sharedCount.toLocaleString();
+  document.getElementById('stat-unique-a').textContent = uniqueA.toLocaleString();
+  document.getElementById('stat-unique-b').textContent = uniqueB.toLocaleString();
+}
+
+// ── Diff rendering ──
+function renderDiff(rawA, rawB, sharedNgramSet, n) {
+  const wordsA = rawA.split(/(\s+)/);
+  const wordsB = rawB.split(/(\s+)/);
+
+  document.getElementById('diff-a').innerHTML = highlightText(rawA, sharedNgramSet, n, 'match');
+  document.getElementById('diff-b').innerHTML = highlightText(rawB, sharedNgramSet, n, 'match-b');
+}
+
+function highlightText(text, sharedSet, n, cls) {
+  const tokens = text.split(/\s+/).filter(Boolean);
+  const lower  = tokens.map(t => t.toLowerCase().replace(/[^a-z0-9]/g,''));
+  const marked = new Array(tokens.length).fill(false);
+
+  for (let i = 0; i <= lower.length - n; i++) {
+    const gram = lower.slice(i, i + n).join(' ');
+    if (sharedSet.has(gram)) {
+      for (let j = i; j < i + n; j++) marked[j] = true;
+    }
+  }
+
+  let html = '';
+  let inMark = false;
+  tokens.forEach((tok, i) => {
+    if (marked[i] && !inMark) { html += `<mark class="${cls}">`; inMark = true; }
+    if (!marked[i] && inMark) { html += '</mark>'; inMark = false; }
+    html += esc(tok) + ' ';
+  });
+  if (inMark) html += '</mark>';
+  return html;
+}
+
+// ── Phrase table ──
+function renderPhraseTable(phrases, score) {
+  document.getElementById('shared-phrase-count').textContent = phrases.length + ' phrases';
+  if (!phrases.length) {
+    document.getElementById('phrase-tbody').innerHTML =
+      '<tr><td colspan="5" style="text-align:center;padding:1.5rem;font-family:\'DM Mono\',monospace;font-size:0.75rem;color:var(--ink-muted)">No shared phrases found at this granularity level</td></tr>';
+    return;
+  }
+  const maxTotal = Math.max(...phrases.map(p => p.countA + p.countB), 1);
+  document.getElementById('phrase-tbody').innerHTML = phrases.map((p, i) => {
+    const total = p.countA + p.countB;
+    const pct = Math.round((total / maxTotal) * 100);
+    return `<tr>
+      <td style="color:var(--ink-muted);font-size:0.75rem">${i+1}</td>
+      <td class="phrase-text">${esc(p.phrase)}</td>
+      <td class="phrase-count">${p.countA}</td>
+      <td class="phrase-count">${p.countB}</td>
+      <td class="phrase-bar-cell">
+        <div class="phrase-bar"><div class="phrase-bar-fill" style="width:${pct}%"></div></div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── SEO tip ──
+function renderTip(score, sharedCount) {
+  let tip;
+  if (score >= 80) {
+    tip = { label: 'SEO Warning', msg: 'Duplicate content above 80% is a serious SEO risk. Google may de-index one version, split ranking signals, or suppress both pages. Use <code>rel="canonical"</code> to indicate the preferred version, or significantly rewrite one of the pieces.' };
+  } else if (score >= 60) {
+    tip = { label: 'SEO Advice', msg: 'A 60–80% similarity score can trigger soft duplicate filters. Focus on adding unique data, examples, expert quotes, or perspectives to each page. Internal linking structure and distinct title/meta tags can also help differentiation.' };
+  } else if (score >= 40) {
+    tip = { label: 'SEO Note', msg: 'Some shared phrasing is normal — especially for related topics. Ensure each page has a clear unique angle, distinct H1, and its own structured data where applicable.' };
+  } else {
+    tip = { label: 'All Clear', msg: 'These texts show low similarity. No duplicate content risk detected. Natural keyword repetition and topic overlap at this level is perfectly normal and expected.' };
+  }
+  document.getElementById('seo-tip').innerHTML = `<strong>${tip.label}</strong>${tip.msg}`;
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>

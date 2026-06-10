@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robots.txt Generator — Maheswari P SEO Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef;--bg-mid:#edeae3;--bg-light:#e4e0d6;--border:#ccc6b8;
+    --gold:#a0742a;--gold-light:#b8893a;--gold-glow:rgba(160,116,42,0.10);
+    --ink:#1c1812;--ink-muted:#5c5040;--ink-body:#3a3228;--white-card:#ffffff;
+    --green:#4a9e6b;--orange:#e07b39;--red:#c0392b;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:0;
+    background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);
+    background-size:60px 60px;pointer-events:none}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;
+    justify-content:space-between;padding:0.85rem 4rem;
+    background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .nav-left{display:flex;align-items:center;gap:1.2rem}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;
+    font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;transition:background 0.2s}
+  .nav-logo:hover{background:var(--gold-glow)}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  .nav-breadcrumb a:hover{color:var(--gold)}
+  .nav-breadcrumb .sep{opacity:0.4}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500}
+  nav ul{list-style:none;display:flex;gap:2.5rem}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;
+    letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s}
+  nav ul a:hover,nav ul a.active{color:var(--gold)}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;
+    font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    text-decoration:none;transition:background 0.2s,transform 0.15s}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px}
+
+  .page-header{padding:8rem 4rem 3rem;position:relative;z-index:1;max-width:980px;margin:0 auto;text-align:center}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;
+    text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;
+    animation:fadeUp 0.6s ease both}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;
+    line-height:1.08;color:var(--ink);margin-bottom:0.8rem;animation:fadeUp 0.6s ease 0.1s both}
+  .page-title em{font-style:italic;color:var(--gold)}
+  .page-desc{font-size:1rem;color:var(--ink-muted);font-weight:300;max-width:500px;margin:0 auto;
+    animation:fadeUp 0.6s ease 0.2s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  .tool-wrapper{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:0 4rem 6rem;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:1.5rem;align-items:start;
+    animation:fadeUp 0.6s ease 0.3s both}
+  .col-left{display:flex;flex-direction:column;gap:1.5rem}
+  .col-right{position:sticky;top:5.5rem;display:flex;flex-direction:column;gap:1.2rem}
+
+  /* CARDS */
+  .card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .card-header{padding:0.9rem 1.5rem;background:var(--bg-mid);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;gap:0.8rem}
+  .card-header-left{display:flex;align-items:center;gap:0.6rem}
+  .card-header-icon{font-size:1rem}
+  .card-title{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted)}
+  .card-body{padding:1.4rem 1.5rem}
+
+  /* TEMPLATES */
+  .template-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+  .template-btn{padding:0.75rem 1rem;border:1px solid var(--border);border-radius:3px;background:var(--bg);
+    cursor:pointer;transition:all 0.2s;text-align:left}
+  .template-btn:hover{border-color:var(--gold);background:var(--gold-glow)}
+  .template-btn-name{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;color:var(--ink);
+    margin-bottom:0.15rem}
+  .template-btn-desc{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);letter-spacing:0.04em;line-height:1.4}
+
+  /* RULE BLOCKS */
+  .rules-list{display:flex;flex-direction:column;gap:0.9rem}
+  .rule-block{border:1px solid var(--border);border-radius:3px;overflow:hidden;
+    transition:border-color 0.2s;background:var(--white-card)}
+  .rule-block:hover{border-color:var(--gold)}
+  .rule-block-header{padding:0.65rem 1rem;background:var(--bg-mid);display:flex;align-items:center;gap:0.6rem;
+    border-bottom:1px solid var(--border)}
+  .rule-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);
+    background:var(--bg-light);border:1px solid var(--border);border-radius:2px;
+    padding:0.1rem 0.45rem;letter-spacing:0.06em}
+  .rule-agent-badge{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--gold);font-weight:500;flex:1}
+  .rule-del-btn{background:none;border:none;cursor:pointer;color:var(--ink-muted);font-size:0.85rem;
+    opacity:0.5;transition:opacity 0.2s,color 0.2s;line-height:1;padding:2px}
+  .rule-del-btn:hover{opacity:1;color:var(--red)}
+  .rule-block-body{padding:0.9rem 1rem}
+
+  /* FIELD */
+  .field{margin-bottom:0.75rem}
+  .field:last-child{margin-bottom:0}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--ink-muted);margin-bottom:0.3rem;display:block}
+  .field-input{width:100%;padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.8rem;
+    outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+  .field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+  .field-input::placeholder{color:var(--ink-muted);opacity:0.5}
+
+  /* DIRECTIVES LIST */
+  .directives-list{display:flex;flex-direction:column;gap:0.4rem;margin-top:0.5rem}
+  .directive-row{display:grid;grid-template-columns:auto 1fr auto;gap:0.5rem;align-items:center}
+  .dir-type-select{padding:0.4rem 0.55rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg-light);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.75rem;
+    outline:none;cursor:pointer;transition:border-color 0.2s;white-space:nowrap}
+  .dir-type-select:focus{border-color:var(--gold)}
+  .dir-type-select.disallow{color:var(--red)}
+  .dir-type-select.allow{color:var(--green)}
+  .dir-path-input{padding:0.4rem 0.65rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.78rem;
+    outline:none;transition:border-color 0.2s;width:100%}
+  .dir-path-input:focus{border-color:var(--gold)}
+  .dir-del{background:none;border:none;cursor:pointer;color:var(--ink-muted);font-size:0.8rem;
+    opacity:0.45;transition:opacity 0.2s,color 0.2s;padding:2px 4px}
+  .dir-del:hover{opacity:1;color:var(--red)}
+  .btn-add-dir{margin-top:0.5rem;background:transparent;border:1px dashed var(--border);border-radius:2px;
+    width:100%;padding:0.45rem;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;
+    color:var(--ink-muted);cursor:pointer;transition:all 0.2s;text-align:center}
+  .btn-add-dir:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* ADD RULE BTN */
+  .btn-add-rule{width:100%;padding:0.7rem;border:2px dashed var(--border);border-radius:3px;
+    background:transparent;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;
+    color:var(--ink-muted);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;
+    justify-content:center;gap:0.5rem;letter-spacing:0.04em}
+  .btn-add-rule:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-glow)}
+
+  /* SITEMAP FIELD */
+  .sitemap-list{display:flex;flex-direction:column;gap:0.5rem}
+  .sitemap-row{display:grid;grid-template-columns:1fr auto;gap:0.5rem;align-items:center}
+  .btn-add-sitemap{width:100%;margin-top:0.5rem;background:transparent;border:1px dashed var(--border);border-radius:2px;
+    padding:0.4rem;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;
+    color:var(--ink-muted);cursor:pointer;transition:all 0.2s}
+  .btn-add-sitemap:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* CRAWL DELAY */
+  .crawl-row{display:grid;grid-template-columns:1fr auto;gap:0.5rem;align-items:center}
+  .crawl-input{padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:2px;
+    background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.8rem;
+    outline:none;transition:border-color 0.2s;width:100%}
+  .crawl-input:focus{border-color:var(--gold)}
+  .crawl-unit{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);white-space:nowrap}
+
+  /* OUTPUT */
+  .code-block{background:#1c1812;border-radius:3px;padding:1.2rem 1rem;overflow-x:auto;position:relative;
+    max-height:440px;overflow-y:auto}
+  .code-block pre{font-family:'DM Mono',monospace;font-size:0.76rem;line-height:1.9;color:#e8e0d0;
+    white-space:pre;margin:0}
+  .code-comment{color:#7a6e60}
+  .code-key{color:#a0742a}
+  .code-val-allow{color:#a8d8a8}
+  .code-val-disallow{color:#f0a0a0}
+  .code-val-neutral{color:#7ec8e3}
+  .code-val-url{color:#c8b8e8}
+
+  .btn-copy-code{position:absolute;top:0.65rem;right:0.65rem;background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);border-radius:2px;color:rgba(255,255,255,0.55);
+    padding:0.25rem 0.7rem;font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;
+    transition:all 0.2s;letter-spacing:0.06em}
+  .btn-copy-code:hover{background:rgba(255,255,255,0.18);color:#fff}
+  .btn-copy-code.copied{color:#a8d8a8;border-color:rgba(168,216,168,0.3)}
+
+  /* DOWNLOAD ROW */
+  .action-row{display:flex;gap:0.7rem;margin-top:1rem}
+  .btn-download{flex:1;background:var(--gold);color:var(--bg);padding:0.65rem 1rem;border:none;border-radius:2px;
+    font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    cursor:pointer;transition:background 0.2s,transform 0.15s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+  .btn-download:hover{background:var(--gold-light);transform:translateY(-1px)}
+  .btn-reset{background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--ink-muted);
+    padding:0.65rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;
+    letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.2s}
+  .btn-reset:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* VALIDATION */
+  .val-list{display:flex;flex-direction:column;gap:0.4rem}
+  .val-row{display:flex;align-items:flex-start;gap:0.5rem;padding:0.45rem 0.7rem;
+    border-radius:2px;border:1px solid var(--border);background:var(--bg);font-size:0.82rem}
+  .val-icon{flex-shrink:0;font-size:0.85rem;margin-top:1px}
+  .val-text{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-body);line-height:1.5}
+  .val-empty{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);
+    text-align:center;padding:0.8rem;opacity:0.6;letter-spacing:0.06em}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.5rem 4rem;
+    display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;
+    font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;flex-wrap:wrap;gap:1rem}
+  footer a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s}
+  footer a:hover{color:var(--gold)}
+  .footer-right{display:flex;gap:2rem}
+
+  @media(max-width:740px){
+    nav{padding:0.85rem 1.5rem}nav ul{display:none}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+      background:rgba(245,243,239,0.98);border-bottom:1px solid var(--border);padding:1rem 1.5rem;gap:1rem}
+    .nav-mobile-toggle{display:flex}.nav-contact-btn{display:none}
+    .page-header{padding-left:1.5rem;padding-right:1.5rem}
+    .tool-wrapper{padding:0 1.5rem 4rem;grid-template-columns:1fr}
+    .col-right{position:static}.template-grid{grid-template-columns:1fr}
+    footer{padding:1.2rem 1.5rem;flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a><span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a><span class="sep">/</span>
+      <span class="current">Robots.txt Generator</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<header class="page-header">
+  <div class="page-eyebrow">Technical SEO</div>
+  <h1 class="page-title">Robots.txt <em>Generator</em></h1>
+  <p class="page-desc">Build a robots.txt file visually — add bot rules, allow/disallow paths, crawl delays and sitemaps, then download in one click.</p>
+</header>
+
+<div class="tool-wrapper">
+
+  <!-- LEFT -->
+  <div class="col-left">
+
+    <!-- Templates -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">⚡</span><span class="card-title">Quick Templates</span></div>
+      </div>
+      <div class="card-body">
+        <div class="template-grid">
+          <button class="template-btn" onclick="applyTemplate('default')">
+            <div class="template-btn-name">🌐 Default</div>
+            <div class="template-btn-desc">Allow all bots, block /admin & /private</div>
+          </button>
+          <button class="template-btn" onclick="applyTemplate('block_all')">
+            <div class="template-btn-name">🚫 Block All</div>
+            <div class="template-btn-desc">Disallow all crawlers from everything</div>
+          </button>
+          <button class="template-btn" onclick="applyTemplate('google_only')">
+            <div class="template-btn-name">🔍 Google Only</div>
+            <div class="template-btn-desc">Allow Googlebot, block all others</div>
+          </button>
+          <button class="template-btn" onclick="applyTemplate('ecommerce')">
+            <div class="template-btn-name">🛒 E-commerce</div>
+            <div class="template-btn-desc">Block cart, checkout, account pages</div>
+          </button>
+          <button class="template-btn" onclick="applyTemplate('wordpress')">
+            <div class="template-btn-name">📝 WordPress</div>
+            <div class="template-btn-desc">Block wp-admin, feeds, author pages</div>
+          </button>
+          <button class="template-btn" onclick="applyTemplate('noai')">
+            <div class="template-btn-name">🤖 No AI Bots</div>
+            <div class="template-btn-desc">Block common AI training crawlers</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules Editor -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">📋</span><span class="card-title">Bot Rules</span></div>
+        <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted)" id="rule-count">0 rules</span>
+      </div>
+      <div class="card-body">
+        <div class="rules-list" id="rules-list"></div>
+        <button class="btn-add-rule" style="margin-top:1rem" onclick="addRule()">
+          + Add Bot Rule
+        </button>
+      </div>
+    </div>
+
+    <!-- Sitemaps -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">🗺️</span><span class="card-title">Sitemap URLs</span></div>
+      </div>
+      <div class="card-body">
+        <div class="sitemap-list" id="sitemap-list"></div>
+        <button class="btn-add-sitemap" onclick="addSitemap()">+ Add Sitemap URL</button>
+      </div>
+    </div>
+
+    <!-- Crawl Delay -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">⏱️</span><span class="card-title">Global Crawl Delay</span></div>
+      </div>
+      <div class="card-body">
+        <div class="crawl-row">
+          <input class="crawl-input" type="number" id="crawl-delay" placeholder="e.g. 10 (leave empty to omit)" min="0" oninput="render()">
+          <span class="crawl-unit">seconds</span>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);margin-top:0.4rem;opacity:0.7">
+          Optional. Tells bots how long to wait between requests. Supported by some crawlers.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- RIGHT -->
+  <div class="col-right">
+
+    <!-- Output -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">📄</span><span class="card-title">robots.txt</span></div>
+        <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted)" id="line-count">0 lines</span>
+      </div>
+      <div class="card-body" style="padding:1rem">
+        <div class="code-block" id="code-block">
+          <button class="btn-copy-code" id="btn-copy-code" onclick="copyCode()">Copy</button>
+          <pre id="code-output"># robots.txt — add rules to generate your file</pre>
+        </div>
+        <div class="action-row">
+          <button class="btn-download" onclick="downloadFile()">
+            ↓ Download robots.txt
+          </button>
+          <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validation -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">✅</span><span class="card-title">Validation</span></div>
+      </div>
+      <div class="card-body" style="padding:1rem 1.5rem">
+        <div class="val-list" id="val-list">
+          <div class="val-empty">Add rules to see validation tips</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left"><span class="card-header-icon">📖</span><span class="card-title">Quick Reference</span></div>
+      </div>
+      <div class="card-body" style="padding:1rem 1.5rem">
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-family:'DM Mono',monospace;font-size:0.7rem;line-height:1.6">
+          <div><span style="color:var(--gold)">User-agent: *</span> — applies to all bots</div>
+          <div><span style="color:var(--gold)">User-agent: Googlebot</span> — Google only</div>
+          <div><span style="color:var(--green)">Allow: /path/</span> — permit crawling</div>
+          <div><span style="color:var(--red)">Disallow: /path/</span> — block crawling</div>
+          <div><span style="color:var(--gold)">Disallow:</span> — (empty) allow everything</div>
+          <div><span style="color:var(--gold)">Disallow: /</span> — block everything</div>
+          <div><span style="color:#7ec8e3">Sitemap: https://…</span> — sitemap location</div>
+          <div><span style="color:#c8b8e8">Crawl-delay: 10</span> — seconds between requests</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div>
+
+<footer>
+  <div>© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">All Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+// ── State ──
+let rules = [];   // [{id, agent, directives:[{type,path}], crawlDelay}]
+let sitemaps = [];
+let ruleCounter = 0;
+let dirCounter = 0;
+
+document.getElementById('mobile-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+// ── Templates ──
+const TEMPLATES = {
+  default: {
+    rules: [
+      { agent: '*', dirs: [
+        { type: 'Disallow', path: '/admin/' },
+        { type: 'Disallow', path: '/private/' },
+        { type: 'Allow', path: '/' },
+      ]}
+    ],
+    sitemaps: ['https://yoursite.com/sitemap.xml']
+  },
+  block_all: {
+    rules: [{ agent: '*', dirs: [{ type: 'Disallow', path: '/' }] }],
+    sitemaps: []
+  },
+  google_only: {
+    rules: [
+      { agent: 'Googlebot', dirs: [{ type: 'Allow', path: '/' }] },
+      { agent: '*',         dirs: [{ type: 'Disallow', path: '/' }] },
+    ],
+    sitemaps: ['https://yoursite.com/sitemap.xml']
+  },
+  ecommerce: {
+    rules: [
+      { agent: '*', dirs: [
+        { type: 'Disallow', path: '/cart/' },
+        { type: 'Disallow', path: '/checkout/' },
+        { type: 'Disallow', path: '/account/' },
+        { type: 'Disallow', path: '/order/' },
+        { type: 'Allow', path: '/' },
+      ]}
+    ],
+    sitemaps: ['https://yoursite.com/sitemap.xml', 'https://yoursite.com/sitemap-products.xml']
+  },
+  wordpress: {
+    rules: [
+      { agent: '*', dirs: [
+        { type: 'Disallow', path: '/wp-admin/' },
+        { type: 'Allow',    path: '/wp-admin/admin-ajax.php' },
+        { type: 'Disallow', path: '/feed/' },
+        { type: 'Disallow', path: '/?author=' },
+        { type: 'Disallow', path: '/trackback/' },
+        { type: 'Disallow', path: '/xmlrpc.php' },
+      ]}
+    ],
+    sitemaps: ['https://yoursite.com/sitemap_index.xml']
+  },
+  noai: {
+    rules: [
+      { agent: 'GPTBot',       dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: 'ChatGPT-User', dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: 'CCBot',        dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: 'anthropic-ai', dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: 'Claude-Web',   dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: 'Google-Extended', dirs: [{ type: 'Disallow', path: '/' }] },
+      { agent: '*',            dirs: [{ type: 'Allow',    path: '/' }] },
+    ],
+    sitemaps: []
+  }
+};
+
+function applyTemplate(key) {
+  const t = TEMPLATES[key];
+  rules = [];
+  sitemaps = [...t.sitemaps];
+  t.rules.forEach(r => {
+    const id = ++ruleCounter;
+    rules.push({ id, agent: r.agent, directives: r.dirs.map(d => ({ id: ++dirCounter, type: d.type, path: d.path })) });
+  });
+  renderEditor();
+  render();
+}
+
+// ── Rule management ──
+function addRule() {
+  const id = ++ruleCounter;
+  rules.push({ id, agent: '*', directives: [{ id: ++dirCounter, type: 'Disallow', path: '' }] });
+  renderEditor();
+  render();
+  // Scroll to new rule
+  setTimeout(() => {
+    const el = document.getElementById('rule-' + id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function deleteRule(id) {
+  rules = rules.filter(r => r.id !== id);
+  renderEditor(); render();
+}
+
+function addDirective(ruleId) {
+  const r = rules.find(r => r.id === ruleId);
+  if (r) { r.directives.push({ id: ++dirCounter, type: 'Disallow', path: '' }); }
+  renderEditor(); render();
+}
+
+function deleteDirective(ruleId, dirId) {
+  const r = rules.find(r => r.id === ruleId);
+  if (r) r.directives = r.directives.filter(d => d.id !== dirId);
+  renderEditor(); render();
+}
+
+function updateAgent(ruleId, val) {
+  const r = rules.find(r => r.id === ruleId);
+  if (r) r.agent = val;
+  render();
+}
+
+function updateDirType(ruleId, dirId, val) {
+  const r = rules.find(r => r.id === ruleId);
+  if (r) { const d = r.directives.find(d => d.id === dirId); if (d) d.type = val; }
+  renderDirSelect(ruleId, dirId, val);
+  render();
+}
+
+function updateDirPath(ruleId, dirId, val) {
+  const r = rules.find(r => r.id === ruleId);
+  if (r) { const d = r.directives.find(d => d.id === dirId); if (d) d.path = val; }
+  render();
+}
+
+function renderDirSelect(ruleId, dirId, val) {
+  const sel = document.getElementById(`dir-sel-${ruleId}-${dirId}`);
+  if (sel) { sel.className = 'dir-type-select ' + val.toLowerCase(); }
+}
+
+// ── Sitemap management ──
+function addSitemap() {
+  sitemaps.push('');
+  renderEditor(); render();
+}
+
+function deleteSitemap(i) {
+  sitemaps.splice(i, 1);
+  renderEditor(); render();
+}
+
+function updateSitemap(i, val) {
+  sitemaps[i] = val;
+  render();
+}
+
+// ── Render editor ──
+function renderEditor() {
+  // Rules
+  document.getElementById('rule-count').textContent = rules.length + ' rule' + (rules.length !== 1 ? 's' : '');
+  const list = document.getElementById('rules-list');
+  list.innerHTML = rules.map((r, ri) => `
+    <div class="rule-block" id="rule-${r.id}">
+      <div class="rule-block-header">
+        <span class="rule-num">#${ri + 1}</span>
+        <span class="rule-agent-badge">User-agent: ${esc(r.agent || '*')}</span>
+        <button class="rule-del-btn" onclick="deleteRule(${r.id})" title="Delete rule">✕</button>
+      </div>
+      <div class="rule-block-body">
+        <div class="field">
+          <label class="field-label">User-agent</label>
+          <input class="field-input" value="${esc(r.agent)}" placeholder="* (all bots)"
+            oninput="updateAgent(${r.id}, this.value)" list="bot-list">
+          <datalist id="bot-list">
+            <option value="*"><option value="Googlebot"><option value="Bingbot">
+            <option value="Slurp"><option value="DuckDuckBot"><option value="Baiduspider">
+            <option value="YandexBot"><option value="facebookexternalhit"><option value="Twitterbot">
+            <option value="GPTBot"><option value="ChatGPT-User"><option value="CCBot">
+            <option value="anthropic-ai"><option value="Claude-Web"><option value="Google-Extended">
+          </datalist>
+        </div>
+        <div class="field">
+          <label class="field-label">Directives</label>
+          <div class="directives-list">
+            ${r.directives.map(d => `
+              <div class="directive-row">
+                <select id="dir-sel-${r.id}-${d.id}" class="dir-type-select ${d.type.toLowerCase()}"
+                  onchange="updateDirType(${r.id}, ${d.id}, this.value)">
+                  <option value="Disallow" ${d.type==='Disallow'?'selected':''}>Disallow</option>
+                  <option value="Allow"    ${d.type==='Allow'   ?'selected':''}>Allow</option>
+                </select>
+                <input class="dir-path-input" value="${esc(d.path)}" placeholder="/path/"
+                  oninput="updateDirPath(${r.id}, ${d.id}, this.value)">
+                <button class="dir-del" onclick="deleteDirective(${r.id}, ${d.id})" title="Remove">✕</button>
+              </div>`).join('')}
+          </div>
+          <button class="btn-add-dir" onclick="addDirective(${r.id})">+ Add directive</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Sitemaps
+  const smList = document.getElementById('sitemap-list');
+  smList.innerHTML = sitemaps.map((s, i) => `
+    <div class="sitemap-row">
+      <input class="field-input" value="${esc(s)}" placeholder="https://yoursite.com/sitemap.xml"
+        oninput="updateSitemap(${i}, this.value)">
+      <button class="dir-del" onclick="deleteSitemap(${i})" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+// ── Render robots.txt output ──
+function render() {
+  const delay = document.getElementById('crawl-delay').value.trim();
+  const lines = [];
+
+  lines.push('# robots.txt');
+  lines.push('# Generated by Maheswari P — SEO Tools');
+  lines.push('# ' + new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }));
+  lines.push('');
+
+  rules.forEach((r, i) => {
+    if (i > 0) lines.push('');
+    lines.push('User-agent: ' + (r.agent || '*'));
+    r.directives.forEach(d => {
+      lines.push(d.type + ': ' + d.path);
+    });
+    if (delay) lines.push('Crawl-delay: ' + delay);
+  });
+
+  if (sitemaps.filter(s => s.trim()).length) {
+    lines.push('');
+    sitemaps.filter(s => s.trim()).forEach(s => lines.push('Sitemap: ' + s));
+  }
+
+  // Syntax-highlighted version
+  const highlighted = lines.map(l => {
+    if (l.startsWith('#')) return `<span class="code-comment">${esc(l)}</span>`;
+    if (l.startsWith('User-agent:')) {
+      const [k, ...rest] = l.split(': ');
+      return `<span class="code-key">${esc(k)}:</span> <span class="code-val-neutral">${esc(rest.join(': '))}</span>`;
+    }
+    if (l.startsWith('Allow:')) {
+      const [k, ...rest] = l.split(': ');
+      return `<span class="code-key">${esc(k)}:</span> <span class="code-val-allow">${esc(rest.join(': '))}</span>`;
+    }
+    if (l.startsWith('Disallow:')) {
+      const [k, ...rest] = l.split(': ');
+      const val = rest.join(': ');
+      return `<span class="code-key">${esc(k)}:</span> <span class="${val ? 'code-val-disallow' : 'code-val-allow'}">${esc(val || '(all allowed)')}</span>`;
+    }
+    if (l.startsWith('Sitemap:')) {
+      const [k, ...rest] = l.split(': ');
+      return `<span class="code-key">${esc(k)}:</span> <span class="code-val-url">${esc(rest.join(': '))}</span>`;
+    }
+    if (l.startsWith('Crawl-delay:')) {
+      const [k, ...rest] = l.split(': ');
+      return `<span class="code-key">${esc(k)}:</span> <span class="code-val-neutral">${esc(rest.join(': '))}</span>`;
+    }
+    return esc(l) || '';
+  }).join('\n');
+
+  document.getElementById('code-output').innerHTML = highlighted;
+  document.getElementById('line-count').textContent = lines.length + ' lines';
+
+  renderValidation(lines);
+}
+
+// ── Validation ──
+function renderValidation(lines) {
+  const issues = [];
+
+  // Check for wildcard rule
+  const hasWildcard = rules.some(r => r.agent === '*');
+  if (!hasWildcard && rules.length > 0) {
+    issues.push({ type: 'warn', msg: 'No wildcard User-agent: * rule. Most bots follow this.' });
+  }
+
+  // Check for empty paths
+  rules.forEach(r => {
+    r.directives.forEach(d => {
+      if (d.path === '' && d.type === 'Disallow') {
+        // empty disallow = allow everything, which is fine
+      } else if (d.path && !d.path.startsWith('/') && !d.path.startsWith('*')) {
+        issues.push({ type: 'warn', msg: `Path "${d.path}" should start with /` });
+      }
+    });
+  });
+
+  // Check for sitemap
+  if (!sitemaps.filter(s => s.trim()).length) {
+    issues.push({ type: 'info', msg: 'No Sitemap: directive. Adding one helps search engines find all your pages.' });
+  } else {
+    sitemaps.filter(s => s.trim()).forEach(s => {
+      if (!s.startsWith('http')) {
+        issues.push({ type: 'error', msg: `Sitemap URL should start with https://: "${s}"` });
+      }
+    });
+  }
+
+  // Block all warning
+  const hasBlockAll = rules.some(r => r.agent === '*' && r.directives.some(d => d.type === 'Disallow' && d.path === '/'));
+  if (hasBlockAll) {
+    issues.push({ type: 'warn', msg: 'Disallow: / blocks all bots from your entire site. Intended?' });
+  }
+
+  // All good
+  if (!issues.length && rules.length > 0) {
+    issues.push({ type: 'ok', msg: 'No issues detected. Your robots.txt looks good!' });
+  }
+
+  const icons = { ok: '✅', warn: '⚠️', error: '❌', info: 'ℹ️' };
+  const el = document.getElementById('val-list');
+  if (!rules.length && !sitemaps.length) {
+    el.innerHTML = '<div class="val-empty">Add rules to see validation tips</div>';
+    return;
+  }
+  el.innerHTML = issues.map(i =>
+    `<div class="val-row"><span class="val-icon">${icons[i.type]}</span><span class="val-text">${esc(i.msg)}</span></div>`
+  ).join('');
+}
+
+// ── Copy & Download ──
+function copyCode() {
+  const text = document.getElementById('code-output').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btn-copy-code');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function downloadFile() {
+  const text = document.getElementById('code-output').innerText;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'robots.txt';
+  a.click();
+}
+
+function resetAll() {
+  rules = []; sitemaps = [];
+  document.getElementById('crawl-delay').value = '';
+  renderEditor(); render();
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Init with default template
+applyTemplate('default');
+</script>
+</body>
+</html>

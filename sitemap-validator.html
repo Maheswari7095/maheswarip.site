@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sitemap Validator — Maheswari P</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef; --bg-mid:#edeae3; --bg-light:#e4e0d6;
+    --border:#ccc6b8; --gold:#a0742a; --gold-light:#b8893a;
+    --gold-glow:rgba(160,116,42,0.10); --ink:#1c1812;
+    --ink-muted:#5c5040; --ink-body:#3a3228; --white-card:#ffffff;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;transition:all 0.3s;}
+
+  /* PAGE HEADER */
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:520px;margin:0 auto 0;animation:fadeInUp 0.6s ease 0.2s both;}
+
+  /* TOOL AREA */
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  /* INPUT CARD */
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2e7d32,#66bb6a);}
+
+    width:100%; height:200px; padding:0.9rem 1rem;
+    border:1px solid var(--border); border-radius:2px;
+    background:var(--bg); color:var(--ink);
+    font-family:'DM Mono',monospace; font-size:0.78rem;
+    line-height:1.6; resize:vertical; outline:none;
+    transition:border-color 0.2s,box-shadow 0.2s;
+    margin-bottom:0.9rem;
+  }
+  .input-card textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px var(--gold-glow); }
+  .input-card textarea::placeholder { color:var(--ink-muted); opacity:0.4; }
+  .input-actions { display:flex; gap:10px; align-items:center; }
+  .btn-clear {
+    height:46px; padding:0 1.4rem;
+    background:transparent; color:var(--ink-muted);
+    border:1px solid var(--border); border-radius:2px;
+    font-family:'DM Sans',sans-serif; font-size:0.78rem;
+    font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+    cursor:pointer; transition:border-color 0.2s,color 0.2s;
+  }
+  .btn-clear:hover { border-color:var(--ink-muted); color:var(--ink); }
+  .field-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:0.8rem;}
+  .input-row{display:flex;gap:10px;}
+  .url-inp{flex:1;height:46px;padding:0 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.85rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  .url-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
+  .url-inp::placeholder{color:var(--ink-muted);opacity:0.5;}
+  .btn-validate{height:46px;padding:0 2rem;background:var(--gold);color:var(--bg);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .btn-validate:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-validate:active{transform:scale(0.98);}
+  .input-hint{font-size:0.75rem;color:var(--ink-muted);margin-top:0.6rem;}
+  .input-hint a{color:var(--gold);text-decoration:none;}
+  .input-hint a:hover{text-decoration:underline;}
+
+  /* SECTION DIVIDER */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:1.8rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  /* METRICS ROW */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem;}
+  .metric{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1rem 1.1rem;}
+  .metric-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+  .metric-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1;}
+  .metric-val.c-green{color:#2e7d32;}
+  .metric-val.c-amber{color:#a0742a;}
+  .metric-val.c-red{color:#c0392b;}
+
+  /* ISSUES */
+  .issue{display:flex;align-items:flex-start;gap:12px;padding:0.85rem 1.1rem;background:var(--white-card);border:1px solid var(--border);border-radius:4px;margin-bottom:8px;font-size:0.85rem;line-height:1.55;}
+  .issue-icon{flex-shrink:0;margin-top:2px;font-size:1rem;}
+  .issue-body{flex:1;}
+  .issue-url{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--ink-muted);word-break:break-all;display:block;margin-top:3px;}
+  .badge{display:inline-block;font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-right:5px;vertical-align:1px;}
+  .b-error{background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.25);color:#c0392b;}
+  .b-warn{background:rgba(160,116,42,0.1);border:1px solid rgba(160,116,42,0.3);color:var(--gold);}
+  .b-info{background:rgba(46,125,50,0.08);border:1px solid rgba(46,125,50,0.25);color:#2e7d32;}
+  .b-ok{background:rgba(46,125,50,0.1);border:1px solid rgba(46,125,50,0.3);color:#2e7d32;}
+
+  /* URL TABLE */
+  .table-wrap{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+  .sv-table{width:100%;border-collapse:collapse;font-size:0.78rem;}
+  .sv-table th{text-align:left;padding:0.7rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid);font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);font-weight:500;}
+  .sv-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(204,198,184,0.4);vertical-align:top;color:var(--ink-body);}
+  .sv-table tr:last-child td{border-bottom:none;}
+  .sv-table tr:hover td{background:rgba(245,243,239,0.6);}
+  .sv-table .mono{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--ink-muted);}
+  .sv-table a{color:var(--gold);text-decoration:none;word-break:break-all;font-family:'DM Mono',monospace;font-size:0.7rem;}
+  .sv-table a:hover{text-decoration:underline;}
+
+  /* PAGINATION */
+  .pagination{display:flex;align-items:center;gap:10px;padding:0.9rem 1rem;border-top:1px solid var(--border);font-size:0.8rem;color:var(--ink-muted);background:var(--white-card);}
+  .pg-btn{height:32px;padding:0 14px;background:var(--bg);border:1px solid var(--border);border-radius:2px;color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;transition:background 0.15s,color 0.15s;}
+  .pg-btn:hover:not(:disabled){background:var(--bg-light);color:var(--gold);}
+  .pg-btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .pg-info{font-family:'DM Mono',monospace;font-size:0.68rem;}
+  .pg-total{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.68rem;}
+
+  /* STATES */
+  .empty-state{text-align:center;padding:4rem 2rem;color:var(--ink-muted);background:var(--white-card);border:1px solid var(--border);border-radius:4px;}
+  .empty-state .icon{font-size:2.5rem;margin-bottom:0.8rem;opacity:0.3;}
+  .empty-state p{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .loading-state{text-align:center;padding:3.5rem 2rem;color:var(--ink-muted);background:var(--white-card);border:1px solid var(--border);border-radius:4px;}
+  .spinner{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.85s linear infinite;margin-bottom:1rem;}
+  .loading-state p{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .error-state{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.2);border-radius:4px;padding:1.1rem 1.4rem;font-size:0.85rem;color:#7a1c1c;margin-bottom:1.5rem;}
+
+  /* TYPE BADGE */
+  .type-index{display:inline-block;background:rgba(160,116,42,0.1);border:1px solid rgba(160,116,42,0.3);color:var(--gold);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:2px;}
+
+  /* CTA */
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light),transparent);}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--ink);margin-bottom:0.35rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);font-weight:300;}
+  .cta-actions{display:flex;gap:0.8rem;flex-wrap:wrap;}
+  .btn-gold{background:var(--gold);color:var(--bg);padding:0.65rem 1.6rem;border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:background 0.2s,transform 0.15s;}
+  .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);}
+  .btn-outline{background:transparent;color:var(--gold);padding:0.65rem 1.6rem;border:1px solid rgba(160,116,42,0.4);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:border-color 0.2s,transform 0.15s;}
+  .btn-outline:hover{border-color:var(--gold);transform:translateY(-2px);}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:1.8rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;background:rgba(237,234,227,0.5);}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;color:var(--ink-muted);text-transform:uppercase;}
+  .footer-right{display:flex;gap:2rem;}
+  .footer-right a{font-size:0.78rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(245,243,239,0.99);border-bottom:1px solid var(--border);padding:1rem 1.5rem 1.5rem;gap:1.2rem;}
+    .nav-mobile-toggle{display:flex;}
+    .nav-contact-btn{display:none;}
+    .page-header{padding:6.5rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .input-card{padding:1.4rem 1.2rem;}
+    .input-row{flex-direction:column;}
+    .btn-validate{height:44px;}
+    .cta-banner{padding:0 1.5rem;margin-bottom:4rem;}
+    .cta-inner{padding:1.6rem 1.4rem;}
+    footer{padding:1.4rem 1.5rem;}
+    .sv-table th:nth-child(3),.sv-table td:nth-child(3),
+    .sv-table th:nth-child(4),.sv-table td:nth-child(4),
+    .sv-table th:nth-child(5),.sv-table td:nth-child(5){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo" title="Portfolio">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Portfolio</a>
+      <span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a>
+      <span class="sep">/</span>
+      <span class="current">Sitemap Validator</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-eyebrow">Technical SEO</div>
+  <h1 class="page-title">Sitemap <em>Validator</em></h1>
+  <p class="page-desc">Paste your sitemap XML below and instantly audit it for errors, duplicate URLs, missing tags, HTTPS issues and indexability problems.</p>
+</header>
+
+<!-- TOOL -->
+<div class="tool-wrap">
+
+  <div class="input-card">
+    <div class="field-label">Paste Sitemap XML</div>
+    <textarea id="xmlPaste" placeholder="<?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#10;<urlset xmlns=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;>&#10;  <url><loc>https://example.com/</loc></url>&#10;</urlset>"></textarea>
+    <div class="input-actions">
+      <button class="btn-validate" onclick="validatePasted()">Validate Sitemap →</button>
+      <button class="btn-clear" onclick="clearPaste()">Clear</button>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="empty-state">
+      <div class="icon">🗺️</div>
+      <p>Paste your sitemap XML above to begin</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Need a Custom SEO Strategy?</h3>
+      <p>These tools reflect the kind of data-driven, AI-augmented SEO work I do for brands every day.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="index.html#contact" class="btn-gold">Get in Touch</a>
+      <a href="seo-tools.html" class="btn-outline">All Tools</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">© 2025 Maheswari P — SEO Tools</div>
+  <div class="footer-right">
+    <a href="index.html">Portfolio</a>
+    <a href="seo-tools.html">Tools</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  let allUrls = [], currentPage = 0;
+  const PER_PAGE = 25;
+
+  function clearPaste() {
+    document.getElementById('xmlPaste').value = '';
+    document.getElementById('results').innerHTML = `<div class="empty-state"><div class="icon">🗺️</div><p>Paste your sitemap XML above to begin</p></div>`;
+  }
+
+  function validatePasted() {
+    const xml = document.getElementById('xmlPaste').value.trim();
+    if (!xml) return;
+    parseAndRender(xml);
+  }
+
+  function parseAndRender(xml) {
+    const el = document.getElementById('results');
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'application/xml');
+
+    if (doc.querySelector('parsererror')) {
+      el.innerHTML = `<div class="error-state"><strong>⚠ Invalid XML</strong> — the sitemap could not be parsed. Check for syntax errors in the XML.</div>`;
+      return;
+    }
+
+    const isSitemapIndex = !!doc.querySelector('sitemapindex');
+    const isUrlset       = !!doc.querySelector('urlset');
+
+    if (!isSitemapIndex && !isUrlset) {
+      el.innerHTML = `<div class="error-state"><strong>⚠ Not a valid sitemap</strong> — no &lt;urlset&gt; or &lt;sitemapindex&gt; element found.</div>`;
+      return;
+    }
+
+    let entries = [];
+
+    if (isSitemapIndex) {
+      entries = [...doc.querySelectorAll('sitemap')].map(s => ({
+        loc:        s.querySelector('loc')?.textContent?.trim() || '',
+        lastmod:    s.querySelector('lastmod')?.textContent?.trim() || null,
+        changefreq: null, priority: null, type: 'index'
+      }));
+    } else {
+      entries = [...doc.querySelectorAll('url')].map(u => ({
+        loc:        u.querySelector('loc')?.textContent?.trim() || '',
+        lastmod:    u.querySelector('lastmod')?.textContent?.trim() || null,
+        changefreq: u.querySelector('changefreq')?.textContent?.trim() || null,
+        priority:   u.querySelector('priority')?.textContent?.trim() || null,
+        type: 'url'
+      }));
+    }
+
+    const total       = entries.length;
+    const validLoc    = entries.filter(e => e.loc);
+    const missingLoc  = entries.filter(e => !e.loc);
+    const locs        = validLoc.map(e => e.loc);
+    const dupeSet     = locs.filter((v, i) => locs.indexOf(v) !== i);
+    const dupes       = [...new Set(dupeSet)];
+    const httpUrls    = validLoc.filter(e => e.loc.startsWith('http://'));
+    const badPri      = validLoc.filter(e => e.priority && (isNaN(+e.priority) || +e.priority < 0 || +e.priority > 1));
+    const noLastmod   = validLoc.filter(e => !e.lastmod);
+    const trailing    = validLoc.filter(e => e.loc !== e.loc.trim());
+    const httpsCount  = validLoc.filter(e => e.loc.startsWith('https://')).length;
+    const errorCount  = (missingLoc.length ? 1 : 0) + (dupes.length ? 1 : 0) + (total > 50000 ? 1 : 0);
+    const warnCount   = (httpUrls.length ? 1 : 0) + (badPri.length ? 1 : 0) + (trailing.length ? 1 : 0);
+
+    // Build issues
+    const issues = [];
+    if (isSitemapIndex) issues.push({ level:'info', msg:`This is a <strong>sitemap index</strong> — it references ${total} child sitemaps.`, url:'' });
+    if (total > 50000)  issues.push({ level:'error', msg:`Sitemap exceeds Google's 50,000 URL limit (${total.toLocaleString()} found). Split into multiple sitemaps.`, url:'' });
+    if (missingLoc.length) issues.push({ level:'error', msg:`${missingLoc.length} entr${missingLoc.length>1?'ies':'y'} missing a <code>&lt;loc&gt;</code> tag.`, url:'' });
+    if (dupes.length)   issues.push({ level:'error', msg:`${dupes.length} duplicate URL${dupes.length>1?'s':''} found. Search engines may ignore duplicates.`, url: dupes[0] });
+    if (httpUrls.length) issues.push({ level:'warn', msg:`${httpUrls.length} URL${httpUrls.length>1?'s use':' uses'} <strong>HTTP</strong> instead of HTTPS. Update to secure URLs.`, url: httpUrls[0]?.loc });
+    if (badPri.length)  issues.push({ level:'warn', msg:`${badPri.length} URL${badPri.length>1?'s have':' has'} an invalid <code>priority</code> value. Must be between 0.0 and 1.0.`, url: badPri[0]?.loc });
+    if (trailing.length) issues.push({ level:'warn', msg:`${trailing.length} URL${trailing.length>1?'s':''} have trailing whitespace in <code>&lt;loc&gt;</code> — this can cause crawl issues.`, url: trailing[0]?.loc });
+    if (noLastmod.length === total) issues.push({ level:'warn', msg:`No URLs include a <code>&lt;lastmod&gt;</code> date. Adding it helps search engines prioritise recrawling.`, url:'' });
+    else if (noLastmod.length > 0) issues.push({ level:'info', msg:`${noLastmod.length} URL${noLastmod.length>1?'s are':' is'} missing <code>&lt;lastmod&gt;</code> — not required but recommended.`, url:'' });
+    if (!issues.length) issues.push({ level:'ok', msg:'<strong>No issues detected.</strong> This sitemap looks well-formed and follows best practices.', url:'' });
+
+    allUrls = validLoc;
+    currentPage = 0;
+
+    const httpsPercent = total > 0 ? Math.round(httpsCount / total * 100) : 0;
+    const lastmodPct   = total > 0 ? Math.round((total - noLastmod.length) / total * 100) : 0;
+
+    el.innerHTML = `
+      <div class="sec-div"><span class="sec-div-label">Summary</span><div class="sec-div-line"></div></div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-lbl">Total URLs</div>
+          <div class="metric-val">${total.toLocaleString()}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Errors</div>
+          <div class="metric-val ${errorCount > 0 ? 'c-red' : 'c-green'}">${errorCount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Warnings</div>
+          <div class="metric-val ${warnCount > 0 ? 'c-amber' : 'c-green'}">${warnCount}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">HTTPS</div>
+          <div class="metric-val ${httpsPercent === 100 ? 'c-green' : httpsPercent > 80 ? 'c-amber' : 'c-red'}">${httpsPercent}%</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Has Lastmod</div>
+          <div class="metric-val ${lastmodPct === 100 ? 'c-green' : 'c-amber'}">${lastmodPct}%</div>
+        </div>
+      </div>
+
+      <div class="sec-div"><span class="sec-div-label">Issues</span><div class="sec-div-line"></div></div>
+      <div id="issues-list">
+        ${issues.map(i => issueRow(i)).join('')}
+      </div>
+
+      <div class="sec-div" style="margin-top:2rem"><span class="sec-div-label">URL Preview${isSitemapIndex?' (Child Sitemaps)':''}</span><div class="sec-div-line"></div></div>
+      <div class="table-wrap">
+        <table class="sv-table">
+          <thead>
+            <tr>
+              <th style="width:42px">#</th>
+              <th>URL ${isSitemapIndex ? '<span class="type-index">index</span>' : ''}</th>
+              <th style="width:130px">Lastmod</th>
+              <th style="width:80px">Priority</th>
+              <th style="width:110px">Changefreq</th>
+            </tr>
+          </thead>
+          <tbody id="url-tbody"></tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    `;
+
+    renderPage();
+  }
+
+  function issueRow(i) {
+    const map = {
+      error: { badge:'b-error', label:'Error',   icon:'⛔' },
+      warn:  { badge:'b-warn',  label:'Warning',  icon:'⚠️' },
+      info:  { badge:'b-info',  label:'Info',     icon:'ℹ️' },
+      ok:    { badge:'b-ok',    label:'Pass',     icon:'✅' }
+    };
+    const m = map[i.level];
+    return `<div class="issue">
+      <span class="issue-icon">${m.icon}</span>
+      <div class="issue-body">
+        <span class="badge ${m.badge}">${m.label}</span>${i.msg}
+        ${i.url ? `<span class="issue-url">${i.url.length > 90 ? i.url.slice(0,90)+'…' : i.url}</span>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function renderPage() {
+    const start  = currentPage * PER_PAGE;
+    const slice  = allUrls.slice(start, start + PER_PAGE);
+    const tbody  = document.getElementById('url-tbody');
+    const pag    = document.getElementById('pagination');
+    if (!tbody) return;
+
+    tbody.innerHTML = slice.map((u, i) => `
+      <tr>
+        <td class="mono">${start + i + 1}</td>
+        <td><a href="${u.loc}" target="_blank" rel="noopener">${u.loc.length > 65 ? u.loc.slice(0,65)+'…' : u.loc}</a></td>
+        <td class="mono">${u.lastmod || '—'}</td>
+        <td class="mono">${u.priority || '—'}</td>
+        <td class="mono">${u.changefreq || '—'}</td>
+      </tr>`).join('');
+
+    const totalPages = Math.ceil(allUrls.length / PER_PAGE);
+    pag.innerHTML = totalPages > 1 ? `
+      <button class="pg-btn" onclick="changePage(-1)" ${currentPage === 0 ? 'disabled' : ''}>← Prev</button>
+      <span class="pg-info">Page ${currentPage + 1} of ${totalPages}</span>
+      <button class="pg-btn" onclick="changePage(1)" ${currentPage >= totalPages - 1 ? 'disabled' : ''}>Next →</button>
+      <span class="pg-total">${allUrls.length.toLocaleString()} URLs total</span>
+    ` : `<span class="pg-total">${allUrls.length.toLocaleString()} URLs</span>`;
+  }
+
+  function changePage(dir) {
+    currentPage += dir;
+    renderPage();
+    document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Enter key in textarea (Ctrl/Cmd+Enter to validate)
+  document.getElementById('xmlPaste').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') validatePasted();
+  });
+
+  // Mobile nav
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

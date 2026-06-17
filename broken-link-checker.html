@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broken Link Checker — Maheswari P</title>
+<meta name="description" content="Paste your HTML and instantly find all broken, redirected and valid links on your page. Free broken link checker tool for SEO.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef; --bg-mid:#edeae3; --bg-light:#e4e0d6;
+    --border:#ccc6b8; --gold:#a0742a; --gold-light:#b8893a;
+    --gold-glow:rgba(160,116,42,0.10); --ink:#1c1812;
+    --ink-muted:#5c5040; --ink-body:#3a3228; --white-card:#ffffff;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;transition:all 0.3s;}
+
+  /* PAGE HEADER */
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:560px;margin:0 auto;animation:fadeInUp 0.6s ease 0.2s both;}
+
+  /* TOOL AREA */
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  /* INPUT CARD */
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7f1d1d,#dc2626);}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:0.8rem;}
+  .html-textarea{width:100%;height:220px;padding:0.9rem 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.78rem;line-height:1.6;resize:vertical;outline:none;transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:0.9rem;}
+  .html-textarea:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08);}
+  .html-textarea::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .base-url-row{display:flex;gap:10px;align-items:center;margin-bottom:0.9rem;}
+  .base-url-input{flex:1;height:42px;padding:0 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.8rem;outline:none;transition:border-color 0.2s;}
+  .base-url-input:focus{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.08);}
+  .base-url-input::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .input-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .btn-check{height:46px;padding:0 2rem;background:var(--gold);color:var(--bg);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .btn-check:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-check:active{transform:scale(0.98);}
+  .btn-check:disabled{opacity:0.55;cursor:not-allowed;transform:none;}
+  .btn-clear{height:46px;padding:0 1.4rem;background:transparent;color:var(--ink-muted);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+  .btn-clear:hover{border-color:var(--ink-muted);color:var(--ink);}
+  .btn-export{height:46px;padding:0 1.4rem;background:transparent;color:var(--ink-muted);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+  .btn-export:hover{border-color:var(--gold);color:var(--gold);}
+  .input-hint{font-size:0.75rem;color:var(--ink-muted);margin-top:0.7rem;line-height:1.6;}
+
+  /* SECTION DIVIDER */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:1.8rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem;}
+  .metric{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1rem 1.1rem;}
+  .metric-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+  .metric-val{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1;}
+  .metric-val.c-green{color:#2e7d32;}
+  .metric-val.c-amber{color:#a0742a;}
+  .metric-val.c-red{color:#c0392b;}
+  .metric-val.c-blue{color:#1e3a5f;}
+
+  /* FILTER TABS */
+  .filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;}
+  .ftab{height:34px;padding:0 1rem;background:var(--bg-light);border:1px solid var(--border);border-radius:2px;font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;color:var(--ink-muted);transition:all 0.2s;}
+  .ftab:hover{border-color:var(--ink-muted);color:var(--ink);}
+  .ftab.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .ftab.red.active{background:#c0392b;border-color:#c0392b;color:#fff;}
+  .ftab.amber.active{background:#a0742a;border-color:#a0742a;color:#fff;}
+  .ftab.green.active{background:#2e7d32;border-color:#2e7d32;color:#fff;}
+
+  /* LINK ROWS */
+  .link-table{width:100%;border-collapse:collapse;}
+  .link-table th{text-align:left;padding:0.6rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid);font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .link-table td{padding:0.7rem 1rem;border-bottom:1px solid rgba(204,198,184,0.35);font-size:0.8rem;color:var(--ink-body);vertical-align:top;}
+  .link-table tr:last-child td{border-bottom:none;}
+  .link-table tr:hover td{background:rgba(245,243,239,0.6);}
+  .table-wrap{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden;overflow-x:auto;}
+  .link-url{font-family:'DM Mono',monospace;font-size:0.72rem;word-break:break-all;color:var(--ink-body);}
+  .link-anchor{font-size:0.78rem;color:var(--ink-muted);}
+  .status-pill{display:inline-block;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.06em;padding:2px 9px;border-radius:20px;white-space:nowrap;}
+  .sp-broken{background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);color:#c0392b;}
+  .sp-redirect{background:rgba(160,116,42,0.1);border:1px solid rgba(160,116,42,0.3);color:#a0742a;}
+  .sp-ok{background:rgba(46,125,50,0.1);border:1px solid rgba(46,125,50,0.3);color:#2e7d32;}
+  .sp-skip{background:rgba(92,61,138,0.08);border:1px solid rgba(92,61,138,0.2);color:#5c3d8a;}
+  .sp-pending{background:var(--bg-light);border:1px solid var(--border);color:var(--ink-muted);}
+  .link-type{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--ink-muted);}
+
+  /* PROGRESS */
+  .progress-wrap{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.5rem 2rem;margin-bottom:1rem;}
+  .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;}
+  .progress-label{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .progress-count{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);}
+  .progress-bar-outer{height:6px;background:var(--bg-light);border-radius:6px;overflow:hidden;}
+  .progress-bar-inner{height:100%;background:linear-gradient(90deg,#7f1d1d,#dc2626);border-radius:6px;transition:width 0.3s ease;}
+
+  /* EMPTY STATE */
+  .empty-state{text-align:center;padding:4rem 2rem;color:var(--ink-muted);background:var(--white-card);border:1px solid var(--border);border-radius:4px;}
+  .empty-state .icon{font-size:2.8rem;margin-bottom:0.8rem;opacity:0.25;}
+  .empty-state p{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .empty-state small{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--ink-muted);display:block;margin-top:0.5rem;letter-spacing:0;text-transform:none;font-weight:300;}
+
+  /* CTA */
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin-bottom:0.3rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);}
+  .cta-btn{background:var(--gold);color:var(--bg);padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .cta-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);letter-spacing:0.1em;}
+  .footer-left a{color:var(--gold);text-decoration:none;}
+  .footer-right{display:flex;gap:1.5rem;}
+  .footer-right a{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  /* MOBILE */
+  @media(max-width:768px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul,nav .nav-contact-btn{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(245,243,239,0.98);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border);}
+    .nav-mobile-toggle{display:flex;}
+    .page-header{padding:6rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .cta-banner{padding:0 1.5rem;}
+    .cta-inner{padding:1.5rem;}
+    footer{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo" title="Back to Portfolio">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a>
+      <span class="sep">/</span>
+      <span class="current">Broken Link Checker</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="page-header">
+  <div class="page-eyebrow">Technical SEO</div>
+  <h1 class="page-title">Broken <em>Link</em> Checker</h1>
+  <p class="page-desc">Paste your page HTML to extract all links and check each one — broken (4xx/5xx), redirected (3xx), or healthy (2xx). Filter, sort and export results as CSV.</p>
+</div>
+
+<div class="tool-wrap">
+  <div class="input-card">
+    <div class="field-label">Base URL (optional — resolves relative links)</div>
+    <input type="text" class="base-url-input" id="baseUrl" placeholder="https://example.com" autocomplete="off" spellcheck="false">
+
+    <div class="field-label" style="margin-top:1.2rem;">Paste Page HTML</div>
+    <textarea class="html-textarea" id="htmlInput" placeholder="Paste the full HTML of your page here…
+
+Tip: In Chrome, press Ctrl+U (or Cmd+U on Mac) to view page source, then select all and paste."></textarea>
+
+    <div class="input-actions">
+      <button class="btn-check" id="checkBtn" onclick="runCheck()">Check Links</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+      <button class="btn-export" id="exportBtn" onclick="exportCSV()" style="display:none">Export CSV</button>
+    </div>
+    <p class="input-hint">All link checking runs locally in your browser — no data is sent to any server. External links are checked via a CORS proxy; some may show as "Skipped" due to server restrictions.</p>
+  </div>
+
+  <div id="output">
+    <div class="empty-state">
+      <div class="icon">🔗</div>
+      <p>Paste HTML above to begin</p>
+      <small>All links (href, src, action) will be extracted and checked for broken, redirect or healthy status</small>
+    </div>
+  </div>
+</div>
+
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Explore All SEO Tools</h3>
+      <p>From keyword research to technical audits — free tools built for SEO professionals.</p>
+    </div>
+    <a href="seo-tools.html" class="cta-btn">View All Tools →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© 2025 <a href="index.html">Maheswari P</a> · All rights reserved</div>
+  <div class="footer-right">
+    <a href="seo-tools.html">SEO Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── State ──
+  let allResults = [];
+  let activeFilter = 'all';
+
+  // ── Helpers ──
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function resolveUrl(href, base) {
+    try {
+      if (!href || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:') || href.startsWith('#')) return null;
+      if (base) return new URL(href, base).href;
+      if (href.startsWith('http://') || href.startsWith('https://')) return href;
+      return null; // relative, no base
+    } catch { return null; }
+  }
+
+  function extractLinks(html, base) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const seen = new Set();
+    const links = [];
+
+    // <a href>
+    doc.querySelectorAll('a[href]').forEach(el => {
+      const raw = el.getAttribute('href');
+      const url = resolveUrl(raw, base);
+      const anchor = (el.textContent || '').trim().slice(0, 80) || raw;
+      if (url && !seen.has(url)) { seen.add(url); links.push({ url, raw, anchor, type: 'a' }); }
+    });
+
+    // <link href>
+    doc.querySelectorAll('link[href]').forEach(el => {
+      const raw = el.getAttribute('href');
+      const url = resolveUrl(raw, base);
+      if (url && !seen.has(url)) { seen.add(url); links.push({ url, raw, anchor: el.getAttribute('rel') || raw, type: 'link' }); }
+    });
+
+    // <img src>
+    doc.querySelectorAll('img[src]').forEach(el => {
+      const raw = el.getAttribute('src');
+      const url = resolveUrl(raw, base);
+      const anchor = el.getAttribute('alt') || raw.split('/').pop() || raw;
+      if (url && !seen.has(url)) { seen.add(url); links.push({ url, raw, anchor, type: 'img' }); }
+    });
+
+    // <script src>
+    doc.querySelectorAll('script[src]').forEach(el => {
+      const raw = el.getAttribute('src');
+      const url = resolveUrl(raw, base);
+      if (url && !seen.has(url)) { seen.add(url); links.push({ url, raw, anchor: raw.split('/').pop() || raw, type: 'script' }); }
+    });
+
+    return links;
+  }
+
+  // ── Check a single URL ──
+  async function checkUrl(url) {
+    // Skip non-http
+    if (!url.startsWith('http')) return { status: 'skip', code: null, label: 'Skipped' };
+
+    try {
+      // Use allorigins as CORS proxy to check the URL
+      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+
+      const resp = await fetch(proxy, { signal: controller.signal });
+      clearTimeout(timer);
+
+      const json = await resp.json();
+      const code = json.status && json.status.http_code;
+
+      if (!code) return { status: 'skip', code: null, label: 'Skipped' };
+      if (code >= 200 && code < 300) return { status: 'ok', code, label: `${code} OK` };
+      if (code >= 300 && code < 400) return { status: 'redirect', code, label: `${code} Redirect` };
+      if (code >= 400 && code < 500) return { status: 'broken', code, label: `${code} Not Found` };
+      if (code >= 500) return { status: 'broken', code, label: `${code} Server Error` };
+      return { status: 'skip', code, label: `${code} Unknown` };
+    } catch (e) {
+      if (e.name === 'AbortError') return { status: 'broken', code: null, label: 'Timeout' };
+      return { status: 'skip', code: null, label: 'Skipped' };
+    }
+  }
+
+  // ── Main ──
+  async function runCheck() {
+    const html = document.getElementById('htmlInput').value.trim();
+    if (!html) { document.getElementById('htmlInput').focus(); return; }
+
+    const base = document.getElementById('baseUrl').value.trim() || null;
+    const links = extractLinks(html, base);
+
+    if (!links.length) {
+      document.getElementById('output').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🔍</div>
+          <p>No links found</p>
+          <small>Make sure you pasted full HTML containing &lt;a href&gt;, &lt;img src&gt; or &lt;link&gt; tags. Relative links need a Base URL to resolve.</small>
+        </div>`;
+      return;
+    }
+
+    const btn = document.getElementById('checkBtn');
+    btn.disabled = true;
+    btn.textContent = 'Checking…';
+    document.getElementById('exportBtn').style.display = 'none';
+    allResults = links.map(l => ({ ...l, status: 'pending', code: null, label: 'Pending' }));
+    activeFilter = 'all';
+
+    renderProgress(0, links.length);
+
+    // Check concurrently in batches of 5
+    const BATCH = 5;
+    for (let i = 0; i < links.length; i += BATCH) {
+      const batch = links.slice(i, i + BATCH);
+      const results = await Promise.all(batch.map(l => checkUrl(l.url)));
+      results.forEach((res, j) => { allResults[i + j] = { ...allResults[i + j], ...res }; });
+      renderProgress(Math.min(i + BATCH, links.length), links.length);
+      renderTable();
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Check Links';
+    document.getElementById('exportBtn').style.display = '';
+    renderTable();
+  }
+
+  function renderProgress(done, total) {
+    const pct = total ? Math.round(done / total * 100) : 0;
+    const broken = allResults.filter(r => r.status === 'broken').length;
+    const ok     = allResults.filter(r => r.status === 'ok').length;
+    const redir  = allResults.filter(r => r.status === 'redirect').length;
+    const skip   = allResults.filter(r => r.status === 'skip').length;
+
+    const out = document.getElementById('output');
+    const existing = out.querySelector('#results-section');
+
+    const progressHtml = `
+      <div class="progress-wrap" id="progress-bar-wrap">
+        <div class="progress-top">
+          <span class="progress-label">Checking links…</span>
+          <span class="progress-count">${done} / ${total}</span>
+        </div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+
+    if (!existing) {
+      out.innerHTML = progressHtml + `<div id="results-section"></div>`;
+    } else {
+      const pb = out.querySelector('#progress-bar-wrap');
+      if (pb) pb.outerHTML = progressHtml;
+    }
+
+    // update summary metrics
+    const rs = out.querySelector('#results-section');
+    if (rs && done === total) {
+      const pbWrap = out.querySelector('#progress-bar-wrap');
+      if (pbWrap) pbWrap.remove();
+    }
+  }
+
+  function renderTable() {
+    const broken = allResults.filter(r => r.status === 'broken').length;
+    const ok     = allResults.filter(r => r.status === 'ok').length;
+    const redir  = allResults.filter(r => r.status === 'redirect').length;
+    const skip   = allResults.filter(r => r.status === 'skip').length;
+    const total  = allResults.length;
+    const done   = allResults.filter(r => r.status !== 'pending').length;
+
+    const filtered = activeFilter === 'all' ? allResults
+      : allResults.filter(r => r.status === activeFilter);
+
+    const rs = document.getElementById('results-section') || document.getElementById('output');
+
+    rs.innerHTML = `
+      <div class="sec-div"><span class="sec-div-label">Summary</span><div class="sec-div-line"></div></div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-lbl">Total Links</div>
+          <div class="metric-val">${total}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Broken</div>
+          <div class="metric-val c-red">${broken}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Redirects</div>
+          <div class="metric-val c-amber">${redir}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Healthy</div>
+          <div class="metric-val c-green">${ok}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Skipped</div>
+          <div class="metric-val c-blue">${skip}</div>
+        </div>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="ftab ${activeFilter==='all'?'active':''}" onclick="setFilter('all')">All (${total})</button>
+        <button class="ftab red ${activeFilter==='broken'?'active':''}" onclick="setFilter('broken')">Broken (${broken})</button>
+        <button class="ftab amber ${activeFilter==='redirect'?'active':''}" onclick="setFilter('redirect')">Redirects (${redir})</button>
+        <button class="ftab green ${activeFilter==='ok'?'active':''}" onclick="setFilter('ok')">Healthy (${ok})</button>
+        <button class="ftab ${activeFilter==='skip'?'active':''}" onclick="setFilter('skip')">Skipped (${skip})</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="link-table">
+          <thead>
+            <tr>
+              <th style="width:42%">URL</th>
+              <th style="width:22%">Anchor / Alt Text</th>
+              <th style="width:10%">Type</th>
+              <th style="width:14%">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.length === 0
+              ? `<tr><td colspan="4" style="text-align:center;color:var(--ink-muted);padding:2rem;font-size:0.82rem;">No links in this category.</td></tr>`
+              : filtered.map(r => `
+              <tr>
+                <td><div class="link-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">${esc(r.url.length > 70 ? r.url.slice(0,67)+'…' : r.url)}</a></div></td>
+                <td><div class="link-anchor">${esc(r.anchor || '—')}</div></td>
+                <td><div class="link-type">${esc(r.type)}</div></td>
+                <td><span class="status-pill sp-${r.status}">${esc(r.label)}</span></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      ${done < total ? `<p style="font-size:0.75rem;color:var(--ink-muted);margin-top:0.8rem;font-family:'DM Mono',monospace;letter-spacing:0.08em;">Checking in progress — results update live as each link is tested.</p>` : ''}
+    `;
+  }
+
+  function setFilter(f) {
+    activeFilter = f;
+    renderTable();
+  }
+
+  function clearAll() {
+    document.getElementById('htmlInput').value = '';
+    document.getElementById('baseUrl').value = '';
+    document.getElementById('exportBtn').style.display = 'none';
+    allResults = [];
+    document.getElementById('output').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔗</div>
+        <p>Paste HTML above to begin</p>
+        <small>All links (href, src, action) will be extracted and checked for broken, redirect or healthy status</small>
+      </div>`;
+  }
+
+  function exportCSV() {
+    if (!allResults.length) return;
+    const rows = [['URL','Anchor Text','Type','Status','HTTP Code']];
+    allResults.forEach(r => {
+      rows.push([
+        `"${r.url.replace(/"/g,'""')}"`,
+        `"${(r.anchor||'').replace(/"/g,'""')}"`,
+        r.type,
+        r.status,
+        r.code || ''
+      ]);
+    });
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'broken-links.csv';
+    a.click();
+  }
+
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

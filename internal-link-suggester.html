@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internal Link Suggester — Maheswari P</title>
+<meta name="description" content="Paste your page content and a list of your site URLs to get smart internal linking suggestions with recommended anchor text. Free SEO internal link tool.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef; --bg-mid:#edeae3; --bg-light:#e4e0d6;
+    --border:#ccc6b8; --gold:#a0742a; --gold-light:#b8893a;
+    --gold-glow:rgba(160,116,42,0.10); --ink:#1c1812;
+    --ink-muted:#5c5040; --ink-body:#3a3228; --white-card:#ffffff;
+    --accent:#2e5e2e; --accent-light:#3a7d3a;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;transition:all 0.3s;}
+
+  /* PAGE HEADER */
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:560px;margin:0 auto;animation:fadeInUp 0.6s ease 0.2s both;}
+
+  /* TOOL AREA */
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  /* TWO COL INPUTS */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;}
+  @media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+
+  /* INPUT CARD */
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2e5e2e,#52b788);}
+  .half-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.6rem 1.8rem;position:relative;overflow:hidden;}
+  .half-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2e5e2e,#52b788);}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:0.8rem;display:flex;align-items:center;gap:6px;}
+  .field-label span{background:var(--bg-light);border:1px solid var(--border);border-radius:2px;padding:1px 7px;font-size:0.6rem;}
+  .html-textarea{width:100%;height:200px;padding:0.9rem 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.78rem;line-height:1.6;resize:vertical;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  .html-textarea:focus{border-color:var(--accent-light);box-shadow:0 0 0 3px rgba(58,125,58,0.10);}
+  .html-textarea::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .url-textarea{width:100%;height:200px;padding:0.9rem 1rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:0.75rem;line-height:1.8;resize:vertical;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  .url-textarea:focus{border-color:var(--accent-light);box-shadow:0 0 0 3px rgba(58,125,58,0.10);}
+  .url-textarea::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .input-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .btn-check{height:46px;padding:0 2rem;background:var(--gold);color:var(--bg);border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .btn-check:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .btn-check:active{transform:scale(0.98);}
+  .btn-clear{height:46px;padding:0 1.4rem;background:transparent;color:var(--ink-muted);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+  .btn-clear:hover{border-color:var(--ink-muted);color:var(--ink);}
+  .btn-export{height:46px;padding:0 1.4rem;background:transparent;color:var(--ink-muted);border:1px solid var(--border);border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;display:none;}
+  .btn-export:hover{border-color:var(--gold);color:var(--gold);}
+  .input-hint{font-size:0.75rem;color:var(--ink-muted);margin-top:0.8rem;line-height:1.6;}
+
+  /* SECTION DIVIDER */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:1.8rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  /* METRICS */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem;}
+  .metric{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1rem 1.1rem;}
+  .metric-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+  .metric-val{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--ink);line-height:1;}
+  .metric-val.c-green{color:#2e7d32;}
+  .metric-val.c-amber{color:#a0742a;}
+
+  /* SUGGESTION CARDS */
+  .sugg-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.4rem 1.6rem;margin-bottom:10px;position:relative;transition:border-color 0.2s,box-shadow 0.2s;}
+  .sugg-card:hover{border-color:var(--accent-light);box-shadow:0 2px 12px rgba(46,94,46,0.07);}
+  .sugg-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.8rem;}
+  .sugg-score{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;line-height:1;flex-shrink:0;}
+  .sugg-score.high{color:#2e7d32;}
+  .sugg-score.mid{color:#a0742a;}
+  .sugg-score.low{color:var(--ink-muted);}
+  .sugg-url{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--accent-light);word-break:break-all;flex:1;}
+  .sugg-url a{color:inherit;text-decoration:none;}
+  .sugg-url a:hover{text-decoration:underline;}
+  .sugg-anchors{margin-top:0.5rem;}
+  .sugg-anchors-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px;}
+  .anchor-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .anchor-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:2px;padding:4px 10px;font-size:0.78rem;color:var(--ink-body);cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+  .anchor-tag:hover{border-color:var(--accent-light);background:rgba(46,94,46,0.05);}
+  .anchor-tag .copy-ic{font-size:0.7rem;opacity:0.5;}
+  .sugg-context{margin-top:0.8rem;font-size:0.8rem;color:var(--ink-muted);line-height:1.6;border-left:2px solid var(--border);padding-left:0.8rem;}
+  .sugg-context mark{background:rgba(46,94,46,0.12);color:var(--accent);border-radius:2px;padding:0 2px;}
+  .match-count{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted);letter-spacing:0.08em;margin-top:0.5rem;}
+
+  /* EMPTY / ERROR */
+  .empty-state{text-align:center;padding:4rem 2rem;color:var(--ink-muted);background:var(--white-card);border:1px solid var(--border);border-radius:4px;}
+  .empty-state .icon{font-size:2.8rem;margin-bottom:0.8rem;opacity:0.25;}
+  .empty-state p{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .empty-state small{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--ink-muted);display:block;margin-top:0.5rem;letter-spacing:0;text-transform:none;font-weight:300;}
+
+  /* HOW IT WORKS */
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem;}
+  @media(max-width:600px){.how-grid{grid-template-columns:1fr;}}
+  .how-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;}
+  .how-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:0.3rem;}
+  .how-title{font-size:0.85rem;font-weight:600;color:var(--ink);margin-bottom:0.3rem;}
+  .how-desc{font-size:0.78rem;color:var(--ink-muted);line-height:1.55;}
+
+  /* CTA */
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin-bottom:0.3rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);}
+  .cta-btn{background:var(--gold);color:var(--bg);padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .cta-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);letter-spacing:0.1em;}
+  .footer-left a{color:var(--gold);text-decoration:none;}
+  .footer-right{display:flex;gap:1.5rem;}
+  .footer-right a{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  /* MOBILE */
+  @media(max-width:768px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul,nav .nav-contact-btn{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(245,243,239,0.98);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border);}
+    .nav-mobile-toggle{display:flex;}
+    .page-header{padding:6rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .cta-banner{padding:0 1.5rem;}
+    .cta-inner{padding:1.5rem;}
+    footer{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo" title="Back to Portfolio">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a>
+      <span class="sep">/</span>
+      <span class="current">Internal Link Suggester</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="page-header">
+  <div class="page-eyebrow">Content SEO</div>
+  <h1 class="page-title">Internal Link <em>Suggester</em></h1>
+  <p class="page-desc">Paste your page content and your site's URL list — get smart internal linking opportunities with ready-to-use anchor text suggestions ranked by relevance.</p>
+</div>
+
+<div class="tool-wrap">
+
+  <!-- HOW IT WORKS -->
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-title">Paste Your Content</div>
+      <div class="how-desc">Add the text of the page you're optimising — headings, body copy, anything.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-title">Add Your Site URLs</div>
+      <div class="how-desc">List your site's pages (one per line) with optional page titles separated by a pipe.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-title">Get Suggestions</div>
+      <div class="how-desc">The tool matches keywords from your URLs to phrases in your content and ranks opportunities.</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="half-card">
+      <div class="field-label">Page Content <span>Paste text</span></div>
+      <textarea class="html-textarea" id="contentInput" placeholder="Paste your page content here…
+
+Example:
+A personal loan is one of the most flexible borrowing options available. Whether you need funds for a medical emergency, home renovation, or debt consolidation, understanding personal loan interest rates and eligibility criteria is key to getting the best deal."></textarea>
+    </div>
+    <div class="half-card">
+      <div class="field-label">Your Site URLs <span>One per line</span></div>
+      <textarea class="url-textarea" id="urlInput" placeholder="One URL per line. Optionally add a title after a pipe (|):
+
+https://example.com/personal-loan | Personal Loan Guide
+https://example.com/home-loan-emi-calculator | Home Loan EMI Calculator
+https://example.com/credit-score | How to Improve Your CIBIL Score
+https://example.com/gold-loan | Gold Loan Interest Rates
+https://example.com/car-loan | Car Loan Eligibility"></textarea>
+    </div>
+  </div>
+
+  <div class="input-card" style="padding:1.4rem 2rem;">
+    <div class="input-actions">
+      <button class="btn-check" onclick="runSuggest()">Find Link Opportunities</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+      <button class="btn-export" id="exportBtn" onclick="exportCSV()">Export CSV</button>
+    </div>
+    <p class="input-hint">Suggestions are ranked by keyword overlap score. Click any anchor text tag to copy it instantly.</p>
+  </div>
+
+  <div id="output">
+    <div class="empty-state">
+      <div class="icon">🔗</div>
+      <p>Add content & URLs above</p>
+      <small>The tool finds matching keywords between your content and page URLs/titles, then suggests the best anchor text for each link</small>
+    </div>
+  </div>
+</div>
+
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Explore All SEO Tools</h3>
+      <p>From keyword research to technical audits — free tools built for SEO professionals.</p>
+    </div>
+    <a href="seo-tools.html" class="cta-btn">View All Tools →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© 2025 <a href="index.html">Maheswari P</a> · All rights reserved</div>
+  <div class="footer-right">
+    <a href="seo-tools.html">SEO Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── State ──
+  let suggestions = [];
+
+  // ── Stop words ──
+  const STOP = new Set(['a','an','the','and','or','but','in','on','at','to','for','of','with','by','from','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','shall','can','need','dare','ought','used','it','its','this','that','these','those','he','she','they','we','you','i','my','your','his','her','their','our','what','which','who','how','when','where','why','not','no','nor','so','yet','both','either','neither','each','few','more','most','other','some','such','than','then','there','here','also','just','about','up','out','if','as','into','through','during','before','after','above','below','between','out','off','over','under','again','further','once']);
+
+  // ── Helpers ──
+  function tokenize(text) {
+    return text.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/)
+      .filter(w => w.length > 2 && !STOP.has(w));
+  }
+
+  function slugToWords(url) {
+    try {
+      const path = new URL(url).pathname;
+      return path.replace(/\//g, ' ').replace(/[-_]/g, ' ').replace(/\.\w+$/, '');
+    } catch {
+      return url.replace(/[-_/]/g, ' ');
+    }
+  }
+
+  function extractNgrams(tokens, n) {
+    const grams = [];
+    for (let i = 0; i <= tokens.length - n; i++) {
+      grams.push(tokens.slice(i, i + n).join(' '));
+    }
+    return grams;
+  }
+
+  function findPhraseInContent(phrase, content) {
+    const re = new RegExp('(?<![\\w])' + phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w])', 'gi');
+    const matches = [];
+    let m;
+    while ((m = re.exec(content)) !== null) {
+      const start = Math.max(0, m.index - 60);
+      const end = Math.min(content.length, m.index + phrase.length + 60);
+      const ctx = content.slice(start, end);
+      matches.push({ index: m.index, context: ctx });
+    }
+    return matches;
+  }
+
+  function highlightPhrase(ctx, phrase) {
+    return ctx.replace(new RegExp('(' + phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'),
+      '<mark>$1</mark>');
+  }
+
+  function parseUrls(raw) {
+    return raw.split('\n')
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => {
+        const [url, ...rest] = line.split('|');
+        const title = rest.join('|').trim();
+        return { url: url.trim(), title };
+      })
+      .filter(({ url }) => url);
+  }
+
+  // ── Main logic ──
+  function runSuggest() {
+    const content = document.getElementById('contentInput').value.trim();
+    const urlRaw  = document.getElementById('urlInput').value.trim();
+
+    if (!content) { document.getElementById('contentInput').focus(); return; }
+    if (!urlRaw)  { document.getElementById('urlInput').focus(); return; }
+
+    const pages = parseUrls(urlRaw);
+    if (!pages.length) {
+      showError('No valid URLs found. Add at least one URL, one per line.');
+      return;
+    }
+
+    const contentTokens = tokenize(content);
+    const contentSet = new Set(contentTokens);
+    // also build bigrams/trigrams from content
+    const contentBigrams  = new Set(extractNgrams(contentTokens, 2));
+    const contentTrigrams = new Set(extractNgrams(contentTokens, 3));
+
+    suggestions = [];
+
+    pages.forEach(({ url, title }) => {
+      // Build keyword pool from URL slug + title
+      const slugWords = tokenize(slugToWords(url));
+      const titleWords = title ? tokenize(title) : [];
+      const allWords = [...new Set([...slugWords, ...titleWords])];
+
+      if (!allWords.length) return;
+
+      // Score: how many keywords from this URL appear in content
+      const unigram_hits = allWords.filter(w => contentSet.has(w));
+
+      // Find multi-word anchors: bigrams & trigrams from titleWords that appear in content
+      const titleBigrams  = extractNgrams(titleWords.length ? titleWords : slugWords, 2);
+      const titleTrigrams = extractNgrams(titleWords.length ? titleWords : slugWords, 3);
+      const bigram_hits   = titleBigrams.filter(g => contentBigrams.has(g));
+      const trigram_hits  = titleTrigrams.filter(g => contentTrigrams.has(g));
+
+      const score = trigram_hits.length * 3 + bigram_hits.length * 2 + unigram_hits.length;
+      if (score === 0) return;
+
+      // Build anchor suggestions: prefer longer phrases
+      const anchorSet = new Set();
+      trigram_hits.forEach(g => anchorSet.add(g));
+      bigram_hits.forEach(g => anchorSet.add(g));
+      unigram_hits.slice(0, 4).forEach(w => anchorSet.add(w));
+
+      // Also add full title if it appears in content
+      if (title) {
+        const titleLower = title.toLowerCase();
+        if (content.toLowerCase().includes(titleLower)) anchorSet.add(title);
+      }
+
+      const anchors = [...anchorSet].sort((a, b) => b.split(' ').length - a.split(' ').length).slice(0, 6);
+
+      // Find context snippets for best anchor
+      const bestAnchor = anchors[0] || unigram_hits[0] || '';
+      const ctxMatches = bestAnchor ? findPhraseInContent(bestAnchor, content) : [];
+
+      suggestions.push({ url, title, score, anchors, ctxMatches, matchCount: unigram_hits.length });
+    });
+
+    // Sort by score desc
+    suggestions.sort((a, b) => b.score - a.score);
+
+    renderResults();
+  }
+
+  function renderResults() {
+    const out = document.getElementById('output');
+    const exportBtn = document.getElementById('exportBtn');
+
+    if (!suggestions.length) {
+      out.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">🔍</div>
+          <p>No matches found</p>
+          <small>Try adding more detailed page titles after a pipe (|) in your URL list, or paste longer page content with more keywords.</small>
+        </div>`;
+      exportBtn.style.display = 'none';
+      return;
+    }
+
+    exportBtn.style.display = '';
+
+    const high = suggestions.filter(s => s.score >= 5).length;
+    const mid  = suggestions.filter(s => s.score >= 2 && s.score < 5).length;
+    const low  = suggestions.filter(s => s.score < 2).length;
+
+    out.innerHTML = `
+      <div class="sec-div"><span class="sec-div-label">Results</span><div class="sec-div-line"></div></div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-lbl">Opportunities</div>
+          <div class="metric-val">${suggestions.length}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">High Relevance</div>
+          <div class="metric-val c-green">${high}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Medium</div>
+          <div class="metric-val c-amber">${mid}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-lbl">Low</div>
+          <div class="metric-val">${low}</div>
+        </div>
+      </div>
+
+      ${suggestions.map((s, i) => {
+        const scoreClass = s.score >= 5 ? 'high' : s.score >= 2 ? 'mid' : 'low';
+        const ctx = s.ctxMatches[0];
+        const highlighted = ctx ? highlightPhrase(escHtml(ctx.context), s.anchors[0]) : '';
+        return `
+        <div class="sugg-card">
+          <div class="sugg-card-top">
+            <div>
+              <div class="sugg-score ${scoreClass}">${s.score}</div>
+              <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--ink-muted);margin-top:2px;letter-spacing:0.06em;">SCORE</div>
+            </div>
+            <div style="flex:1">
+              <div class="sugg-url"><a href="${escHtml(s.url)}" target="_blank" rel="noopener">${escHtml(s.url)}</a></div>
+              ${s.title ? `<div style="font-size:0.8rem;color:var(--ink-muted);margin-top:2px;">${escHtml(s.title)}</div>` : ''}
+            </div>
+          </div>
+          ${s.anchors.length ? `
+          <div class="sugg-anchors">
+            <div class="sugg-anchors-label">Suggested Anchor Text</div>
+            <div class="anchor-tags">
+              ${s.anchors.map(a => `<button class="anchor-tag" onclick="copyAnchor(this,'${escAttr(a)}')">${escHtml(a)} <span class="copy-ic">⎘</span></button>`).join('')}
+            </div>
+          </div>` : ''}
+          ${highlighted ? `
+          <div class="sugg-context">…${highlighted}…</div>` : ''}
+          <div class="match-count">${s.matchCount} keyword match${s.matchCount !== 1 ? 'es' : ''} in content</div>
+        </div>`;
+      }).join('')}
+    `;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escAttr(s) {
+    return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+  }
+
+  function copyAnchor(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.innerHTML = text + ' <span class="copy-ic">✓</span>';
+      btn.style.borderColor = 'var(--accent-light)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; }, 1500);
+    }).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+    });
+  }
+
+  function showError(msg) {
+    document.getElementById('output').innerHTML = `
+      <div style="background:rgba(192,57,43,0.05);border:1px solid rgba(192,57,43,0.2);border-radius:4px;padding:1.2rem 1.5rem;font-size:0.85rem;color:#c0392b;">${msg}</div>`;
+  }
+
+  function clearAll() {
+    document.getElementById('contentInput').value = '';
+    document.getElementById('urlInput').value = '';
+    document.getElementById('exportBtn').style.display = 'none';
+    suggestions = [];
+    document.getElementById('output').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔗</div>
+        <p>Add content & URLs above</p>
+        <small>The tool finds matching keywords between your content and page URLs/titles, then suggests the best anchor text for each link</small>
+      </div>`;
+  }
+
+  function exportCSV() {
+    if (!suggestions.length) return;
+    const rows = [['Score','URL','Page Title','Suggested Anchors','Keyword Matches']];
+    suggestions.forEach(s => {
+      rows.push([
+        s.score,
+        `"${s.url.replace(/"/g,'""')}"`,
+        `"${(s.title||'').replace(/"/g,'""')}"`,
+        `"${s.anchors.join(', ').replace(/"/g,'""')}"`,
+        s.matchCount
+      ]);
+    });
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'internal-link-suggestions.csv';
+    a.click();
+  }
+
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

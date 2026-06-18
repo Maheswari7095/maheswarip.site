@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SERP CTR Calculator — Maheswari P</title>
+<meta name="description" content="Calculate expected organic traffic from your SERP position and search volume. See CTR benchmarks by position and estimate the traffic impact of rank improvements.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f5f3ef;--bg-mid:#edeae3;--bg-light:#e4e0d6;--border:#ccc6b8;--gold:#a0742a;--gold-light:#b8893a;--gold-glow:rgba(160,116,42,0.10);--ink:#1c1812;--ink-muted:#5c5040;--ink-body:#3a3228;--white-card:#ffffff;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;}
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:560px;margin:0 auto;animation:fadeInUp 0.6s ease 0.2s both;}
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.5rem;margin-bottom:2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#065f46,#059669);}
+
+  .fields-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;}
+  @media(max-width:640px){.fields-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:420px){.fields-grid{grid-template-columns:1fr;}}
+  .field-group{display:flex;flex-direction:column;gap:0.5rem;}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;}
+  .field-input{height:44px;padding:0 0.9rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  .field-input:focus{border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,0.09);}
+  .field-hint{font-size:0.7rem;color:var(--ink-muted);}
+  .field-select{height:44px;padding:0 0.9rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s;cursor:pointer;-webkit-appearance:none;}
+  .field-select:focus{border-color:#059669;}
+
+  /* RESULTS */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:1.8rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  .metrics-big{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem;}
+  .metric-big{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;}
+  .metric-big-lbl{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px;}
+  .metric-big-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1;color:var(--ink);}
+  .metric-big-val.c-green{color:#2e7d32;}
+  .metric-big-val.c-amber{color:#a0742a;}
+  .metric-big-val.c-blue{color:#1e3a5f;}
+  .metric-big-sub{font-size:0.72rem;color:var(--ink-muted);margin-top:3px;}
+
+  /* POSITION TABLE */
+  .pos-table{width:100%;border-collapse:collapse;}
+  .pos-table th{text-align:left;padding:0.55rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-mid);font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .pos-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(204,198,184,0.3);font-size:0.83rem;color:var(--ink-body);vertical-align:middle;}
+  .pos-table tr:last-child td{border-bottom:none;}
+  .pos-table tr.highlight-row td{background:rgba(5,150,105,0.05);font-weight:600;}
+  .pos-table tr.target-row td{background:rgba(160,116,42,0.06);font-weight:600;color:var(--gold);}
+  .table-wrap{background:var(--white-card);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:1.5rem;}
+  .ctr-bar-outer{width:100px;height:6px;background:var(--bg-light);border-radius:6px;display:inline-block;vertical-align:middle;margin-left:6px;}
+  .ctr-bar-inner{height:100%;border-radius:6px;background:#059669;}
+
+  /* OPPORTUNITY */
+  .opp-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:1.4rem 1.8rem;margin-bottom:1rem;}
+  .opp-card h4{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:1rem;}
+  .opp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
+  .opp-item{text-align:center;padding:0.8rem;background:var(--bg);border-radius:3px;}
+  .opp-pos{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--ink-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
+  .opp-traffic{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ink);line-height:1;}
+  .opp-gain{font-size:0.72rem;margin-top:3px;}
+  .opp-gain.pos{color:#2e7d32;}
+  .opp-gain.neg{color:#c0392b;}
+
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin-bottom:0.3rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);}
+  .cta-btn{background:var(--gold);color:var(--bg);padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .cta-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);letter-spacing:0.1em;}
+  .footer-left a{color:var(--gold);text-decoration:none;}
+  .footer-right{display:flex;gap:1.5rem;}
+  .footer-right a{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  @media(max-width:768px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul,nav .nav-contact-btn{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(245,243,239,0.98);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border);}
+    .nav-mobile-toggle{display:flex;}
+    .page-header{padding:6rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .cta-banner{padding:0 1.5rem;}
+    .cta-inner{padding:1.5rem;}
+    footer{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Home</a><span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a><span class="sep">/</span>
+      <span class="current">SERP CTR Calculator</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header">
+  <div class="page-eyebrow">Analytics</div>
+  <h1 class="page-title">SERP CTR <em>Calculator</em></h1>
+  <p class="page-desc">Calculate expected organic traffic from your position and monthly search volume. See CTR benchmarks and the traffic you'd gain by moving up in rankings.</p>
+</div>
+
+<div class="tool-wrap">
+  <div class="input-card">
+    <div class="fields-grid">
+      <div class="field-group">
+        <label class="field-label">Monthly Search Volume</label>
+        <input type="number" class="field-input" id="volInput" placeholder="10000" min="0" oninput="calc()">
+        <div class="field-hint">Avg monthly searches for keyword</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Current Position</label>
+        <input type="number" class="field-input" id="posInput" placeholder="5" min="1" max="100" oninput="calc()">
+        <div class="field-hint">Your current Google ranking</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Search Type</label>
+        <select class="field-select" id="typeInput" onchange="calc()">
+          <option value="branded">Branded</option>
+          <option value="informational" selected>Informational</option>
+          <option value="transactional">Transactional</option>
+          <option value="navigational">Navigational</option>
+        </select>
+        <div class="field-hint">Query intent type</div>
+      </div>
+    </div>
+    <div class="fields-grid">
+      <div class="field-group">
+        <label class="field-label">Target Position</label>
+        <input type="number" class="field-input" id="targetInput" placeholder="1" min="1" max="100" oninput="calc()">
+        <div class="field-hint">Position you want to reach</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Has Featured Snippet?</label>
+        <select class="field-select" id="snippetInput" onchange="calc()">
+          <option value="no" selected>No</option>
+          <option value="yes">Yes (SERP feature)</option>
+        </select>
+        <div class="field-hint">Reduces CTR for other positions</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Device Mix</label>
+        <select class="field-select" id="deviceInput" onchange="calc()">
+          <option value="mixed" selected>Mixed (avg)</option>
+          <option value="desktop">Desktop heavy</option>
+          <option value="mobile">Mobile heavy</option>
+        </select>
+        <div class="field-hint">Device affects CTR by position</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text"><h3>Explore All SEO Tools</h3><p>From keyword research to technical audits — free tools built for SEO professionals.</p></div>
+    <a href="seo-tools.html" class="cta-btn">View All Tools →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© 2025 <a href="index.html">Maheswari P</a> · All rights reserved</div>
+  <div class="footer-right">
+    <a href="seo-tools.html">SEO Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // CTR benchmarks by position (Sistrix / Advanced Web Ranking 2024 averages)
+  const CTR_BASE = {
+    informational: [0.284,0.155,0.103,0.074,0.054,0.042,0.033,0.026,0.022,0.020,0.012,0.010,0.009,0.009,0.008,0.007,0.007,0.006,0.006,0.006],
+    transactional: [0.198,0.118,0.086,0.065,0.050,0.040,0.032,0.026,0.022,0.019,0.012,0.010,0.009,0.008,0.007,0.007,0.006,0.006,0.005,0.005],
+    branded:       [0.466,0.186,0.110,0.072,0.051,0.038,0.030,0.024,0.020,0.017,0.010,0.009,0.008,0.007,0.006,0.006,0.005,0.005,0.005,0.004],
+    navigational:  [0.385,0.172,0.108,0.073,0.052,0.040,0.031,0.025,0.021,0.018,0.011,0.009,0.008,0.008,0.007,0.006,0.006,0.005,0.005,0.005],
+  };
+
+  const DEVICE_MULT = { mixed:1.0, desktop:1.12, mobile:0.88 };
+  const SNIPPET_MULT = 0.82; // featured snippet reduces other CTRs
+
+  function getCTR(pos, type, snippet, device) {
+    if (pos < 1) pos = 1;
+    const idx = Math.min(pos - 1, 19);
+    const base = CTR_BASE[type][idx];
+    let ctr = base * DEVICE_MULT[device];
+    if (snippet === 'yes' && pos > 1) ctr *= SNIPPET_MULT;
+    return Math.max(0, ctr);
+  }
+
+  function fmt(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+    if (n >= 1000) return (n/1000).toFixed(1)+'K';
+    return Math.round(n).toLocaleString();
+  }
+
+  function calc() {
+    const vol     = parseFloat(document.getElementById('volInput').value) || 0;
+    const pos     = parseInt(document.getElementById('posInput').value)   || 0;
+    const target  = parseInt(document.getElementById('targetInput').value)|| 0;
+    const type    = document.getElementById('typeInput').value;
+    const snippet = document.getElementById('snippetInput').value;
+    const device  = document.getElementById('deviceInput').value;
+
+    if (!vol || !pos) {
+      document.getElementById('output').innerHTML = `
+        <div style="text-align:center;padding:3rem;background:var(--white-card);border:1px solid var(--border);border-radius:4px;color:var(--ink-muted);">
+          <div style="font-size:2.5rem;opacity:0.2;margin-bottom:0.5rem;">📊</div>
+          <p style="font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;">Enter search volume and position above</p>
+        </div>`;
+      return;
+    }
+
+    const currCTR     = getCTR(pos, type, snippet, device);
+    const currTraffic = vol * currCTR;
+    const targetCTR   = target ? getCTR(target, type, snippet, device) : null;
+    const targetTraffic = targetCTR !== null ? vol * targetCTR : null;
+    const gain = targetTraffic !== null ? targetTraffic - currTraffic : null;
+
+    // Build position table rows 1-20
+    const tableRows = [];
+    for (let p = 1; p <= 20; p++) {
+      const ctr = getCTR(p, type, snippet, device);
+      const traffic = vol * ctr;
+      const isCurrent = p === pos;
+      const isTarget  = p === target;
+      tableRows.push({ p, ctr, traffic, isCurrent, isTarget });
+    }
+
+    // Opportunity rows (current ±3 positions)
+    const oppPositions = [];
+    for (let p = Math.max(1, pos-2); p <= Math.min(10, pos+2); p++) {
+      if (p === pos) continue;
+      const ctr = getCTR(p, type, snippet, device);
+      const traffic = vol * ctr;
+      oppPositions.push({ p, traffic, gain: traffic - currTraffic });
+    }
+
+    document.getElementById('output').innerHTML = `
+      <div class="sec-div"><span class="sec-div-label">Your Current Estimate</span><div class="sec-div-line"></div></div>
+      <div class="metrics-big">
+        <div class="metric-big">
+          <div class="metric-big-lbl">Current Position</div>
+          <div class="metric-big-val">#${pos}</div>
+          <div class="metric-big-sub">${type} keyword</div>
+        </div>
+        <div class="metric-big">
+          <div class="metric-big-lbl">Estimated CTR</div>
+          <div class="metric-big-val c-blue">${(currCTR*100).toFixed(1)}%</div>
+          <div class="metric-big-sub">Based on position ${pos}</div>
+        </div>
+        <div class="metric-big">
+          <div class="metric-big-lbl">Monthly Visits</div>
+          <div class="metric-big-val c-green">${fmt(currTraffic)}</div>
+          <div class="metric-big-sub">From ${fmt(vol)} searches</div>
+        </div>
+        ${targetTraffic !== null ? `
+        <div class="metric-big">
+          <div class="metric-big-lbl">Target #${target} Traffic</div>
+          <div class="metric-big-val ${gain >= 0 ? 'c-green':'c-amber'}">${fmt(targetTraffic)}</div>
+          <div class="metric-big-sub">${gain >= 0 ? '+':'' }${fmt(gain)} visits/mo</div>
+        </div>` : ''}
+      </div>
+
+      ${oppPositions.length ? `
+      <div class="sec-div"><span class="sec-div-label">Traffic Opportunity by Position</span><div class="sec-div-line"></div></div>
+      <div class="opp-card">
+        <h4>Estimated monthly traffic if you rank at…</h4>
+        <div class="opp-grid">
+          ${oppPositions.map(o => `
+            <div class="opp-item">
+              <div class="opp-pos">Position ${o.p}</div>
+              <div class="opp-traffic">${fmt(o.traffic)}</div>
+              <div class="opp-gain ${o.gain >= 0 ? 'pos':'neg'}">${o.gain >= 0?'+':''}${fmt(o.gain)}/mo</div>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <div class="sec-div"><span class="sec-div-label">CTR Benchmarks — Positions 1–20</span><div class="sec-div-line"></div></div>
+      <div class="table-wrap">
+        <table class="pos-table">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Est. CTR</th>
+              <th>CTR Visual</th>
+              <th>Monthly Traffic</th>
+              <th>vs Your Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRows.map(r => `
+              <tr class="${r.isCurrent?'highlight-row':r.isTarget?'target-row':''}">
+                <td>#${r.p} ${r.isCurrent?'← You':r.isTarget?'← Target':''}</td>
+                <td>${(r.ctr*100).toFixed(2)}%</td>
+                <td><div class="ctr-bar-outer"><div class="ctr-bar-inner" style="width:${Math.min(100,(r.ctr/0.284)*100)}%"></div></div></td>
+                <td>${fmt(r.traffic)}</td>
+                <td style="color:${r.traffic-currTraffic>0?'#2e7d32':r.traffic-currTraffic<0?'#c0392b':'var(--ink-muted)'}">
+                  ${r.isCurrent ? '—' : (r.traffic-currTraffic>=0?'+':'') + fmt(r.traffic-currTraffic)}
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.72rem;color:var(--ink-muted);font-family:'DM Mono',monospace;letter-spacing:0.06em;">CTR benchmarks based on Sistrix &amp; Advanced Web Ranking 2024 averages. Actual CTR varies by brand, SERP features, title quality and industry.</p>
+    `;
+  }
+
+  calc();
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

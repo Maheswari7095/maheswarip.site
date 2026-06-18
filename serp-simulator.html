@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SERP Simulator — Maheswari P</title>
+<meta name="description" content="Preview how your page looks in Google search results. Check title length, meta description, URL display and rich snippet appearance. Free SERP preview tool.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f3ef;--bg-mid:#edeae3;--bg-light:#e4e0d6;
+    --border:#ccc6b8;--gold:#a0742a;--gold-light:#b8893a;
+    --gold-glow:rgba(160,116,42,0.10);--ink:#1c1812;
+    --ink-muted:#5c5040;--ink-body:#3a3228;--white-card:#ffffff;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(160,116,42,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(160,116,42,0.045) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 4rem;background:rgba(245,243,239,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-left{display:flex;align-items:center;gap:1.2rem;}
+  .nav-logo{width:42px;height:42px;border-radius:50%;background:var(--bg-light);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.06em;text-decoration:none;flex-shrink:0;transition:background 0.2s;}
+  .nav-logo:hover{background:var(--gold-glow);}
+  .nav-breadcrumb{display:flex;align-items:center;gap:0.55rem;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--ink-muted);letter-spacing:0.08em;}
+  .nav-breadcrumb a{color:var(--ink-muted);text-decoration:none;transition:color 0.2s;}
+  .nav-breadcrumb a:hover{color:var(--gold);}
+  .nav-breadcrumb .sep{opacity:0.4;}
+  .nav-breadcrumb .current{color:var(--gold);font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:2.5rem;}
+  nav ul a{text-decoration:none;color:var(--ink-muted);font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.25s;}
+  nav ul a:hover,nav ul a.active{color:var(--gold);}
+  .nav-contact-btn{background:var(--gold);color:var(--bg);padding:0.45rem 1.2rem;border-radius:2px;font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:background 0.2s,transform 0.15s;}
+  .nav-contact-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+  .nav-mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+  .nav-mobile-toggle span{display:block;width:22px;height:2px;background:var(--ink-muted);border-radius:2px;}
+
+  .page-header{padding:8rem 4rem 3.5rem;position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .page-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--gold);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;animation:fadeInUp 0.6s ease both;}
+  .page-eyebrow::before,.page-eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:0.6;}
+  .page-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.08;color:var(--ink);margin-bottom:1rem;animation:fadeInUp 0.6s ease 0.1s both;}
+  .page-title em{font-style:italic;color:var(--gold);}
+  .page-desc{font-size:1.05rem;color:var(--ink-muted);font-weight:300;max-width:560px;margin:0 auto;animation:fadeInUp 0.6s ease 0.2s both;}
+
+  .tool-wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:2rem 4rem 6rem;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+  @media(max-width:780px){.two-col{grid-template-columns:1fr;}}
+
+  .input-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.3s both;}
+  .input-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1a56a0,#4285f4);}
+
+  .field-group{margin-bottom:1.2rem;}
+  .field-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;}
+  .char-count{font-family:'DM Mono',monospace;font-size:0.65rem;}
+  .char-count.ok{color:#2e7d32;}
+  .char-count.warn{color:#a0742a;}
+  .char-count.over{color:#c0392b;}
+  .field-input{width:100%;height:42px;padding:0 0.9rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+  .field-input:focus{border-color:#4285f4;box-shadow:0 0 0 3px rgba(66,133,244,0.09);}
+  .field-input::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .field-textarea{width:100%;padding:0.7rem 0.9rem;border:1px solid var(--border);border-radius:2px;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:0.88rem;line-height:1.5;resize:vertical;outline:none;transition:border-color 0.2s,box-shadow 0.2s;min-height:80px;}
+  .field-textarea:focus{border-color:#4285f4;box-shadow:0 0 0 3px rgba(66,133,244,0.09);}
+  .field-textarea::placeholder{color:var(--ink-muted);opacity:0.4;}
+  .field-hint{font-size:0.72rem;color:var(--ink-muted);margin-top:4px;}
+
+  /* PREVIEW AREA */
+  .preview-card{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2rem 2.2rem;position:relative;overflow:hidden;animation:fadeInUp 0.6s ease 0.4s both;}
+  .preview-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1a56a0,#4285f4);}
+  .preview-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;margin-bottom:1.2rem;}
+
+  /* Google-style SERP preview */
+  .serp-wrap{background:#fff;border:1px solid #dfe1e5;border-radius:8px;padding:1.2rem 1.4rem;font-family:Arial,sans-serif;max-width:600px;}
+  .serp-site-line{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+  .serp-favicon{width:18px;height:18px;border-radius:50%;background:#e8eaed;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+  .serp-favicon img{width:100%;height:100%;object-fit:cover;}
+  .serp-site-name{font-size:14px;color:#202124;font-weight:500;line-height:1.3;}
+  .serp-url-display{font-size:12px;color:#4d5156;line-height:1.3;}
+  .serp-title{font-size:20px;color:#1a0dab;line-height:1.3;margin-bottom:4px;cursor:pointer;text-decoration:none;display:block;}
+  .serp-title:hover{text-decoration:underline;}
+  .serp-title.truncated{color:#1a0dab;}
+  .serp-desc{font-size:14px;color:#4d5156;line-height:1.58;margin-top:2px;}
+  .serp-date{color:#70757a;font-size:14px;}
+
+  /* Mobile preview */
+  .serp-mobile-wrap{background:#fff;padding:1rem;font-family:Arial,sans-serif;max-width:380px;border:1px solid #dfe1e5;border-radius:8px;}
+  .serp-mobile-site{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+  .serp-mobile-name{font-size:12px;color:#202124;}
+  .serp-mobile-url{font-size:11px;color:#4d5156;}
+  .serp-mobile-title{font-size:18px;color:#1a0dab;line-height:1.3;margin-bottom:2px;}
+  .serp-mobile-desc{font-size:13px;color:#4d5156;line-height:1.5;}
+
+  /* Toggle */
+  .preview-toggle{display:flex;gap:6px;margin-bottom:1rem;}
+  .ptoggle{height:30px;padding:0 14px;border:1px solid var(--border);border-radius:2px;background:var(--bg-light);color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;}
+  .ptoggle.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+
+  /* SEO meter bars */
+  .sec-div{display:flex;align-items:center;gap:1rem;margin:2rem 0 1rem;}
+  .sec-div-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.18em;color:var(--ink-muted);text-transform:uppercase;white-space:nowrap;}
+  .sec-div-line{flex:1;height:1px;background:var(--border);}
+
+  .meter-row{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:0.9rem 1.2rem;margin-bottom:8px;}
+  .meter-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .meter-name{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .meter-info{font-size:0.75rem;color:var(--ink-muted);}
+  .meter-bar-outer{height:6px;background:var(--bg-light);border-radius:6px;overflow:hidden;position:relative;}
+  .meter-bar-inner{height:100%;border-radius:6px;transition:width 0.4s ease,background 0.4s;}
+  .meter-note{font-size:0.74rem;color:var(--ink-muted);margin-top:5px;line-height:1.5;}
+
+  .cta-banner{position:relative;z-index:1;max-width:980px;margin:0 auto 6rem;padding:0 4rem;}
+  .cta-inner{background:var(--white-card);border:1px solid var(--border);border-radius:4px;padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;position:relative;overflow:hidden;}
+  .cta-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+  .cta-text h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin-bottom:0.3rem;}
+  .cta-text p{font-size:0.88rem;color:var(--ink-muted);}
+  .cta-btn{background:var(--gold);color:var(--bg);padding:0.75rem 2rem;border-radius:2px;text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;transition:background 0.2s,transform 0.15s;}
+  .cta-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .footer-left{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);letter-spacing:0.1em;}
+  .footer-left a{color:var(--gold);text-decoration:none;}
+  .footer-right{display:flex;gap:1.5rem;}
+  .footer-right a{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--ink-muted);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-right a:hover{color:var(--gold);}
+
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  @media(max-width:768px){
+    nav{padding:0.85rem 1.5rem;}
+    nav ul,nav .nav-contact-btn{display:none;}
+    nav ul.open{display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(245,243,239,0.98);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border);}
+    .nav-mobile-toggle{display:flex;}
+    .page-header{padding:6rem 1.5rem 2.5rem;}
+    .tool-wrap{padding:1.5rem 1.5rem 4rem;}
+    .cta-banner{padding:0 1.5rem;}
+    .cta-inner{padding:1.5rem;}
+    footer{padding:1.5rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo">MP</a>
+    <div class="nav-breadcrumb">
+      <a href="index.html">Home</a><span class="sep">/</span>
+      <a href="seo-tools.html">SEO Tools</a><span class="sep">/</span>
+      <span class="current">SERP Simulator</span>
+    </div>
+  </div>
+  <ul id="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="seo-tools.html" class="active">SEO Tools</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-contact-btn">Hire Me</a>
+  <button class="nav-mobile-toggle" id="mobile-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-header">
+  <div class="page-eyebrow">Content SEO</div>
+  <h1 class="page-title">SERP <em>Simulator</em></h1>
+  <p class="page-desc">Preview exactly how your page will appear in Google search results — check title length, meta description, URL display and get instant SEO feedback.</p>
+</div>
+
+<div class="tool-wrap">
+  <div class="two-col">
+    <!-- INPUT -->
+    <div class="input-card">
+      <div class="field-group">
+        <div class="field-label">
+          Page Title
+          <span class="char-count" id="titleCount">0 / 60</span>
+        </div>
+        <input type="text" class="field-input" id="titleInput" placeholder="e.g. Personal Loan — Low Interest Rates | BankBazaar" maxlength="120" oninput="update()">
+        <div class="field-hint">Ideal: 50–60 characters. Google truncates around 580px (≈60 chars).</div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">
+          Page URL
+          <span class="char-count" id="urlCount" style="color:var(--ink-muted);">—</span>
+        </div>
+        <input type="text" class="field-input" id="urlInput" placeholder="https://example.com/personal-loan" oninput="update()">
+        <div class="field-hint">Enter the full URL. The breadcrumb is auto-generated.</div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">
+          Meta Description
+          <span class="char-count" id="descCount">0 / 160</span>
+        </div>
+        <textarea class="field-textarea" id="descInput" placeholder="e.g. Compare personal loan interest rates from top banks. Apply online and get instant approval. Rates from 10.5% p.a." maxlength="320" oninput="update()"></textarea>
+        <div class="field-hint">Ideal: 150–160 characters. Google may rewrite if too short or off-topic.</div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Site Name <span style="opacity:0.5;font-size:0.6rem;">(optional)</span></div>
+        <input type="text" class="field-input" id="siteInput" placeholder="e.g. BankBazaar" oninput="update()">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">Date Shown <span style="opacity:0.5;font-size:0.6rem;">(optional)</span></div>
+        <input type="text" class="field-input" id="dateInput" placeholder="e.g. Jun 10, 2025" oninput="update()">
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-card">
+      <div class="preview-label">Live Preview</div>
+      <div class="preview-toggle">
+        <button class="ptoggle active" id="togDesk" onclick="setMode('desktop')">🖥 Desktop</button>
+        <button class="ptoggle" id="togMob" onclick="setMode('mobile')">📱 Mobile</button>
+      </div>
+      <div id="serpPreview"></div>
+    </div>
+  </div>
+
+  <!-- METERS -->
+  <div class="sec-div"><span class="sec-div-label">SEO Score</span><div class="sec-div-line"></div></div>
+  <div id="meters"></div>
+</div>
+
+<div class="cta-banner">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h3>Explore All SEO Tools</h3>
+      <p>From keyword research to technical audits — free tools built for SEO professionals.</p>
+    </div>
+    <a href="seo-tools.html" class="cta-btn">View All Tools →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© 2025 <a href="index.html">Maheswari P</a> · All rights reserved</div>
+  <div class="footer-right">
+    <a href="seo-tools.html">SEO Tools</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  let mode = 'desktop';
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('togDesk').classList.toggle('active', m === 'desktop');
+    document.getElementById('togMob').classList.toggle('active', m === 'mobile');
+    update();
+  }
+
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function urlBreadcrumb(url) {
+    try {
+      const u = new URL(url.startsWith('http') ? url : 'https://' + url);
+      const parts = [u.hostname.replace(/^www\./,'')];
+      const segs = u.pathname.split('/').filter(Boolean);
+      segs.forEach(s => parts.push(s.replace(/-/g,' ').replace(/(^\w|\s\w)/g,c=>c.toUpperCase())));
+      return parts.join(' › ');
+    } catch {
+      return url;
+    }
+  }
+
+  function siteName(url, fallback) {
+    if (fallback) return fallback;
+    try {
+      return new URL(url.startsWith('http') ? url : 'https://' + url).hostname.replace(/^www\./, '');
+    } catch { return url; }
+  }
+
+  function faviconUrl(url) {
+    try {
+      const u = new URL(url.startsWith('http') ? url : 'https://' + url);
+      return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=32`;
+    } catch { return ''; }
+  }
+
+  function truncate(str, px) {
+    // Approximate: avg char width ~6.5px for 20px Arial, ~5.5px for 14px
+    const avg = px === 580 ? 6.5 : 5.5;
+    const max = Math.floor(px / avg);
+    if (str.length <= max) return { text: str, cut: false };
+    return { text: str.slice(0, max - 1) + '…', cut: true };
+  }
+
+  function update() {
+    const title = document.getElementById('titleInput').value;
+    const url   = document.getElementById('urlInput').value.trim();
+    const desc  = document.getElementById('descInput').value;
+    const site  = document.getElementById('siteInput').value.trim();
+    const date  = document.getElementById('dateInput').value.trim();
+
+    // Char counts
+    setCount('titleCount', title.length, 60, 60);
+    setCount('descCount',  desc.length,  160, 160);
+
+    // URL display
+    const urlEl = document.getElementById('urlCount');
+    if (url) {
+      urlEl.textContent = urlBreadcrumb(url);
+      urlEl.style.color = 'var(--ink-muted)';
+    } else {
+      urlEl.textContent = '—';
+    }
+
+    // Build preview
+    const titleT = truncate(title || 'Page Title', 580);
+    const descT  = truncate(desc  || 'No meta description. Google will pull text from the page content.', 750);
+    const breadcrumb = url ? urlBreadcrumb(url) : 'example.com › page';
+    const sname  = siteName(url, site);
+    const fav    = url ? faviconUrl(url) : '';
+    const displayUrl = url || 'https://example.com/page';
+
+    const preview = document.getElementById('serpPreview');
+
+    if (mode === 'desktop') {
+      preview.innerHTML = `
+        <div class="serp-wrap">
+          <div class="serp-site-line">
+            <div class="serp-favicon">${fav ? `<img src="${esc(fav)}" alt="">` : '🌐'}</div>
+            <div>
+              <div class="serp-site-name">${esc(sname || 'example.com')}</div>
+              <div class="serp-url-display">${esc(breadcrumb)}</div>
+            </div>
+          </div>
+          <a class="serp-title ${titleT.cut ? 'truncated' : ''}" href="#">${esc(titleT.text)}</a>
+          <div class="serp-desc">${date ? `<span class="serp-date">${esc(date)} — </span>` : ''}${esc(descT.text)}</div>
+        </div>`;
+    } else {
+      const titleM = truncate(title || 'Page Title', 480);
+      const descM  = truncate(desc  || 'No meta description.', 640);
+      preview.innerHTML = `
+        <div class="serp-mobile-wrap">
+          <div class="serp-mobile-site">
+            <div class="serp-favicon" style="width:14px;height:14px;">${fav ? `<img src="${esc(fav)}" alt="">` : '🌐'}</div>
+            <div>
+              <div class="serp-mobile-name">${esc(sname || 'example.com')}</div>
+              <div class="serp-mobile-url">${esc(breadcrumb)}</div>
+            </div>
+          </div>
+          <div class="serp-mobile-title">${esc(titleM.text)}</div>
+          <div class="serp-mobile-desc">${date ? `<span style="color:#70757a;">${esc(date)} — </span>` : ''}${esc(descM.text)}</div>
+        </div>`;
+    }
+
+    // Meters
+    renderMeters(title, desc, url);
+  }
+
+  function setCount(id, len, ideal, max) {
+    const el = document.getElementById(id);
+    el.textContent = `${len} / ${max}`;
+    el.className = 'char-count';
+    if (len === 0) el.style.color = 'var(--ink-muted)';
+    else if (len <= ideal) { el.classList.add('ok'); }
+    else if (len <= max)   { el.classList.add('warn'); }
+    else                   { el.classList.add('over'); }
+  }
+
+  function renderMeters(title, desc, url) {
+    const items = [
+      titleMeter(title),
+      descMeter(desc),
+      urlMeter(url),
+    ];
+    document.getElementById('meters').innerHTML = items.map(m => `
+      <div class="meter-row">
+        <div class="meter-top">
+          <span class="meter-name">${m.name}</span>
+          <span class="meter-info" style="color:${m.color}">${m.info}</span>
+        </div>
+        <div class="meter-bar-outer">
+          <div class="meter-bar-inner" style="width:${m.pct}%;background:${m.color};"></div>
+        </div>
+        <div class="meter-note">${m.note}</div>
+      </div>`).join('');
+  }
+
+  function titleMeter(title) {
+    const len = title.length;
+    if (!len) return { name:'Title Tag', pct:0, color:'#ccc6b8', info:'Empty', note:'Add a title tag. This is the most important on-page SEO element.' };
+    if (len < 30) return { name:'Title Tag', pct:len/60*100, color:'#c0392b', info:`${len} chars — Too short`, note:'Title is too short. Aim for 50–60 characters to maximise SERP real estate.' };
+    if (len <= 60) return { name:'Title Tag', pct:len/60*100, color:'#2e7d32', info:`${len} chars — ✓ Optimal`, note:'Great! Title length is within Google\'s optimal range (50–60 characters).' };
+    if (len <= 70) return { name:'Title Tag', pct:95, color:'#a0742a', info:`${len} chars — May truncate`, note:'Title may be truncated on desktop. Consider trimming to under 60 characters.' };
+    return { name:'Title Tag', pct:100, color:'#c0392b', info:`${len} chars — Too long`, note:'Title will be cut off in search results. Shorten to 60 characters or less.' };
+  }
+
+  function descMeter(desc) {
+    const len = desc.length;
+    if (!len) return { name:'Meta Description', pct:0, color:'#ccc6b8', info:'Empty', note:'Add a meta description. While not a ranking factor, it drives click-through rate.' };
+    if (len < 70) return { name:'Meta Description', pct:len/160*100, color:'#c0392b', info:`${len} chars — Too short`, note:'Description is too short. Google may ignore it and pull content from the page.' };
+    if (len <= 160) return { name:'Meta Description', pct:len/160*100, color:'#2e7d32', info:`${len} chars — ✓ Optimal`, note:'Good length. Description fits within Google\'s display limit (≈160 characters).' };
+    if (len <= 200) return { name:'Meta Description', pct:95, color:'#a0742a', info:`${len} chars — May truncate`, note:'Description may be cut off. Aim for 150–160 characters for full visibility.' };
+    return { name:'Meta Description', pct:100, color:'#c0392b', info:`${len} chars — Too long`, note:'Description will be truncated. Reduce to 160 characters.' };
+  }
+
+  function urlMeter(url) {
+    if (!url) return { name:'URL Structure', pct:0, color:'#ccc6b8', info:'No URL entered', note:'Enter your page URL to audit its SEO-friendliness.' };
+    const isHttps = url.startsWith('https://');
+    const hasUnderscores = url.includes('_');
+    const hasParams = url.includes('?');
+    const tooLong = url.length > 100;
+    const score = (isHttps?25:0) + (!hasUnderscores?25:0) + (!hasParams?25:0) + (!tooLong?25:0);
+    let note = [];
+    if (!isHttps) note.push('Use HTTPS for security and SEO trust signals.');
+    if (hasUnderscores) note.push('Replace underscores with hyphens — Google treats hyphens as word separators.');
+    if (hasParams) note.push('Query parameters make URLs harder to read and can cause duplicate content.');
+    if (tooLong) note.push('URL is over 100 characters — keep URLs short and descriptive.');
+    if (!note.length) note.push('URL looks clean and SEO-friendly!');
+    const color = score >= 75 ? '#2e7d32' : score >= 50 ? '#a0742a' : '#c0392b';
+    return { name:'URL Structure', pct:score, color, info:`${score}/100`, note:note.join(' ') };
+  }
+
+  // Init with defaults
+  update();
+
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

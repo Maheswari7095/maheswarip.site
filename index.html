@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Articles – AEO & GEO | Maheswari P</title>
+<meta name="description" content="In-depth SEO articles on Answer Engine Optimisation (AEO) and Generative Engine Optimisation (GEO) — written by Maheswari P, Assistant Manager SEO.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #f5f3ef;
+    --bg-mid:     #edeae3;
+    --bg-light:   #e4e0d6;
+    --border:     #ccc6b8;
+    --gold:       #a0742a;
+    --gold-light: #b8893a;
+    --gold-glow:  rgba(160,116,42,0.10);
+    --ink:        #1c1812;
+    --ink-muted:  #5c5040;
+    --ink-body:   #3a3228;
+    --white-card: #ffffff;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(245,243,239,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--bg-light); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.06em; flex-shrink: 0; text-decoration: none;
+  }
+  .header-right { display: flex; align-items: center; gap: 2rem; }
+  .header-nav { display: flex; gap: 1.8rem; list-style: none; }
+  .header-nav a {
+    text-decoration: none; color: var(--ink-muted);
+    font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .header-nav a:hover, .header-nav a.active { color: var(--gold); }
+  .back-link {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    color: var(--ink-muted); text-decoration: none;
+    letter-spacing: 0.08em; display: flex; align-items: center; gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--gold); }
+
+  /* ── HERO BAND ── */
+  .page-hero {
+    background: var(--ink);
+    padding: 5rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .page-hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(160,116,42,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(160,116,42,0.07) 1px, transparent 1px);
+    background-size: 55px 55px;
+  }
+  .page-hero-glow {
+    position: absolute; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(160,116,42,0.08) 0%, transparent 65%);
+    top: -200px; right: -100px;
+  }
+  .page-hero-inner { position: relative; z-index: 1; max-width: 780px; }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--gold-light); letter-spacing: 0.22em;
+    text-transform: uppercase; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .hero-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:var(--gold); }
+  .page-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 900; line-height: 1.08;
+    color: rgba(245,243,239,0.95); margin-bottom: 1rem;
+  }
+  .page-hero h1 em { color: var(--gold-light); font-style: italic; }
+  .page-hero p {
+    font-size: 1rem; color: rgba(245,243,239,0.55);
+    max-width: 600px; line-height: 1.8;
+  }
+
+  /* ── ARTICLES LISTING ── */
+  .articles-wrap { max-width: 1060px; margin: 0 auto; padding: 4rem 2rem; }
+  .articles-header { margin-bottom: 2.5rem; }
+  .section-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--gold);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.7rem;
+  }
+  .section-tag::after { content:''; flex:1; max-width:50px; height:1px; background:rgba(160,116,42,0.4); }
+  .articles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+  /* Article card */
+  .article-card {
+    background: var(--white-card);
+    border: 1px solid var(--border);
+    padding: 0; overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+  }
+  .article-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(160,116,42,0.12);
+  }
+  .article-card-top {
+    background: var(--ink); padding: 2rem 2rem 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .article-card-top::before {
+    content:''; position:absolute; inset:0;
+    background-image: linear-gradient(rgba(160,116,42,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(160,116,42,0.07) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .article-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    background: var(--gold); color: var(--bg);
+    padding: 0.2rem 0.7rem; border-radius: 1px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    display: inline-block; margin-bottom: 1rem; position: relative; z-index: 1;
+  }
+  .article-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; line-height: 1.25;
+    color: rgba(245,243,239,0.95); position: relative; z-index: 1;
+  }
+  .article-card-body { padding: 1.5rem 2rem 2rem; flex: 1; display: flex; flex-direction: column; }
+  .article-excerpt { font-size: 0.86rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 1.5rem; flex: 1; }
+  .article-meta { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+  .article-meta-item { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--ink-muted); letter-spacing: 0.08em; display: flex; align-items: center; gap: 0.35rem; }
+  .article-read-btn {
+    margin-top: auto; padding-top: 1.2rem;
+    border-top: 1px solid var(--bg-light);
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: gap 0.2s;
+  }
+  .article-card:hover .article-read-btn { gap: 0.8rem; }
+
+  /* ── ARTICLE FULL VIEW ── */
+  #article-overlay {
+    display: none; position: fixed; inset: 0;
+    background: var(--bg); z-index: 500;
+    overflow-y: auto;
+  }
+  #article-overlay.open { display: block; }
+  .article-overlay-nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(245,243,239,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .close-article-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--ink-muted); padding: 0.45rem 1.1rem;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+    transition: border-color 0.2s, color 0.2s;
+    border-radius: 2px;
+  }
+  .close-article-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .article-progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--gold); width: 0%; z-index: 600;
+    transition: width 0.1s linear;
+  }
+
+  /* ── BLOG CONTENT ── */
+  .blog-wrap { max-width: 780px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+  .blog-header { margin-bottom: 3.5rem; }
+  .blog-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    background: var(--gold); color: var(--bg);
+    padding: 0.25rem 0.8rem; display: inline-block;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1.2rem;
+  }
+  .blog-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900; line-height: 1.1; color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .blog-title em { color: var(--gold); font-style: italic; }
+  .blog-subtitle { font-size: 1.1rem; color: var(--ink-muted); line-height: 1.75; margin-bottom: 2rem; font-weight: 300; }
+  .blog-byline {
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--white-card); border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+  }
+  .byline-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--gold); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .byline-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .byline-meta { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--ink-muted); letter-spacing: 0.06em; margin-top: 0.15rem; }
+
+  /* Blog body typography */
+  .blog-body { font-size: 1rem; line-height: 1.85; color: var(--ink-body); }
+  .blog-body p { margin-bottom: 1.5rem; }
+  .blog-body h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 700; color: var(--ink);
+    margin: 3rem 0 1.2rem; line-height: 1.2;
+    padding-bottom: 0.6rem; border-bottom: 1px solid var(--bg-light);
+  }
+  .blog-body h2 em { color: var(--gold); font-style: italic; }
+  .blog-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700; color: var(--ink);
+    margin: 2.2rem 0 0.8rem;
+  }
+  .blog-body h4 {
+    font-family: 'DM Mono', monospace; font-size: 0.82rem;
+    color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase;
+    margin: 1.8rem 0 0.6rem;
+  }
+  .blog-body ul, .blog-body ol { padding-left: 0; margin-bottom: 1.5rem; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .blog-body ul li { padding-left: 1.6rem; position: relative; }
+  .blog-body ul li::before { content:'→'; position:absolute; left:0; color:var(--gold); font-size:0.8rem; top:0.28rem; }
+  .blog-body ol { counter-reset: ol-counter; }
+  .blog-body ol li { padding-left: 2rem; position: relative; counter-increment: ol-counter; }
+  .blog-body ol li::before {
+    content: counter(ol-counter);
+    position: absolute; left: 0; top: 0.1rem;
+    width: 1.4rem; height: 1.4rem;
+    background: var(--gold); color: var(--bg);
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+  }
+  .blog-body strong { color: var(--ink); font-weight: 600; }
+  .blog-body em { color: var(--gold-light); font-style: italic; }
+
+  /* Callout boxes */
+  .callout {
+    background: var(--white-card); border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    padding: 1.4rem 1.6rem; margin: 2rem 0; border-radius: 0 2px 2px 0;
+  }
+  .callout.tip { border-left-color: #4a9e6b; }
+  .callout.warning { border-left-color: #e07b39; }
+  .callout-label {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 0.5rem; font-weight: 600;
+  }
+  .callout p { margin-bottom: 0; font-size: 0.9rem; }
+  .callout.tip .callout-label { color: #4a9e6b; }
+  .callout.warning .callout-label { color: #e07b39; }
+  .callout .callout-label { color: var(--gold); }
+
+  /* Comparison table */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.88rem; }
+  .compare-table th {
+    background: var(--ink); color: rgba(245,243,239,0.9);
+    padding: 0.75rem 1rem; text-align: left;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .compare-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--bg-light); vertical-align: top; }
+  .compare-table tr:nth-child(even) td { background: var(--bg-mid); }
+  .compare-table tr:hover td { background: var(--gold-glow); }
+
+  /* Stats highlight */
+  .stat-highlight {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin: 2rem 0;
+  }
+  .stat-highlight-item {
+    background: var(--white-card); border: 1px solid var(--border);
+    padding: 1.2rem 1rem; text-align: center;
+  }
+  .stat-highlight-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .stat-highlight-lbl { font-size: 0.73rem; color: var(--ink-muted); margin-top: 0.3rem; line-height: 1.4; }
+
+  /* Article divider */
+  .article-divider {
+    border: none; border-top: 2px solid var(--bg-light);
+    margin: 4rem 0; position: relative;
+  }
+  .article-divider::before {
+    content: '✦'; position: absolute; top: -0.75rem; left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg); padding: 0 1rem;
+    color: var(--gold); font-size: 0.9rem;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--white-card); border: 1px solid var(--border);
+    padding: 1.5rem 1.8rem; margin: 0 0 2.5rem;
+  }
+  .toc-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1rem; }
+  .toc ol { counter-reset: toc-counter; gap: 0.4rem; }
+  .toc ol li { counter-increment: toc-counter; padding-left: 1.8rem; }
+  .toc ol li::before { content: counter(toc-counter) '.'; position:absolute; left:0; color:var(--gold); font-family:'DM Mono',monospace; font-size:0.7rem; top:0.22rem; background:none; width:auto; height:auto; border-radius:0; }
+  .toc a { color: var(--ink-body); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .toc a:hover { color: var(--gold); }
+
+  /* Tag strip */
+  .tag-strip { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2.5rem 0; }
+  .tag { font-size: 0.73rem; color: var(--ink-body); background: rgba(160,116,42,0.08); border: 1px solid rgba(160,116,42,0.2); padding: 0.25rem 0.75rem; border-radius: 1px; font-family: 'DM Mono', monospace; }
+
+  /* Footer inside article */
+  .article-footer-cta {
+    background: var(--ink); padding: 2.5rem; margin-top: 3rem;
+    text-align: center;
+  }
+  .article-footer-cta p { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: rgba(245,243,239,0.85); margin-bottom: 1.2rem; }
+  .article-footer-cta a {
+    background: var(--gold); color: var(--bg);
+    padding: 0.75rem 2rem; text-decoration: none;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    display: inline-block; transition: background 0.2s;
+  }
+  .article-footer-cta a:hover { background: var(--gold-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  /* ── TABLET (≤900px) ── */
+  @media (max-width: 900px) {
+    header, .article-overlay-nav { padding: 0.85rem 1.5rem; }
+    .page-hero { padding: 4rem 1.5rem 3rem; }
+    .articles-wrap { padding: 3rem 1.5rem; }
+    .articles-grid { grid-template-columns: 1fr; }
+    .blog-wrap { padding: 2.5rem 1.2rem 4rem; }
+    .header-nav { display: none; }
+    .blog-title { font-size: clamp(1.7rem, 5vw, 2.6rem); }
+    .blog-subtitle { font-size: 1rem; }
+    .compare-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .stat-highlight { grid-template-columns: 1fr 1fr; }
+    .toc { padding: 1.2rem 1.4rem; }
+  }
+
+  /* ── MOBILE (≤600px) ── */
+  @media (max-width: 600px) {
+    /* Header */
+    header { padding: 0.75rem 1rem; }
+    .header-right { gap: 0.8rem; }
+    .back-link span { display: none; }
+
+    /* Hero */
+    .page-hero { padding: 3rem 1rem 2.5rem; }
+    .page-hero h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); line-height: 1.1; }
+    .page-hero p { font-size: 0.9rem; }
+    .hero-eyebrow { font-size: 0.65rem; }
+
+    /* Article cards */
+    .article-card-top { padding: 1.4rem 1.2rem 1rem; }
+    .article-card-title { font-size: 1.15rem; }
+    .article-card-body { padding: 1.2rem 1.2rem 1.5rem; }
+    .article-excerpt { font-size: 0.83rem; }
+    .article-meta { gap: 0.8rem; }
+
+    /* Article overlay nav */
+    .article-overlay-nav { padding: 0.75rem 1rem; }
+    .close-article-btn { padding: 0.4rem 0.8rem; font-size: 0.65rem; }
+
+    /* Blog reading view */
+    .blog-wrap { padding: 2rem 1rem 4rem; }
+    .blog-title { font-size: clamp(1.55rem, 7vw, 2.2rem); line-height: 1.12; }
+    .blog-subtitle { font-size: 0.92rem; line-height: 1.65; }
+    .blog-byline { padding: 1rem 1.1rem; gap: 1rem; flex-wrap: wrap; }
+    .byline-meta { font-size: 0.62rem; }
+
+    /* Body typography */
+    .blog-body { font-size: 0.94rem; line-height: 1.8; }
+    .blog-body h2 { font-size: 1.4rem; margin: 2.2rem 0 1rem; }
+    .blog-body h3 { font-size: 1.1rem; margin: 1.8rem 0 0.6rem; }
+    .blog-body p { margin-bottom: 1.2rem; }
+    .blog-body ul li, .blog-body ol li { padding-left: 1.6rem; font-size: 0.9rem; }
+
+    /* Stats grid — single column on small screens */
+    .stat-highlight { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .stat-highlight-num { font-size: 1.6rem; }
+    .stat-highlight-lbl { font-size: 0.68rem; }
+
+    /* Tables — horizontal scroll */
+    .compare-table { font-size: 0.75rem; min-width: 480px; }
+    .compare-table th, .compare-table td { padding: 0.6rem 0.7rem; }
+    .compare-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); }
+
+    /* Callouts */
+    .callout { padding: 1.1rem 1.2rem; }
+    .callout p { font-size: 0.86rem; }
+
+    /* TOC */
+    .toc { padding: 1rem 1.1rem; }
+    .toc a { font-size: 0.82rem; }
+
+    /* Tags */
+    .tag-strip { gap: 0.4rem; }
+    .tag { font-size: 0.68rem; padding: 0.2rem 0.6rem; }
+
+    /* Footer CTA */
+    .article-footer-cta { padding: 2rem 1.2rem; }
+    .article-footer-cta p { font-size: 1.1rem; }
+
+    /* Footer */
+    footer { padding: 1.4rem 1rem !important; flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+  }
+
+  /* ── VERY SMALL (≤380px) ── */
+  @media (max-width: 380px) {
+    .stat-highlight { grid-template-columns: 1fr; }
+    .blog-title { font-size: 1.45rem; }
+    .page-hero h1 { font-size: 1.75rem; }
+    .article-card-title { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="nav-logo" title="SEO Articles Home">MP</a>
+  <div class="header-right">
+    <ul class="header-nav">
+      <li><a href="#listing" class="active">Articles</a></li>
+      <li><a href="resume.html" style="color:var(--gold);font-weight:600;">Resume</a></li>
+      <li><a href="resume.html#contact">Contact</a></li>
+      <li><a href="seo-case-studies.html" style="color:var(--gold);font-weight:600;">Case Studies</a></li>
+      <li><a href="seo-tools.html" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600;">SEO Tools ↗</a></li>
+    </ul>
+    <a href="resume.html" class="back-link">
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 10H5M10 5l-5 5 5 5"/></svg>
+      Resume
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="hero-eyebrow">SEO Insights &amp; Deep Dives</div>
+    <h1>The <em>SEO Articles</em><br>That Matter in 2026</h1>
+    <p>Practical, in-depth breakdowns of the strategies shaping modern search — written from the trenches of managing 5M+ monthly organic visitors at BankBazaar.</p>
+  </div>
+</div>
+
+<!-- ARTICLES LISTING -->
+<div class="articles-wrap" id="listing">
+  <div class="articles-header">
+    <div class="section-tag">Published Articles</div>
+    <p style="color:var(--ink-muted); font-size:0.9rem; max-width:520px; line-height:1.8;">Click any article to read the full piece. More articles added regularly across Technical SEO, AEO, GEO, Programmatic SEO, and AI-driven growth.</p>
+  </div>
+
+  <div class="articles-grid">
+
+    <!-- Article 1: AEO -->
+    <a class="article-card" href="#" onclick="openArticle('aeo'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">AEO</span>
+        <div class="article-card-title">Answer Engine Optimisation: The Complete 2026 Guide to Getting Featured in AI Answers</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">AI-powered search is rewriting the rules. Google AI Overviews, ChatGPT, and Perplexity are answering questions directly — and if your content isn't structured to be cited, you're invisible. Learn the full AEO playbook.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~18 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            June 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 2: GEO -->
+    <a class="article-card" href="#" onclick="openArticle('geo'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">GEO</span>
+        <div class="article-card-title">Generative Engine Optimisation: How to Make Your Brand Visible in ChatGPT, Gemini & Perplexity</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">GEO is the next frontier of SEO. As generative AI systems become primary research tools, your brand needs to be cited, referenced, and trusted by these engines. Here's exactly how to do it.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~20 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            July 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 3: Zero-Click Search -->
+    <a class="article-card" href="#" onclick="openArticle('zeroclicksearch'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Zero-Click SEO</span>
+        <div class="article-card-title">Zero-Click Search in 2026: 65% of Queries End Without a Visit — Here's How to Win Anyway</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">Nearly two thirds of all Google searches now end without a click. AI Overviews, featured snippets, and AI Mode have fundamentally changed the search landscape. This guide breaks down what it means for your traffic strategy and how to measure success when clicks aren't the metric anymore.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~15 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            January 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 4: LLMO -->
+    <a class="article-card" href="#" onclick="openArticle('llmo'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">LLMO</span>
+        <div class="article-card-title">LLMO: Large Language Model Optimisation — The Missing Layer Between SEO and GEO</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">GEO gets brands cited by AI search engines. But LLMO goes deeper — ensuring your content becomes part of what large language models actually know and reference during generation. Here's the distinction that separates surface-level AI optimisation from structural AI authority.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~16 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            February 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 5: Google AI Mode -->
+    <a class="article-card" href="#" onclick="openArticle('aimode'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Google AI Mode</span>
+        <div class="article-card-title">Google AI Mode & the New SEO Rules: What Changes When 93% of AI Queries Never Click</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">Google's AI Mode is here, and it's rewriting organic search economics. Brands cited in AI Overviews see +35% CTR gains — but 93% of AI Mode sessions end without any external click at all. This deep-dive maps out the new rules, what content gets cited, and how to position for AI Mode visibility in 2026.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~17 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            March 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 6: Brand Authority & AI Trust -->
+    <a class="article-card" href="#" onclick="openArticle('brandauthority'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Brand Authority</span>
+        <div class="article-card-title">Brand Authority Is Now the Primary Filter for AI Inclusion — Here's How to Build It</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">100% of marketers surveyed in 2026 agreed that trust and credibility signals are growing more important — because AI systems use brand authority as their primary filter when deciding which sources to surface. This is the playbook for compounding brand authority across SEO, digital PR, and AI visibility simultaneously.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~14 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            April 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 7: Agentic SEO -->
+    <a class="article-card" href="#" onclick="openArticle('agenticseo'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Agentic SEO</span>
+        <div class="article-card-title">Agentic SEO: Optimising for AI Agents, Browser Bots & the Next Wave of Autonomous Search</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">AI agents are now browsing the web on behalf of users — researching, comparing, and deciding without a human ever seeing your page. Google's own documentation now includes guidance on agentic experiences. This is what Agentic SEO means, why it matters for fintech brands, and how to prepare your site for the autonomous search era.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~16 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            May 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 8: Social Search -->
+    <a class="article-card" href="#" onclick="openArticle('socialsearch'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Social Search</span>
+        <div class="article-card-title">Social SEO: Why TikTok, Instagram & Reddit Are Now Search Engines</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">Nearly half of Gen Z now starts product research on TikTok or Instagram instead of Google — and Google itself is ranking Reddit threads above brand pages. Here's how to optimise for search behaviour that no longer starts on a search engine.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~9 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            August 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 9: Programmatic SEO -->
+    <a class="article-card" href="#" onclick="openArticle('programmaticseo'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Programmatic SEO</span>
+        <div class="article-card-title">Programmatic SEO at Scale in 2026: Thousands of Pages Without Getting Penalised</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">Generating landing pages at scale is one of the highest-leverage SEO plays — and one of the easiest ways to trigger a quality update penalty. The framework I use to scale programmatic pages while staying firmly on the right side of Google's helpful content systems.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~11 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            August 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 10: First-Party Data -->
+    <a class="article-card" href="#" onclick="openArticle('firstpartydata'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Privacy-First Marketing</span>
+        <div class="article-card-title">First-Party Data & Privacy-First Marketing: Winning Without Third-Party Cookies</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">With third-party cookies phased out and privacy regulation tightening globally, the brands still growing paid and organic performance are the ones that built a first-party data strategy early. Here's the practical playbook.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~9 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            August 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 11: AI Content Detection & E-E-A-T Defense -->
+    <a class="article-card" href="#" onclick="openArticle('aicontentdetection'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Content Authenticity</span>
+        <div class="article-card-title">AI Content Detection & E-E-A-T Defence: Proving Your Content Is Genuinely Human-Led</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">As AI-written content floods the web, Google's quality systems are getting sharper at rewarding genuine experience over generic output. How to use AI responsibly in your workflow without triggering the signals that flag "unhelpful" content.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~8 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            August 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article 12: Marketing Automation with AI Agents -->
+    <a class="article-card" href="#" onclick="openArticle('marketingautomation'); return false;">
+      <div class="article-card-top">
+        <span class="article-tag">Marketing Automation</span>
+        <div class="article-card-title">Marketing Automation with AI Agents: n8n, Workflows & the End of Manual Reporting</div>
+      </div>
+      <div class="article-card-body">
+        <div class="article-excerpt">The marketers scaling fastest in 2026 aren't doing more manual work — they've built AI-agent pipelines that handle reporting, rank tracking, and content briefs automatically. A practical look at what to automate first and how to build it.</div>
+        <div class="article-meta">
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M7 8h6M7 12h4"/></svg>
+            ~10 min read
+          </span>
+          <span class="article-meta-item">
+            <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+            August 2026
+          </span>
+        </div>
+        <div class="article-read-btn">
+          Read Full Article
+          <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 10h10M12 7l3 3-3 3"/></svg>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ARTICLE OVERLAY (full article reader)
+═══════════════════════════════════════════════ -->
+<div id="article-overlay">
+  <div class="article-progress-bar" id="progress-bar"></div>
+
+  <div class="article-overlay-nav">
+    <a href="index.html" class="nav-logo" style="font-size:0.75rem;">MP</a>
+    <button class="close-article-btn" onclick="closeArticle()">
+      <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 10H5M10 5l-5 5 5 5"/></svg>
+      Back to Articles
+    </button>
+  </div>
+
+  <!-- AEO ARTICLE -->
+  <div id="article-aeo" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Answer Engine Optimisation</span>
+        <h1 class="blog-title">Answer Engine Optimisation:<br><em>The Complete 2026 Guide</em></h1>
+        <p class="blog-subtitle">AI-powered search is answering questions without clicks. Here's the full playbook to make your content the source Google AI Overviews, ChatGPT, Perplexity, and Gemini actually cite.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · June 2026 · 18 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">AEO</span><span class="tag">Featured Snippets</span><span class="tag">AI Overviews</span>
+        <span class="tag">Schema Markup</span><span class="tag">E-E-A-T</span><span class="tag">Conversational SEO</span>
+        <span class="tag">Voice Search</span><span class="tag">FAQ Pages</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#aeo-what">What is Answer Engine Optimisation (AEO)?</a></li>
+          <li><a href="#aeo-why">Why AEO Matters More Than Ever in 2026</a></li>
+          <li><a href="#aeo-how-works">How Answer Engines Work — The Mechanics</a></li>
+          <li><a href="#aeo-vs-seo">AEO vs Traditional SEO — Key Differences</a></li>
+          <li><a href="#aeo-signals">The 7 Core AEO Ranking Signals</a></li>
+          <li><a href="#aeo-schema">Schema Markup: Your AEO Superpower</a></li>
+          <li><a href="#aeo-content">Writing Content That Gets Cited by AI</a></li>
+          <li><a href="#aeo-eeat">E-E-A-T and Authority Building for AEO</a></li>
+          <li><a href="#aeo-measure">Measuring AEO Success</a></li>
+          <li><a href="#aeo-action">The AEO Action Plan</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">60%</div><div class="stat-highlight-lbl">of Google searches now end without a click (zero-click)</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">25%</div><div class="stat-highlight-lbl">of Google queries now show AI Overviews</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">52%</div><div class="stat-highlight-lbl">of AI Overview sources rank in Google's top 10</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">42.9%</div><div class="stat-highlight-lbl">CTR for featured snippets — highest of any SERP feature</div></div>
+        </div>
+
+        <h2 id="aeo-what">What is Answer Engine <em>Optimisation</em>?</h2>
+        <p>Answer Engine Optimisation (AEO) is the practice of structuring and presenting your content so that AI-powered search systems — Google AI Overviews, Bing Copilot, ChatGPT, Perplexity, Gemini, and voice assistants — select it as the direct answer to a user's question.</p>
+        <p>Where traditional SEO focuses on earning a ranked position on a search results page, AEO focuses on earning the <strong>zero position</strong> — the single answer that gets read aloud, surfaced in an AI summary, or displayed as a featured snippet before any organic results.</p>
+        <p>Think of it this way: traditional SEO gets you onto the shelf in a library. AEO makes you the book the librarian hands directly to the person asking a question.</p>
+
+        <div class="callout">
+          <div class="callout-label">💡 Key Definition</div>
+          <p>AEO is not a replacement for SEO — it's an evolution of it. The technical foundations (crawlability, page speed, authority) still matter. AEO layers structured, authoritative, conversational content on top of a solid SEO base.</p>
+        </div>
+
+        <h2 id="aeo-why">Why AEO Matters More Than <em>Ever in 2026</em></h2>
+        <p>The search landscape has fundamentally changed. Users no longer just search — they <em>ask</em>. "What is the best credit card for travel?" is a question, not a keyword. And AI systems are increasingly built to answer questions, not just return a list of pages.</p>
+        <p>Here's what's driving this shift:</p>
+        <ul>
+          <li><strong>Google AI Overviews</strong> now appear for 25%+ of all queries, pulling answers from trusted sources and displaying them above organic results.</li>
+          <li><strong>Voice search</strong> has crossed 1 billion monthly searches globally — and voice assistants only provide a single spoken answer, not a list of 10 blue links.</li>
+          <li><strong>ChatGPT, Perplexity, and Gemini</strong> are processing hundreds of millions of queries per month. When users ask these tools questions about finance, health, or products, they cite sources — and those citations drive real traffic.</li>
+          <li><strong>Zero-click searches</strong> mean that even when you rank #1, users may get their answer directly in the SERP without visiting your page. If that answer is yours, you still win brand awareness and trust.</li>
+        </ul>
+        <p>At BankBazaar, our shift toward AEO — restructuring key pages with FAQ schema, conversational Q&A sections, and entity-based content — resulted in BankBazaar being <strong>cited in Google AI Overviews, ChatGPT, and Perplexity</strong> for high-intent financial queries. This is the real-world impact of AEO done right.</p>
+
+        <h2 id="aeo-how-works">How Answer Engines Work — <em>The Mechanics</em></h2>
+        <p>To optimise for answer engines, you need to understand how they select answers. The process broadly involves three stages:</p>
+        <h3>1. Retrieval</h3>
+        <p>The AI system retrieves candidate pages from its index (or the live web, in the case of Perplexity and AI Overviews). Pages need to be crawlable, indexed, and authoritative. This is where traditional SEO still matters — if Google can't crawl your page, no AI system will surface it.</p>
+        <h3>2. Comprehension</h3>
+        <p>The AI parses the retrieved content and identifies whether it directly, clearly answers the question at hand. Content that directly states a definition, explanation, or step-by-step process — ideally in the opening 100 words — wins here. Vague, verbose introductions lose.</p>
+        <h3>3. Trustworthiness Assessment</h3>
+        <p>AI systems cross-reference signals of authority and trust: backlink profiles, brand mentions across the web, E-E-A-T signals, schema markup, and author credentials. A technically perfect answer from an untrustworthy domain won't be selected.</p>
+
+        <div class="callout tip">
+          <div class="callout-label">✅ Pro Tip</div>
+          <p>Structure every important piece of content with a <strong>"direct answer first"</strong> approach: state the core answer in the opening paragraph, then expand. Google's AI systems and featured snippet algorithms both reward this pattern.</p>
+        </div>
+
+        <h2 id="aeo-vs-seo">AEO vs Traditional SEO — <em>Key Differences</em></h2>
+
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead>
+            <tr><th>Dimension</th><th>Traditional SEO</th><th>AEO</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Target</strong></td><td>Ranked position on SERP</td><td>Zero position / direct AI citation</td></tr>
+            <tr><td><strong>Query type</strong></td><td>Keywords (head terms)</td><td>Questions &amp; conversational queries</td></tr>
+            <tr><td><strong>Content format</strong></td><td>Long-form articles, landing pages</td><td>Structured Q&amp;A, definitions, step lists</td></tr>
+            <tr><td><strong>Success metric</strong></td><td>Rankings, organic traffic</td><td>AI citations, featured snippets, voice answers</td></tr>
+            <tr><td><strong>Schema focus</strong></td><td>Breadcrumbs, products</td><td>FAQPage, HowTo, Speakable, QAPage</td></tr>
+            <tr><td><strong>User intent</strong></td><td>Broad intent signals</td><td>Specific question intent matching</td></tr>
+            <tr><td><strong>Authority signals</strong></td><td>Backlinks, DA</td><td>E-E-A-T, brand mentions, author expertise</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="aeo-signals">The 7 Core <em>AEO Ranking Signals</em></h2>
+        <p>Based on research, experimentation at scale, and real-world results across BankBazaar's 15K+ page site, these are the signals that most consistently predict AEO success:</p>
+        <ol>
+          <li><strong>Direct answer placement:</strong> The answer to the query must appear clearly in the first 100–150 words of the page or section — not buried after preamble.</li>
+          <li><strong>FAQ schema (FAQPage):</strong> Explicitly marks up questions and answers in JSON-LD, making it trivial for AI systems to extract structured Q&amp;A pairs.</li>
+          <li><strong>Concise, scannable answers:</strong> AI systems prefer answers of 40–60 words for simple questions and 100–200 words for complex ones. Avoid padding.</li>
+          <li><strong>E-E-A-T signals:</strong> Author bylines with credentials, publication dates, "About the Author" sections, and links to authoritative sources all signal expertise and trustworthiness.</li>
+          <li><strong>Speakable schema:</strong> Marks specific passages as optimised for voice/audio delivery — important for Google Assistant and other voice surfaces.</li>
+          <li><strong>Content freshness:</strong> AI systems weight recency for time-sensitive queries. Update key pages regularly — especially statistics, rates, and how-to processes.</li>
+          <li><strong>Entity clarity:</strong> Use real entities (people, places, organisations, concepts) explicitly. AI systems use entity graphs; vague content without clear entities is harder to cite.</li>
+        </ol>
+
+        <h2 id="aeo-schema">Schema Markup: <em>Your AEO Superpower</em></h2>
+        <p>Schema markup is the single highest-leverage technical intervention for AEO. It communicates directly to AI systems exactly what your content is about, how it's structured, and what questions it answers.</p>
+        <h3>The Must-Have Schema Types for AEO</h3>
+        <h4>FAQPage Schema</h4>
+        <p>The most impactful schema type for AEO. Mark up every significant Q&amp;A on your page. At BankBazaar, implementing FAQPage schema across credit card and loan pages drove a measurable increase in AI Overview appearances within 60 days.</p>
+        <h4>HowTo Schema</h4>
+        <p>For any process-based content — "how to apply for a personal loan", "how to improve CIBIL score" — HowTo schema with numbered steps is a direct signal to AI systems that your content provides structured procedural guidance.</p>
+        <h4>Speakable Schema</h4>
+        <p>Marks specific text sections as suitable for text-to-speech delivery. Critically important for voice search optimisation and increasingly used by Google Assistant to select spoken answers.</p>
+        <h4>Article / NewsArticle Schema</h4>
+        <p>Signals authorship, publication date, and editorial context. Essential for E-E-A-T. Combined with sameAs links to the author's LinkedIn or Google Scholar profile, it builds a strong author entity.</p>
+        <h4>QAPage Schema</h4>
+        <p>Different from FAQPage — used when a page presents a community Q&amp;A format (like a forum or support page). Allows AI systems to identify both the accepted answer and the question in context.</p>
+
+        <div class="callout warning">
+          <div class="callout-label">⚠ Common Mistake</div>
+          <p>Don't mark up content in schema that doesn't appear visibly on the page. Google explicitly penalises hidden or mismatched structured data. Every FAQ in your JSON-LD must have a corresponding visible question and answer on the page.</p>
+        </div>
+
+        <h2 id="aeo-content">Writing Content That Gets <em>Cited by AI</em></h2>
+        <p>The way you structure and write content directly affects whether AI systems choose to cite it. Here is the framework I use across BankBazaar's high-traffic pages:</p>
+        <h3>The DAEF Framework (Direct Answer → Elaboration → Evidence → FAQ)</h3>
+        <ol>
+          <li><strong>Direct Answer:</strong> Open every section with a clear, direct answer to the most likely question that section addresses. No fluff, no "In this section we will discuss..."</li>
+          <li><strong>Elaboration:</strong> Expand on the answer with context, nuance, and supporting information. This is where depth helps — AI systems prefer comprehensive sources even if they extract only the direct answer.</li>
+          <li><strong>Evidence:</strong> Back claims with data, studies, or specific examples. AI systems are increasingly trained to cite sources that reference primary evidence.</li>
+          <li><strong>FAQ block:</strong> End every major section with 3–5 related questions and concise answers. This is a direct signal to AI systems that your page comprehensively covers the topic.</li>
+        </ol>
+        <h3>Question-Led Headings</h3>
+        <p>Replace generic headings like "Benefits of Credit Cards" with question-led headings like "What are the benefits of using a credit card?" This directly mirrors how users phrase queries in conversational search and voice search, making it far easier for AI systems to match your content to the right query.</p>
+        <h3>Inverted Pyramid Writing</h3>
+        <p>Borrowed from journalism: lead with the most important information, then add detail. AI systems and featured snippet algorithms both scan the first 100 words of a section first. If the answer isn't there, they move to the next candidate page.</p>
+
+        <h2 id="aeo-eeat">E-E-A-T and Authority Building <em>for AEO</em></h2>
+        <p>Google's E-E-A-T framework (Experience, Expertise, Authoritativeness, Trustworthiness) is the foundation of AEO credibility. AI systems don't just evaluate content — they evaluate the <em>source</em> of content.</p>
+        <ul>
+          <li><strong>Experience:</strong> Show first-hand experience. Use real case studies, specific numbers, and personal observations. "We tested this across 8,000+ IFSC pages and saw X result" is far more credible than generic advice.</li>
+          <li><strong>Expertise:</strong> Author credentials, professional certifications, years of experience, and domain-specific depth all signal expertise. Link author profiles to external verification (LinkedIn, publications).</li>
+          <li><strong>Authoritativeness:</strong> Build backlinks from other authoritative sources in your niche. Be cited by news outlets, academic papers, and industry publications. At BankBazaar, we have backlinks from Reuters, Indiatimes, and major Indian financial media — these authority signals carry directly into AI citation probability.</li>
+          <li><strong>Trustworthiness:</strong> HTTPS, clear editorial policies, fact-checking disclosures, transparent authorship, and regular content updates all contribute to trust signals that AI systems evaluate.</li>
+        </ul>
+
+        <h2 id="aeo-measure">Measuring <em>AEO Success</em></h2>
+        <p>Traditional SEO metrics don't fully capture AEO performance. Here are the metrics that matter:</p>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Metric</th><th>What It Measures</th><th>Where to Track</th></tr></thead>
+          <tbody>
+            <tr><td>Featured Snippet appearances</td><td>Zero-position wins in Google</td><td>Google Search Console, SEMrush</td></tr>
+            <tr><td>AI Overview citations</td><td>Presence in Google's AI summaries</td><td>Manual checks, AI visibility tools</td></tr>
+            <tr><td>People Also Ask wins</td><td>Presence in PAA boxes</td><td>SEMrush, Ahrefs, manual SERP checks</td></tr>
+            <tr><td>Voice search answers</td><td>Content read by Google Assistant</td><td>Speakable schema reports</td></tr>
+            <tr><td>Brand mentions in AI tools</td><td>Citations in ChatGPT, Perplexity, Gemini</td><td>Manual prompting, brand monitoring tools</td></tr>
+            <tr><td>FAQ click impressions</td><td>FAQ schema activations in SERPs</td><td>Google Search Console rich results</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="aeo-action">The AEO <em>Action Plan</em></h2>
+        <p>Ready to implement? Here's the prioritised action plan, ordered by impact-to-effort ratio:</p>
+        <ol>
+          <li><strong>Audit your top 20 pages</strong> for question-intent queries in Google Search Console. Filter by queries that start with "what", "how", "why", "best", "can I".</li>
+          <li><strong>Add FAQPage schema</strong> to every page where you can identify 3+ related questions your target audience asks. This is the single highest-ROI AEO action.</li>
+          <li><strong>Restructure content headings</strong> as questions for your top 10 organic landing pages.</li>
+          <li><strong>Implement author schema</strong> on all blog posts and editorial content — link to author LinkedIn profiles via sameAs.</li>
+          <li><strong>Add a "Direct Answer" paragraph</strong> to the top of every important section — 50–80 words, starting with the keyword/question topic.</li>
+          <li><strong>Add Speakable schema</strong> to your most important definitional and how-to content.</li>
+          <li><strong>Refresh top pages quarterly</strong> — update statistics, rates, and examples to signal content freshness.</li>
+          <li><strong>Monitor AI citations weekly</strong> — query your brand and key topics in Perplexity, ChatGPT, and Gemini. Track whether your content is being cited and adjust.</li>
+        </ol>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>AEO is not about gaming AI systems — it's about being genuinely, demonstrably helpful. The brands that will dominate AI-powered search are the ones that answer questions better, faster, and more credibly than anyone else. Build for the user, structure for the machine.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to discuss AEO strategy or SEO collaboration?</p>
+        <a href="resume.html#contact">Get in Touch with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEO ARTICLE -->
+  <div id="article-geo" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Generative Engine Optimisation</span>
+        <h1 class="blog-title">Generative Engine Optimisation:<br><em>The Complete 2026 Guide</em></h1>
+        <p class="blog-subtitle">ChatGPT, Gemini, and Perplexity are the new search engines for millions of users. If your brand isn't being cited by these AI systems, you don't exist in their world. Here's how to change that.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · July 2026 · 20 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">GEO</span><span class="tag">ChatGPT</span><span class="tag">Perplexity</span>
+        <span class="tag">Gemini</span><span class="tag">AI Search</span><span class="tag">Brand Visibility</span>
+        <span class="tag">Entity SEO</span><span class="tag">AI Citations</span><span class="tag">LLM Optimisation</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#geo-what">What is Generative Engine Optimisation (GEO)?</a></li>
+          <li><a href="#geo-why">Why GEO is the Biggest SEO Shift Since Mobilegeddon</a></li>
+          <li><a href="#geo-how">How Generative AI Engines Select Sources</a></li>
+          <li><a href="#geo-aeo-diff">GEO vs AEO — What's the Difference?</a></li>
+          <li><a href="#geo-signals">The 8 Core GEO Ranking Signals</a></li>
+          <li><a href="#geo-content">Content Strategy for Generative AI Visibility</a></li>
+          <li><a href="#geo-entity">Entity Optimisation — The Heart of GEO</a></li>
+          <li><a href="#geo-offpage">Off-Page GEO: Brand Mentions &amp; Citation Building</a></li>
+          <li><a href="#geo-platforms">Platform-by-Platform GEO Strategy</a></li>
+          <li><a href="#geo-measure">Measuring GEO Performance</a></li>
+          <li><a href="#geo-action">The GEO Action Plan</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">527%</div><div class="stat-highlight-lbl">growth in AI search traffic year-over-year</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">3x</div><div class="stat-highlight-lbl">Brand mentions correlate with AI visibility more than backlinks alone</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">200M+</div><div class="stat-highlight-lbl">ChatGPT weekly active users asking research questions</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">40%</div><div class="stat-highlight-lbl">of users under 35 now use AI tools as their primary research method</div></div>
+        </div>
+
+        <h2 id="geo-what">What is Generative Engine <em>Optimisation (GEO)</em>?</h2>
+        <p>Generative Engine Optimisation (GEO) is the discipline of making your brand, content, and expertise visible and trustworthy to large language model (LLM)-powered AI systems — including ChatGPT, Google Gemini, Perplexity AI, Claude, Bing Copilot, and emerging AI assistants.</p>
+        <p>Unlike traditional SEO, which targets Google's algorithmic ranking of pages, GEO targets the training data, real-time retrieval, and citation decisions of generative AI models. The goal: when someone asks an AI assistant about your topic, industry, or use case, your brand is the one that gets mentioned, cited, and recommended.</p>
+        <p>GEO is sometimes called <em>LLM SEO</em>, <em>AI search optimisation</em>, or <em>generative AI visibility</em> — all describing the same emerging discipline.</p>
+
+        <div class="callout">
+          <div class="callout-label">💡 GEO in Plain English</div>
+          <p>If someone asks ChatGPT "What's the best credit card for cashback in India?" and BankBazaar is mentioned as a trusted source — that's GEO working. If a competitor is mentioned instead, that's a GEO gap to close.</p>
+        </div>
+
+        <h2 id="geo-why">Why GEO is the Biggest SEO Shift <em>Since Mobilegeddon</em></h2>
+        <p>Every few years, a paradigm shift forces SEOs to fundamentally rethink strategy. Mobilegeddon in 2015 made mobile-first non-negotiable. The BERT update in 2019 made semantic search understanding critical. GEO is the 2025–2026 equivalent — and it's bigger than either.</p>
+        <p>Here's why this shift is structural, not cyclical:</p>
+        <ul>
+          <li><strong>AI tools are replacing search for research tasks.</strong> Users asking "which home loan is best?" are increasingly doing so directly in ChatGPT or Perplexity — bypassing Google entirely. If your content isn't in these systems' knowledge base or retrieval index, you simply don't exist for these users.</li>
+          <li><strong>Generation Z and younger millennials prefer AI-first research.</strong> Studies show 40%+ of users under 35 use AI tools as their primary research starting point. This cohort will only grow.</li>
+          <li><strong>AI citations create compounding authority.</strong> When AI systems recommend your brand consistently, users trust it more. This feeds back into organic search CTR, branded search volume, and conversion rates across all channels.</li>
+          <li><strong>Traditional SEO rankings are no longer enough.</strong> A #1 Google ranking for "best personal loan India" delivers value — but if ChatGPT doesn't mention you when asked the same question, you're missing a rapidly growing share of your potential audience.</li>
+        </ul>
+        <p>At BankBazaar, our investment in GEO-aligned content — structured data, entity optimisation, E-E-A-T, and authoritative off-page citations — has resulted in consistent mentions in ChatGPT, Perplexity, and Google Gemini for key financial verticals. This is measurable, trackable brand presence in AI-powered search.</p>
+
+        <h2 id="geo-how">How Generative AI Engines <em>Select Sources</em></h2>
+        <p>Different AI systems work differently, and understanding the distinction is critical for GEO strategy.</p>
+        <h3>Training Data-Based Systems (Static Knowledge)</h3>
+        <p>Some AI responses are based primarily on pre-training data — the vast corpus of text that was used to train the model before its knowledge cutoff. For these responses, GEO is about ensuring your content was present and prominent in high-quality, widely-indexed web content that was included in training datasets. Wikipedia, major news publications, industry reports, and highly-linked blog content are typically over-represented.</p>
+        <h3>Real-Time Retrieval-Augmented Generation (RAG)</h3>
+        <p>Perplexity, Bing Copilot, and Google AI Overviews use real-time retrieval — they search the live web, retrieve relevant pages, and use those pages to generate their answer. For these systems, GEO heavily overlaps with AEO: your content must rank well enough to be retrieved, and must then be structured to be cited.</p>
+        <h3>Hybrid Systems</h3>
+        <p>ChatGPT with browsing enabled, Google Gemini, and most modern AI assistants use a hybrid: the base LLM provides general knowledge, real-time retrieval supplements it for current queries. GEO must address both layers.</p>
+
+        <h2 id="geo-aeo-diff">GEO vs AEO — <em>What's the Difference?</em></h2>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Dimension</th><th>AEO</th><th>GEO</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Target</strong></td><td>Featured snippets, voice answers, AI Overviews</td><td>ChatGPT, Gemini, Perplexity citations &amp; recommendations</td></tr>
+            <tr><td><strong>Primary channel</strong></td><td>Google Search (AI-enhanced)</td><td>Standalone AI tools and AI-native search engines</td></tr>
+            <tr><td><strong>Key lever</strong></td><td>Schema markup, question-led content</td><td>Entity authority, off-page brand mentions, training data presence</td></tr>
+            <tr><td><strong>Measurement</strong></td><td>Featured snippet wins, AI Overview appearances</td><td>AI tool citations, brand mentions in AI responses</td></tr>
+            <tr><td><strong>Timeline</strong></td><td>Weeks to months (retrieval-based)</td><td>Months to years (training-cycle dependent)</td></tr>
+            <tr><td><strong>Overlap</strong></td><td colspan="2" style="text-align:center;">High — both require E-E-A-T, structured content, and authority signals</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="geo-signals">The 8 Core <em>GEO Ranking Signals</em></h2>
+        <p>Based on emerging research — including the Stanford/Georgia Tech GEO paper (2024) and extensive real-world testing — these are the signals most correlated with AI citation frequency:</p>
+        <ol>
+          <li><strong>Authoritative brand presence:</strong> Brands with Wikipedia pages, Google Knowledge Panels, Wikidata entries, and consistent mentions across major publications are disproportionately cited by LLMs.</li>
+          <li><strong>Citation density in training data:</strong> Content that has been widely linked to, shared, and referenced by other authoritative sources is more likely to be represented in LLM training data.</li>
+          <li><strong>Expertise signals in content:</strong> Research-backed, data-driven, expert-authored content outperforms generic content in AI citation probability. Citing primary sources (studies, reports, government data) is a strong GEO signal.</li>
+          <li><strong>Entity clarity and named entity richness:</strong> Content that clearly references known entities (specific people, organisations, products, locations) is easier for AI systems to anchor in their knowledge graph.</li>
+          <li><strong>Content structure and retrievability:</strong> For RAG-based systems, content must be retrievable (high organic rankings, fast page speed, clean HTML) and structured (clear headings, definitions, lists).</li>
+          <li><strong>Recency and freshness:</strong> AI systems that use real-time retrieval favour recently updated, date-stamped content for time-sensitive queries.</li>
+          <li><strong>Multi-platform presence:</strong> Brands mentioned consistently across Reddit threads, Quora answers, YouTube transcripts, industry forums, and news articles build a richer cross-platform entity footprint that AI systems recognise.</li>
+          <li><strong>Digital PR and earned media:</strong> According to Ahrefs research, brand mentions in authoritative publications correlate 3x more strongly with AI visibility than backlinks alone. Earned media placements in top-tier publications are the most powerful GEO lever.</li>
+        </ol>
+
+        <h2 id="geo-content">Content Strategy for <em>Generative AI Visibility</em></h2>
+        <p>GEO-aligned content is different from traditional SEO content in key ways. Here's the framework:</p>
+        <h3>Write for Entities, Not Just Keywords</h3>
+        <p>AI systems understand the world through entities — specific, identifiable things (BankBazaar, CIBIL score, RBI, HDFC Bank). Content that clearly references and explains relationships between relevant entities is more likely to be understood, indexed accurately, and cited by AI systems.</p>
+        <p>Instead of writing "the best credit cards offer good rewards", write "HDFC Bank's Infinia credit card and Axis Bank's Magnus card offer among the highest reward rates in India, according to BankBazaar's 2026 credit card comparison." This is entity-rich, specific, and citable.</p>
+        <h3>Data-First, Original Research</h3>
+        <p>AI systems — especially those trained on curated web corpora — disproportionately represent original research, proprietary data, and unique statistics. Publishing original surveys, proprietary data analyses, and first-party research dramatically increases your chances of being included in training data and real-time citations.</p>
+        <h3>Comprehensive Topic Coverage (Topical Authority)</h3>
+        <p>AI systems favour sources that demonstrate deep, comprehensive expertise on a topic rather than surface-level coverage. A site with 50 deeply interconnected articles on personal loans is more likely to be cited for personal loan queries than a site with one great article. Build content clusters, not isolated pages.</p>
+        <h3>Use Precise, Quotable Language</h3>
+        <p>Write in clear, precise sentences that can stand alone as a cited quote. Avoid ambiguous pronoun references ("it", "they") and ensure every key claim is a complete, attributable sentence. AI systems extract and cite specific passages — make those passages clean and quotable.</p>
+
+        <div class="callout tip">
+          <div class="callout-label">✅ GEO Content Test</div>
+          <p>Before publishing, ask: "If an AI system extracted a single sentence from this page to answer a query, would that sentence accurately and completely represent my brand's position?" If yes, the content is GEO-ready.</p>
+        </div>
+
+        <h2 id="geo-entity">Entity Optimisation — <em>The Heart of GEO</em></h2>
+        <p>Entity optimisation is the practice of ensuring your brand, people, products, and expertise are clearly defined, consistently represented, and widely referenced across the web — so that AI systems build an accurate, rich knowledge graph entry for your entity.</p>
+        <h3>Build Your Google Knowledge Panel</h3>
+        <p>A verified Google Knowledge Panel is one of the strongest signals that your brand is a real, established entity. Claim it via Google's Knowledge Panel claim process, link it to your official website, social profiles, and Wikipedia/Wikidata page.</p>
+        <h3>Create or Improve Your Wikipedia/Wikidata Presence</h3>
+        <p>Wikipedia is heavily over-represented in LLM training data. A well-maintained, neutral Wikipedia article about your brand or key people dramatically increases the probability of accurate LLM knowledge. Even a Wikidata entry with structured properties (founded, headquarters, industry, key people) adds significant entity clarity.</p>
+        <h3>Consistent NAP + Entity Attributes Across the Web</h3>
+        <p>Your brand name, description, founding date, key people, products, and category must be consistent across LinkedIn, Crunchbase, industry directories, news databases, and social platforms. Inconsistent information confuses AI knowledge graphs.</p>
+        <h3>Author Entity Building</h3>
+        <p>Individual authors are entities too. Build your personal entity: LinkedIn profile, Google Scholar profile (if applicable), bio pages on publication websites, consistent use of your full professional name, and links between all these profiles. When an AI system attributes expertise on a topic to "Maheswari P, SEO expert at BankBazaar", that attribution is powered by entity clarity.</p>
+
+        <h2 id="geo-offpage">Off-Page GEO: Brand Mentions <em>&amp; Citation Building</em></h2>
+        <p>Off-page GEO is arguably more important than on-page — because LLMs learn about your brand primarily from what other sources say about you, not just from your own website.</p>
+        <h3>Digital PR for AI Visibility</h3>
+        <p>Secure placements in top-tier publications: major newspapers, industry journals, government or regulatory reports, academic citations. Each placement in a high-authority source increases your probability of appearing in AI training datasets and real-time retrieval results.</p>
+        <h3>Community Presence</h3>
+        <p>Be present where users ask questions. Answer relevant questions on Reddit, Quora, and niche forums. Participate in LinkedIn discussions. Comment in industry threads. AI systems that use real-time retrieval pull heavily from these platforms — and your consistent, authoritative presence in community discussions builds a strong off-page entity footprint.</p>
+        <h3>Podcast and Video Transcripts</h3>
+        <p>YouTube transcripts, podcast show notes, and webinar summaries are increasingly indexed and included in AI training data. Appearing as a guest expert on relevant podcasts or YouTube channels creates additional entity touchpoints across platforms.</p>
+        <h3>Unlinked Brand Mention Monitoring</h3>
+        <p>Track every mention of your brand across the web (using tools like Brand24, Mention, or Google Alerts) and work to convert unlinked mentions into linked citations. Every additional inbound link from an authoritative source strengthens both your traditional SEO and your GEO entity graph.</p>
+
+        <h2 id="geo-platforms">Platform-by-Platform <em>GEO Strategy</em></h2>
+        <h3>ChatGPT / OpenAI</h3>
+        <p>ChatGPT's base knowledge comes from its training data. For real-time browsing (ChatGPT with search enabled), your content must rank highly enough to be retrieved. Prioritise: Wikipedia presence, widely-published original research, and strong backlink authority. ChatGPT browsing uses Bing — so Bing SEO is a GEO lever here.</p>
+        <h3>Perplexity AI</h3>
+        <p>Perplexity is retrieval-first — it searches the live web for every query. This means traditional SEO signals (rankings, crawlability, content quality) directly determine Perplexity citations. Additionally, Perplexity's "Copilot" mode favours content that is clear, structured, and directly answers the stated question. AEO practices are your GEO strategy for Perplexity.</p>
+        <h3>Google Gemini / AI Overviews</h3>
+        <p>Google uses its existing search index for Gemini's retrieval layer. Strong Google SEO fundamentals, schema markup, E-E-A-T signals, and FAQPage schema all directly improve your probability of being cited. Google also weights brands with established Knowledge Panels and Merchant Center profiles.</p>
+        <h3>Bing Copilot</h3>
+        <p>Bing Copilot uses Microsoft's search index. Ensure your content is indexed by Bing (submit to Bing Webmaster Tools), has strong structured data, and appears in Bing's top results for your target queries.</p>
+
+        <h2 id="geo-measure">Measuring <em>GEO Performance</em></h2>
+        <p>GEO measurement is newer and less tool-supported than traditional SEO — but it's rapidly maturing. Here's how to track it today:</p>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>GEO Metric</th><th>How to Measure</th><th>Frequency</th></tr></thead>
+          <tbody>
+            <tr><td>AI tool brand mentions</td><td>Manually query ChatGPT, Gemini, Perplexity with target queries. Log citations.</td><td>Weekly</td></tr>
+            <tr><td>Perplexity citation rate</td><td>Query your top 20 keywords in Perplexity. Track if your domain is cited.</td><td>Weekly</td></tr>
+            <tr><td>AI Overview appearances</td><td>Track via SEMrush AI Overview tracking or manual SERP checks.</td><td>Monthly</td></tr>
+            <tr><td>Brand mention volume</td><td>Brand24, Mention, or Google Alerts for brand mentions across platforms.</td><td>Ongoing</td></tr>
+            <tr><td>Wikipedia traffic &amp; edits</td><td>Wikipedia page analytics (Wikistats).</td><td>Monthly</td></tr>
+            <tr><td>Knowledge Panel presence</td><td>Manual check: search your brand name in Google.</td><td>Monthly</td></tr>
+            <tr><td>Branded search volume</td><td>Google Search Console branded query impressions &amp; clicks.</td><td>Monthly</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="geo-action">The GEO <em>Action Plan</em></h2>
+        <p>Here is a prioritised 90-day GEO implementation roadmap, ordered by impact:</p>
+        <h3>Days 1–30: Foundations</h3>
+        <ol>
+          <li><strong>Claim and optimise your Google Knowledge Panel.</strong> Verify ownership, add all relevant attributes, link to official social profiles.</li>
+          <li><strong>Create or improve your Wikidata entry</strong> with key entity attributes: brand name, founding date, industry, key people, headquarters, official website.</li>
+          <li><strong>Audit your top 10 pages for entity clarity.</strong> Ensure each page clearly references relevant named entities (people, organisations, products, locations).</li>
+          <li><strong>Set up brand monitoring</strong> across ChatGPT (browse mode), Perplexity, and Gemini for your top 20 target queries. Baseline your current citation rate.</li>
+        </ol>
+        <h3>Days 31–60: Content &amp; Authority</h3>
+        <ol>
+          <li><strong>Publish one original research piece</strong> per month — a proprietary data study, survey, or analysis that no one else has. Original data is the highest-value GEO content asset.</li>
+          <li><strong>Implement comprehensive schema markup:</strong> FAQPage, HowTo, Article, Person (for authors), and Organisation schema with sameAs links.</li>
+          <li><strong>Develop author entity pages</strong> for your key content creators — link to LinkedIn, professional bios, publications, and schema Person markup.</li>
+          <li><strong>Begin community presence building:</strong> Answer 5+ relevant questions per week on Quora and Reddit in your niche.</li>
+        </ol>
+        <h3>Days 61–90: Off-Page &amp; Scale</h3>
+        <ol>
+          <li><strong>Execute a digital PR campaign</strong> targeting 3+ top-tier publications in your industry. Focus on newsworthy, data-backed pitches.</li>
+          <li><strong>Pursue podcast and speaking opportunities</strong> in your niche — even one appearance per quarter adds meaningful entity touchpoints.</li>
+          <li><strong>Convert unlinked brand mentions</strong> to linked citations using outreach.</li>
+          <li><strong>Review GEO metrics</strong> against baseline — identify which query categories you're being cited for and which represent gaps. Adjust content strategy accordingly.</li>
+        </ol>
+
+        <div class="callout">
+          <div class="callout-label">✦ The Big Picture</div>
+          <p>GEO is not a tactic — it's a long-term brand strategy. The brands that invest in being genuinely authoritative, widely mentioned, and consistently helpful across the web will compound their AI visibility over time. Start now, measure consistently, and build for the long game.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Interested in GEO strategy or working together on AI search visibility?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ ARTICLE 3: ZERO-CLICK SEARCH ══ -->
+  <div id="article-zeroclicksearch" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Zero-Click SEO</span>
+        <h1 class="blog-title">Zero-Click Search in 2026:<br><em>65% of Queries End Without a Visit</em></h1>
+        <p class="blog-subtitle">Nearly two thirds of all Google searches now end without a click. Here's how to measure success, adapt your content strategy, and win visibility even when users never reach your website.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · January 2026 · 15 min read</div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-strip">
+        <span class="tag">Zero-Click</span><span class="tag">AI Overviews</span><span class="tag">AI Mode</span>
+        <span class="tag">Featured Snippets</span><span class="tag">Brand Visibility</span><span class="tag">CTR Optimisation</span>
+      </div>
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#zc-reality">The Zero-Click Reality in 2026</a></li>
+          <li><a href="#zc-why">Why Zero-Click Has Accelerated</a></li>
+          <li><a href="#zc-data">What the Data Actually Says</a></li>
+          <li><a href="#zc-winners">Who Still Gets Clicks — and Why</a></li>
+          <li><a href="#zc-strategy">The Zero-Click Survival Strategy</a></li>
+          <li><a href="#zc-measure">Measuring Success Without Clicks</a></li>
+        </ol>
+      </div>
+      <div class="blog-body">
+        <h2 id="zc-reality">The Zero-Click <em>Reality in 2026</em></h2>
+        <p>64.82% of Google searches now end without a single click to any website. This is not a temporary disruption caused by AI — it's the acceleration of a trend that has been building since featured snippets emerged in 2014. What AI Overviews and Google's AI Mode have done is compress that timeline dramatically.</p>
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">64.8%</div><div class="stat-highlight-lbl">of Google searches end without a click (2026)</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">93%</div><div class="stat-highlight-lbl">of AI Mode sessions end without external visits</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">+35%</div><div class="stat-highlight-lbl">CTR boost for brands cited in AI Overviews</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">−18%</div><div class="stat-highlight-lbl">Average CTR drop when AI Overview appears</div></div>
+        </div>
+        <p>Here's the paradox: while overall CTR drops when AI Overviews appear, the brands that are actually cited in those overviews see a +35% CTR boost compared to non-cited brands on the same SERP. Zero-click doesn't mean zero opportunity — it means the opportunity has moved upstream, to being the source AI cites rather than the link users click.</p>
+
+        <h2 id="zc-why">Why Zero-Click Has <em>Accelerated</em></h2>
+        <p>Three platform changes collided in 2025–2026 to drive zero-click to its current level:</p>
+        <h3>Google AI Overviews</h3>
+        <p>AI Overviews now appear in approximately 18–21% of all Google searches globally — heavily concentrated on informational and how-to queries, which historically drove the most organic traffic. When an AI Overview answers the question, the need to click a blue link is eliminated for most users.</p>
+        <h3>Google AI Mode</h3>
+        <p>Launched in March 2025 and rolled out globally through 2025–2026, AI Mode is a full conversational search experience within Google. Users can ask multi-part questions and receive synthesised answers drawing from multiple web sources. 93% of AI Mode sessions end without an external website visit — because users get what they need in the conversation.</p>
+        <h3>Featured Snippets & Knowledge Panels</h3>
+        <p>These predate AI but continue to grow in scope. Knowledge panels, People Also Ask boxes, local packs, and shopping graphs all serve information without requiring clicks. AI has simply added a much more powerful layer on top of these existing zero-click surfaces.</p>
+
+        <div class="callout warning">
+          <div class="callout-label">⚠ The Sector Gap</div>
+          <p>Zero-click impact is not uniform. Informational and educational content ("how to," "what is," "why does") faces near-total cannibalisation from AI Overviews. Commercial and transactional queries — comparisons, pricing, provider-specific searches — retain much higher click rates. For fintech brands like BankBazaar, this means the blog traffic funnel is shrinking while comparison and product pages remain relatively protected.</p>
+        </div>
+
+        <h2 id="zc-data">What the Data <em>Actually Says</em></h2>
+        <p>The zero-click headline numbers are real, but averages obscure important nuances. Here's what the 2026 research cohort shows:</p>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Query Type</th><th>AI Overview Rate</th><th>Click Rate</th><th>Implication</th></tr></thead>
+          <tbody>
+            <tr><td>"How to" queries</td><td>~99.9%</td><td>Very low</td><td>Content mostly cannibalised; focus on being cited</td></tr>
+            <tr><td>"What is" / definitional</td><td>High</td><td>Low</td><td>Knowledge panel + EEAT authority matters</td></tr>
+            <tr><td>Comparison queries</td><td>Moderate</td><td>Moderate-High</td><td>Comparison tables + original data win clicks</td></tr>
+            <tr><td>Brand + product queries</td><td>Very low</td><td>High</td><td>Traditional SEO still fully applies</td></tr>
+            <tr><td>Transactional ("buy X")</td><td>3–4%</td><td>Very High</td><td>PDP and category pages — least disrupted</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="zc-winners">Who Still Gets Clicks <em>— and Why</em></h2>
+        <p>Despite the headline numbers, clicks haven't disappeared — they've concentrated. The remaining 35% of searches that do generate clicks are increasingly dominated by three user intent categories:</p>
+        <h3>Navigational Intent</h3>
+        <p>Users who already know they want to go to a specific website ("BankBazaar credit card comparison", "Zerodha login") will always click. Brand SEO, branded search volume, and ensuring your own site ranks #1 for your brand terms is non-negotiable.</p>
+        <h3>Transactional Intent</h3>
+        <p>Users who want to buy, apply, sign up, or compare products with pricing are far less satisfied by AI-generated summaries. They need to see the actual product, the real rate, the current offer. E-commerce, fintech product pages, and service booking pages retain strong click rates.</p>
+        <h3>Trust-Verification Intent</h3>
+        <p>A significant portion of AI search users — especially for health, legal, and financial information — use AI to get an initial answer but then click through to verify. Pew Research confirms this: people use AI for exploration and synthesis, then use traditional search to fact-check. High-authority informational content still drives verification clicks even after zero-click AI answers.</p>
+
+        <h2 id="zc-strategy">The Zero-Click <em>Survival Strategy</em></h2>
+        <h3>1. Optimise for Citation, Not Just Ranking</h3>
+        <p>Being cited in an AI Overview is now worth more than being ranked #3 on a page with an AI Overview. Prioritise AEO and GEO tactics for informational content: direct answer structure, FAQ schema, E-E-A-T signals, and original data that AI systems want to reference.</p>
+        <h3>2. Shift Content Investment Toward Transactional and Comparison Pages</h3>
+        <p>AI Overviews struggle to replace detailed comparison tables with real pricing, user reviews, and live data. For fintech brands, this means investing in dynamic comparison tools, rate tables, and product detail pages — the content that converts, not just the content that informs.</p>
+        <h3>3. Build Brand Visibility as a Parallel Track</h3>
+        <p>In a zero-click world, brand mentions in AI answers, featured snippets, and knowledge panels deliver marketing value even without a click. Track "AI share of voice" — how often your brand is mentioned across ChatGPT, Perplexity, and Google AI Mode — as a primary brand KPI alongside organic traffic.</p>
+        <h3>4. Invest in Original Research</h3>
+        <p>AI systems can summarise generic content from thousands of sources. What they can't replace is your proprietary data — original surveys, internal benchmarks, platform-specific findings. Original research becomes the only truly zero-click-proof content investment.</p>
+        <h3>5. Pursue Digital PR for Citation Building</h3>
+        <p>Brands are 6.5× more likely to be cited by AI systems through third-party sources than from their own domain. Securing placements in high-authority publications, industry reports, and regulatory databases is now a direct lever for AI search visibility — not just a backlink strategy.</p>
+
+        <h2 id="zc-measure">Measuring Success <em>Without Clicks</em></h2>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Old Metric</th><th>New Metric</th><th>How to Track</th></tr></thead>
+          <tbody>
+            <tr><td>Organic clicks</td><td>AI citation rate</td><td>Manual AI query monitoring; tools like AI Traffic Analytics</td></tr>
+            <tr><td>Organic impressions</td><td>AI share of voice</td><td>Track brand mentions across ChatGPT, Perplexity, Gemini</td></tr>
+            <tr><td>CTR</td><td>Citation + click blended rate</td><td>GSC + AI citation tracking combined</td></tr>
+            <tr><td>Position #1</td><td>AI Overview inclusion</td><td>SEMrush AI Overview tracking / manual SERP audit</td></tr>
+            <tr><td>Organic revenue</td><td>Branded search + direct traffic growth</td><td>GA4 channel attribution</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout">
+          <div class="callout-label">✦ The Mindset Shift</div>
+          <p>Zero-click search doesn't mean zero value. It means the value your content delivers to users now happens inside the search engine — and your job is to be the source that delivers it. Measure accordingly: brand authority, AI citation rate, and branded search volume are the new primary KPIs for informational content in 2026.</p>
+        </div>
+      </div>
+      <div class="article-footer-cta">
+        <p>Want to audit your zero-click exposure and build a citation-first content strategy?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 4: LLMO ══ -->
+  <div id="article-llmo" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">LLMO</span>
+        <h1 class="blog-title">LLMO: Large Language Model Optimisation —<br><em>The Missing Layer Between SEO and GEO</em></h1>
+        <p class="blog-subtitle">GEO helps your brand get cited in AI search results. LLMO ensures your content becomes part of what AI models actually know. Here's the distinction — and why it matters more than most SEOs realise.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · February 2026 · 16 min read</div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-strip">
+        <span class="tag">LLMO</span><span class="tag">GEO</span><span class="tag">Training Data</span>
+        <span class="tag">Semantic SEO</span><span class="tag">Entity Authority</span><span class="tag">Citation Reliability</span>
+      </div>
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#llmo-what">What is LLMO?</a></li>
+          <li><a href="#llmo-vs-geo">LLMO vs GEO vs SEO</a></li>
+          <li><a href="#llmo-how">How LLMs Ingest and Represent Content</a></li>
+          <li><a href="#llmo-tactics">LLMO Tactics That Work in 2026</a></li>
+          <li><a href="#llmo-measure">Measuring LLMO Performance</a></li>
+        </ol>
+      </div>
+      <div class="blog-body">
+        <h2 id="llmo-what">What is <em>LLMO?</em></h2>
+        <p>Large Language Model Optimisation (LLMO) is the practice of structuring content, building semantic authority, and establishing citation reliability such that large language models — ChatGPT, Claude, Gemini, Perplexity — accurately represent, reference, and recommend your brand during generation.</p>
+        <p>While GEO focuses on whether AI search retrieval systems select your content as a cited source at query time, LLMO addresses a deeper layer: whether your brand's knowledge, expertise, and positioning are baked into the model's parametric memory — the knowledge stored in its weights from training data — and whether your content is consistently retrievable and accurately citable when the model searches live at inference time.</p>
+        <div class="callout">
+          <div class="callout-label">✦ The Key Distinction</div>
+          <p>GEO influences whether content is selected for AI answers. LLMO influences whether that content becomes part of what models can reference during generation — even when no live retrieval is performed. Think of GEO as your search ranking, and LLMO as your brand's reputation inside the model itself.</p>
+        </div>
+
+        <h2 id="llmo-vs-geo">LLMO vs GEO vs SEO: <em>A Precise Comparison</em></h2>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Dimension</th><th>SEO</th><th>GEO</th><th>LLMO</th></tr></thead>
+          <tbody>
+            <tr><td>Goal</td><td>Rank pages for clicks</td><td>Be cited in AI-generated answers</td><td>Be accurately known and trusted by AI models</td></tr>
+            <tr><td>Primary surface</td><td>Google SERPs</td><td>AI Overview, ChatGPT, Perplexity</td><td>LLM parametric memory + retrieval</td></tr>
+            <tr><td>Key signals</td><td>Backlinks, relevance, freshness</td><td>Structure, E-E-A-T, entity clarity</td><td>Semantic grounding, citation reliability, source consistency</td></tr>
+            <tr><td>Measurement</td><td>Rankings, clicks, impressions</td><td>Citation rate, AI share of voice</td><td>Brand accuracy in AI responses, training data presence</td></tr>
+            <tr><td>Time horizon</td><td>Weeks to months</td><td>Months</td><td>Long-term (training cycles)</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="llmo-how">How LLMs Ingest and <em>Represent Content</em></h2>
+        <h3>Parametric Memory vs Retrieval Augmented Generation (RAG)</h3>
+        <p>Modern LLMs operate in two modes simultaneously. Parametric memory is knowledge encoded into the model's weights during training — this is what the model "knows" without looking anything up. RAG (Retrieval Augmented Generation) is when the model searches the live web at inference time to supplement its base knowledge with current information.</p>
+        <p>ChatGPT, as of early 2026, only activates web search on about 34.5% of queries — down from 46% in late 2024. This means the majority of ChatGPT responses still rely entirely on parametric memory. If your brand isn't well-represented in the training data, it simply doesn't exist for those queries.</p>
+        <h3>What Makes Content Training-Data-Worthy</h3>
+        <p>Models are trained on web crawls that prioritise: high-domain-authority pages with strong inbound link profiles; frequently cited sources across multiple independent publications; consistently accurate information that corroborates across many sources; clean, structured HTML that parsers can reliably extract; and author entities with verifiable real-world credentials. The single most powerful LLMO lever is getting your brand and expertise cited across multiple independent, high-authority sources — because that corroboration signals to both training pipelines and retrieval systems that your brand is a reliable source.</p>
+        <h3>The Citation Consistency Problem</h3>
+        <p>Brands cited in AI answers are 6.5× more likely to be cited through third-party sources than their own domain. This confirms what LLMO practitioners have observed: LLMs weight independent corroboration far more heavily than self-referential content. Your own website's content matters — but what others say about you matters more.</p>
+
+        <h2 id="llmo-tactics">LLMO Tactics That <em>Work in 2026</em></h2>
+        <h3>1. Build Corroborated Authority</h3>
+        <p>Every mention of your brand in a high-authority, independent publication strengthens your representation in AI training data. Target Wikipedia citations, academic references, government and regulatory mentions, major industry publications, and analyst reports. Quantity across diverse authoritative sources outperforms depth on your own domain.</p>
+        <h3>2. Create Training-Data-Grade Content</h3>
+        <p>Content that has historically been prioritised in training pipelines shares consistent traits: it is factually accurate and internally consistent; it contains verifiable claims with clear sources; it uses clean semantic HTML with proper heading hierarchy; it is cited by other high-authority sources; and it is written by identified, credentialed authors. Every piece of content you create should pass this filter.</p>
+        <h3>3. Establish Entity Disambiguation</h3>
+        <p>LLMs struggle with ambiguous entities — brands, people, or concepts that share names or lack clear distinguishing attributes. Ensure your brand is unambiguously defined in Wikidata, Wikipedia (if applicable), Google's Knowledge Graph, and Schema.org markup on your own site. The clearer your entity definition, the more reliably models can reference you correctly.</p>
+        <h3>4. Semantic Consistency Across the Web</h3>
+        <p>Every description of your brand, product, or expertise across all platforms should be semantically consistent. Inconsistent descriptions (you're a "fintech platform" on your website but a "financial comparison tool" on LinkedIn and a "credit card aggregator" on Crunchbase) create ambiguity that reduces model confidence in representing you accurately.</p>
+        <h3>5. GPT-5 Search Behaviour — What It Means for LLMO</h3>
+        <p>GPT-5, observed in April 2026, conducts significantly more search fan-outs per query (10+ different sub-queries) and uses "site:" operators to get information directly from brand domains rather than third-party commentary. This suggests newer LLMs are moving toward a hybrid approach: corroborated third-party authority combined with direct brand source retrieval. Both channels must be strong.</p>
+
+        <h2 id="llmo-measure">Measuring <em>LLMO Performance</em></h2>
+        <p>LLMO measurement is still maturing, but a practical 2026 framework includes:</p>
+        <ul>
+          <li><strong>Brand accuracy audit:</strong> Query 5–10 LLMs with questions about your brand, products, and expertise. Document where they are accurate, inaccurate, or silent. Run this quarterly.</li>
+          <li><strong>Citation diversity score:</strong> Track the number of distinct, high-authority domains that mention your brand. Growth in this metric predicts LLMO improvement over time.</li>
+          <li><strong>Entity confidence test:</strong> Ask multiple LLMs to define your brand and note variation. High variation signals entity ambiguity that needs correction.</li>
+          <li><strong>Training signal velocity:</strong> Monitor how quickly newly published information about your brand appears in AI model responses. Faster propagation indicates stronger entity signals.</li>
+        </ul>
+        <div class="callout">
+          <div class="callout-label">✦ The Long Game</div>
+          <p>LLMO operates on a longer time horizon than GEO or SEO. Training data pipelines update on cycles of months. The brands investing in LLMO today — building corroborated authority, consistent entity signals, and training-data-grade content — are building a compounding asset that will become their dominant AI search advantage over the next 2–3 years.</p>
+        </div>
+      </div>
+      <div class="article-footer-cta">
+        <p>Want to audit your LLMO position and build a long-term AI authority strategy?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 5: GOOGLE AI MODE ══ -->
+  <div id="article-aimode" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Google AI Mode</span>
+        <h1 class="blog-title">Google AI Mode &amp; the New SEO Rules:<br><em>When 93% of AI Queries Never Click</em></h1>
+        <p class="blog-subtitle">Google's AI Mode has fundamentally changed organic search economics. Here's what gets cited, what still drives clicks, and how to position your brand for maximum AI Mode visibility in 2026.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · March 2026 · 17 min read</div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-strip">
+        <span class="tag">AI Mode</span><span class="tag">Google AI Overviews</span><span class="tag">AI Overviews CTR</span>
+        <span class="tag">Query Fan-Out</span><span class="tag">RAG</span><span class="tag">Semantic SEO</span>
+      </div>
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#aim-what">What is Google AI Mode?</a></li>
+          <li><a href="#aim-works">How AI Mode Selects Sources</a></li>
+          <li><a href="#aim-google">Google's Own Guidance: AEO and GEO Are Still SEO</a></li>
+          <li><a href="#aim-tactics">What to Do and What to Ignore</a></li>
+          <li><a href="#aim-fintech">AI Mode for Fintech Brands</a></li>
+        </ol>
+      </div>
+      <div class="blog-body">
+        <h2 id="aim-what">What is <em>Google AI Mode?</em></h2>
+        <p>Google AI Mode is a full conversational search experience built into Google Search, powered by Gemini. Launched in March 2025 and progressively rolled out globally through 2025–2026, it allows users to ask complex, multi-part questions and receive synthesised AI-generated answers — drawing on Google's search index through a retrieval-augmented generation (RAG) architecture.</p>
+        <p>Unlike AI Overviews, which appear as a box above traditional results, AI Mode replaces the traditional SERP entirely with a conversational interface. Users can follow up, ask for clarifications, and explore topics through multi-turn dialogue — all without visiting any external website. 93% of AI Mode sessions end without a single external click.</p>
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">93%</div><div class="stat-highlight-lbl">of AI Mode sessions end without external website visits</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">92%</div><div class="stat-highlight-lbl">of AI Overview citations come from Google's top 10 results</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">3×</div><div class="stat-highlight-lbl">more AI citations for high domain-authority sites vs low DA</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">+35%</div><div class="stat-highlight-lbl">CTR for brands cited in AI Overviews vs uncited brands</div></div>
+        </div>
+
+        <h2 id="aim-works">How AI Mode <em>Selects Sources</em></h2>
+        <h3>Query Fan-Out: The Multi-Search Architecture</h3>
+        <p>When a user asks a question in AI Mode, Google doesn't execute one search. It executes multiple sub-queries — "fan-outs" — to gather information from different angles. GPT-5 in April 2026 was observed making 10+ separate sub-query fan-outs for complex questions. Google's AI Mode operates similarly. This means your content doesn't need to rank for just one keyword — it needs to rank for the constellation of related sub-queries that AI systems generate around a user's intent.</p>
+        <h3>The Retrieval + Ranking Stack</h3>
+        <p>A 2026 analysis by Dataslayer found that 92.36% of AI Overview citations come from domains ranking in Google's top 10 for that query. Domain authority is the single strongest predictor of AI citation — with high-authority domains earning roughly 3× more AI citations than lower-authority counterparts. The conclusion: Google's AI search is rooted in its existing ranking system. You cannot shortcut AI Mode visibility without first having strong traditional SEO fundamentals.</p>
+        <h3>Multimodal Content Performance</h3>
+        <p>AI Mode supports multimodal responses — it can surface images, charts, diagrams, and video content alongside text. Content enriched with properly labelled images, structured data for visual elements, and video transcripts indexed by Google performs better in AI Mode than text-only pages, particularly for how-to and educational queries.</p>
+
+        <h2 id="aim-google">Google's Own Guidance: <em>AEO and GEO Are Still SEO</em></h2>
+        <p>In May 2026, Google published a new documentation page titled "Optimising your website for generative AI features on Google Search." It is Google's most direct statement yet on AI search optimisation — and it contains several important clarifications that push back on vendor hype in the GEO/AEO space.</p>
+        <h3>What Google Says to Ignore</h3>
+        <ul>
+          <li><strong>llms.txt files:</strong> Google says you don't need to create machine-readable AI files or special markup to appear in generative AI search.</li>
+          <li><strong>Content chunking:</strong> Google's systems can "understand the nuance of multiple topics on a page and show the relevant piece to users." Breaking content into tiny AI-readable chunks is unnecessary for Google.</li>
+          <li><strong>AI-specific rewriting:</strong> Rewriting content specifically for AI extraction without improving its value for human readers is not a recommended tactic.</li>
+          <li><strong>Special schema for AI:</strong> No additional schema beyond standard structured data is required to appear in Google's generative AI features.</li>
+        </ul>
+        <h3>What Google Says Matters</h3>
+        <p>Google's guide confirms that its AI features are "rooted in our core Search ranking and quality systems." Foundational SEO — technical health, quality content, E-E-A-T, structured data, and link authority — is the foundation of AI search visibility. Google explicitly states: "From Google Search's perspective, optimising for generative AI search is optimising for the search experience, and thus still SEO."</p>
+        <div class="callout tip">
+          <div class="callout-label">💡 The Agentic Layer</div>
+          <p>Google's guide includes a new section on "agentic experiences" — AI agents that browse the web autonomously on behalf of users. Google frames this as "forward-looking rather than urgent" for most businesses — but for fintech brands where AI agents might compare rates, check loan eligibility, or research credit cards on a user's behalf, preparing structured, machine-readable product data is a non-trivial early-mover opportunity.</p>
+        </div>
+
+        <h2 id="aim-tactics">What to Do and <em>What to Ignore</em></h2>
+        <h3>Do: Double Down on Traditional SEO Fundamentals</h3>
+        <p>Core Web Vitals, crawlability, indexing, internal linking, quality content, and backlink authority are the foundation of AI Mode visibility. Brands that rank well in Google's traditional results will be cited in AI Mode. There is no shortcut around this foundation.</p>
+        <h3>Do: Implement E-E-A-T at Scale</h3>
+        <p>Experience, Expertise, Authoritativeness, and Trustworthiness are now even more critical for AI Mode than for traditional search. Author entity pages, credentials, bylines, expert review notes, and original research all signal E-E-A-T to Google's quality systems — and AI Mode inherits these quality signals directly.</p>
+        <h3>Do: Write Answer-First Content</h3>
+        <p>The first sentence of any informational page should directly answer the primary question. AI Mode's retrieval system looks for "quick validation" — content that confirms the answer immediately before elaborating. Section headers should be questions or clear topic statements. Every section should be able to stand alone as a complete answer to its implied question.</p>
+        <h3>Ignore: Content Chunking for AI</h3>
+        <p>Google has explicitly stated that chunking content into small pieces for AI readability is unnecessary. Write for human readers; Google's systems will handle the extraction.</p>
+        <h3>Ignore: llms.txt Files</h3>
+        <p>Despite significant industry chatter, Google has confirmed these files receive no special treatment in Google Search. For non-Google AI platforms, the evidence of impact remains limited.</p>
+
+        <h2 id="aim-fintech">AI Mode for <em>Fintech Brands</em></h2>
+        <p>For financial services brands operating at scale, AI Mode creates both a threat and an asymmetric opportunity. The threat: informational content explaining financial concepts, eligibility criteria, or product features is highly vulnerable to AI Overview cannibalisation. The opportunity: comparison queries — "best credit card for travel rewards India", "which home loan has lowest processing fee" — require specific, current, verified data that AI struggles to synthesise accurately from generic sources.</p>
+        <p>Brands like BankBazaar that maintain live, structured, regularly updated product data — rates, fees, eligibility, features — are naturally positioned to be the authoritative cited source for commercial intent AI Mode queries, precisely because this data requires real-time accuracy that only dedicated fintech data teams can provide.</p>
+        <div class="callout">
+          <div class="callout-label">✦ The Strategic Imperative</div>
+          <p>AI Mode is not the end of organic search — it's a restructuring. The organic click pie is smaller for informational content and larger for commercial content. Fintech brands that shift content investment accordingly, double down on data quality, and build AI citation authority will emerge from this transition with stronger, more defensible search positions than they had before AI Mode existed.</p>
+        </div>
+      </div>
+      <div class="article-footer-cta">
+        <p>Want to audit your AI Mode readiness and build a citation-first SEO strategy?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 6: BRAND AUTHORITY ══ -->
+  <div id="article-brandauthority" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Brand Authority</span>
+        <h1 class="blog-title">Brand Authority Is Now the<br><em>Primary Filter for AI Inclusion</em></h1>
+        <p class="blog-subtitle">100% of digital marketing practitioners surveyed in 2026 agree trust and credibility signals are growing more important — because AI systems now use brand authority as their primary filter for deciding which sources to surface. Here's the full playbook.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · April 2026 · 14 min read</div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-strip">
+        <span class="tag">Brand Authority</span><span class="tag">Digital PR</span><span class="tag">E-E-A-T</span>
+        <span class="tag">Trust Signals</span><span class="tag">AI Citation</span><span class="tag">Domain Authority</span>
+      </div>
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#ba-shift">The Trust Shift in AI Search</a></li>
+          <li><a href="#ba-signals">What AI Systems Use as Trust Signals</a></li>
+          <li><a href="#ba-pr">Digital PR as the Primary AI Lever</a></li>
+          <li><a href="#ba-build">The Brand Authority Building Framework</a></li>
+          <li><a href="#ba-measure">Measuring Brand Authority in the AI Era</a></li>
+        </ol>
+      </div>
+      <div class="blog-body">
+        <h2 id="ba-shift">The Trust Shift <em>in AI Search</em></h2>
+        <p>In traditional SEO, trust was one ranking factor among many — important, but balanced against relevance, freshness, and user signals. In AI search, trust has become the primary filter. AI systems don't just rank content — they decide which sources to include in answers at all. Brands they don't trust are simply absent.</p>
+        <p>A 2026 Goodfirms survey of 100+ digital marketing practitioners across 20+ countries found unanimous agreement: trust and credibility signals are growing more important as AI systems take on the work of deciding which sources to surface. This isn't a marginal shift — it's a structural change in how search value is allocated.</p>
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">100%</div><div class="stat-highlight-lbl">of marketers agree trust is a growing AI citation factor (2026)</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">6.5×</div><div class="stat-highlight-lbl">more likely to be cited via third-party sources than own domain</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">3×</div><div class="stat-highlight-lbl">more AI citations for high-DA domains vs low-DA domains</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">19%</div><div class="stat-highlight-lbl">of marketers list brand authority as a named strategic priority — despite 81% doing digital PR routinely</div></div>
+        </div>
+
+        <h2 id="ba-signals">What AI Systems Use <em>as Trust Signals</em></h2>
+        <h3>Domain Authority (DA) — Still Paramount</h3>
+        <p>SE Ranking's 2026 analysis confirmed domain authority as the single strongest predictor of AI citation — with high-DA domains earning roughly 3× more AI citations than lower-DA counterparts. The mechanism is straightforward: AI systems are trained on web crawls that weight high-DA pages more heavily, and retrieval systems use authority signals to filter candidate sources. Building domain authority through quality backlinks and digital PR remains the most reliable AI citation lever available.</p>
+        <h3>Third-Party Corroboration</h3>
+        <p>AI systems heavily weight independent corroboration. Brands cited across multiple high-authority, unaffiliated sources are far more likely to be included in AI answers than brands that only appear on their own domain. This is why digital PR — securing genuine earned media in authoritative publications — has become the single most important strategy for AI visibility, according to current industry consensus.</p>
+        <h3>E-E-A-T Signals</h3>
+        <p>Google's E-E-A-T framework (Experience, Expertise, Authoritativeness, Trustworthiness) was designed for human quality raters but is now the primary framework AI systems use to evaluate sources. Every E-E-A-T signal you build — author credentials, bylines, expert review notes, original data, factual accuracy, transparent sourcing — directly strengthens your AI trust profile.</p>
+        <h3>Entity Consistency</h3>
+        <p>Inconsistent brand information across platforms creates entity ambiguity that reduces AI confidence. Consistent NAP (Name, Address, Phone), consistent brand descriptions, consistent author attribution, and consistent product/service descriptions across all platforms are fundamental trust hygiene for AI systems.</p>
+
+        <h2 id="ba-pr">Digital PR as <em>the Primary AI Lever</em></h2>
+        <p>Digital PR — earning genuine editorial coverage in high-authority publications — has emerged as the most direct lever for AI search visibility. The logic: AI systems that rely on retrieval from the live web, and AI training pipelines that process web crawl data, both prioritise sources that are frequently cited by authoritative, independent publishers.</p>
+        <h3>Where to Target for Maximum AI Impact</h3>
+        <ul>
+          <li><strong>Tier 1 national media:</strong> Major newspapers, national TV and radio websites. These carry the highest authority signals.</li>
+          <li><strong>Industry verticals:</strong> Authoritative publications in your specific industry (for fintech: Economic Times, Mint, Moneycontrol, Bloomberg India). Industry-specific authority compounds over time.</li>
+          <li><strong>Government and regulatory sources:</strong> Mentions or citations in official government publications, regulatory filings, or RBI/SEBI reports carry exceptional trust weight.</li>
+          <li><strong>Academic and research citations:</strong> Being cited in academic papers or research reports creates high-durability authority signals that persist through training data cycles.</li>
+          <li><strong>Analyst and research reports:</strong> Appearances in McKinsey, Bain, BCG, or sector-specific analyst reports are among the highest-value citation placements for AI trust building.</li>
+        </ul>
+        <h3>What Makes a PR Pitch AI-Ready</h3>
+        <p>Newsworthy, data-backed pitches consistently outperform opinion-based or brand-promotion pitches for earning editorial coverage. Original research — proprietary data, platform-specific benchmarks, user behaviour studies — is the highest-value pitch asset because it provides journalists with exclusive, citable information they can't find elsewhere.</p>
+
+        <h2 id="ba-build">The Brand Authority <em>Building Framework</em></h2>
+        <h3>Layer 1: Own Your Entity (Months 1–2)</h3>
+        <p>Claim and verify your Google Knowledge Panel. Build or improve your Wikidata entry with key entity attributes. Ensure consistent brand descriptions across LinkedIn, Crunchbase, industry directories, and social platforms. Establish author entity pages for your key content creators.</p>
+        <h3>Layer 2: Build Corroborated Authority (Months 2–6)</h3>
+        <p>Execute monthly digital PR campaigns targeting Tier 1 publications. Publish original research quarterly — proprietary surveys, platform-specific data, industry benchmarks. Pursue podcast and speaking appearances in your industry vertical. Monitor unlinked brand mentions and convert to linked citations through proactive outreach.</p>
+        <h3>Layer 3: Scale and Compound (Month 6+)</h3>
+        <p>Track AI citation rate across ChatGPT, Gemini, and Perplexity for your top 20 target queries. Identify topics where you are not being cited despite having strong content — these represent gaps in corroborated authority, not content gaps. Allocate digital PR resources to fill authority gaps by topic cluster, not just by domain.</p>
+
+        <h2 id="ba-measure">Measuring Brand Authority <em>in the AI Era</em></h2>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Metric</th><th>What It Measures</th><th>Tool / Method</th></tr></thead>
+          <tbody>
+            <tr><td>AI citation rate</td><td>% of target queries where your brand is cited</td><td>Manual AI query monitoring; AI citation tools</td></tr>
+            <tr><td>Domain authority growth</td><td>Overall link authority trajectory</td><td>Ahrefs DR / Moz DA</td></tr>
+            <tr><td>Citation diversity</td><td>Number of distinct high-DA referring domains</td><td>Ahrefs / SEMrush referring domains report</td></tr>
+            <tr><td>Branded search volume</td><td>Awareness and brand recall proxy</td><td>Google Search Console branded query data</td></tr>
+            <tr><td>AI share of voice</td><td>Brand presence across AI answers relative to competitors</td><td>Manual competitive AI monitoring</td></tr>
+            <tr><td>Entity accuracy score</td><td>Consistency of how AI describes your brand</td><td>Multi-LLM brand description audit</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout">
+          <div class="callout-label">✦ The Compounding Effect</div>
+          <p>Brand authority compounds in a way that keyword rankings don't. Each piece of high-authority coverage strengthens your entity signals, which increases AI citation rate, which increases branded search and awareness, which drives more direct traffic and conversion — independent of any individual keyword ranking. This is why the brands winning in AI search in 2026 are the ones that started building genuine authority 2–3 years ago. The second-best time to start is today.</p>
+        </div>
+      </div>
+      <div class="article-footer-cta">
+        <p>Want to build a compounding brand authority strategy for AI search visibility?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 7: AGENTIC SEO ══ -->
+  <div id="article-agenticseo" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Agentic SEO</span>
+        <h1 class="blog-title">Agentic SEO: Optimising for AI Agents,<br><em>Browser Bots &amp; Autonomous Search</em></h1>
+        <p class="blog-subtitle">AI agents now browse the web on behalf of users — researching, comparing, and deciding without any human ever seeing your page. Google has included agentic guidance in its official documentation. Here's what Agentic SEO means and how to prepare.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · May 2026 · 16 min read</div>
+          </div>
+        </div>
+      </div>
+      <div class="tag-strip">
+        <span class="tag">Agentic SEO</span><span class="tag">AI Agents</span><span class="tag">Browser Automation</span>
+        <span class="tag">Structured Data</span><span class="tag">Machine-Readable</span><span class="tag">UCP</span>
+      </div>
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#ag-what">What is Agentic SEO?</a></li>
+          <li><a href="#ag-agents">How AI Agents Browse the Web</a></li>
+          <li><a href="#ag-google">Google's Official Agentic Guidance</a></li>
+          <li><a href="#ag-fintech">Agentic Search in Fintech: The Stakes</a></li>
+          <li><a href="#ag-tactics">Agentic SEO Tactics for 2026</a></li>
+          <li><a href="#ag-future">The Agentic Future of Search</a></li>
+        </ol>
+      </div>
+      <div class="blog-body">
+        <h2 id="ag-what">What is <em>Agentic SEO?</em></h2>
+        <p>Agentic SEO is the practice of optimising websites and content to be discoverable, interpretable, and trustworthy for AI agents — autonomous software systems that browse the web, gather information, compare options, and make decisions on behalf of human users.</p>
+        <p>In 2026, AI agents are no longer a speculative future. ChatGPT's operator-mode agents, Google's browser-integrated Gemini agents, Microsoft Copilot's agentic features, and numerous third-party AI agent platforms are actively browsing websites, reading product pages, comparing financial products, and synthesising purchase recommendations — all without any human user ever loading a page in a browser.</p>
+        <div class="callout warning">
+          <div class="callout-label">⚠ The Invisible Visit Problem</div>
+          <p>When an AI agent visits your product page, it doesn't appear in your standard analytics as a human session. It may arrive as a bot crawl, be blocked by JavaScript-dependent content, or access only machine-readable structured data. Your conversion funnel was built for humans. Agentic search requires you to build a parallel discovery layer for machines.</p>
+        </div>
+
+        <h2 id="ag-agents">How AI Agents <em>Browse the Web</em></h2>
+        <h3>What Agents Are Doing Right Now</h3>
+        <p>GPT-5, observed in April 2026, conducts 10+ search fan-outs per complex query and uses "site:" operators to pull information directly from brand domains. When a user asks ChatGPT to "find the best home loan in India with the lowest interest rate," GPT-5 may execute queries like: "site:bankbazaar.com home loan rates 2026", "HDFC home loan interest rate May 2026", "SBI home loan eligibility criteria", and several more — synthesising the answers into a single recommendation.</p>
+        <h3>The Content Agents Can and Cannot Read</h3>
+        <p>AI agents and web crawlers can reliably read: HTML text content with semantic structure; structured data (JSON-LD schema markup); server-side rendered page content; sitemap XML files; and robots.txt directives. They struggle with: client-side-only JavaScript-rendered content; dynamically loaded data that requires user interaction to trigger; content hidden behind authentication walls; and heavily Flash-dependent or non-standard web formats. A product page that requires JavaScript to render its interest rates is invisible to an AI agent doing product research on behalf of a user.</p>
+        <h3>Authority Signals Agents Use</h3>
+        <p>GPT-5's search behaviour confirms AI agents also look for authority signals specific to the query type. For "best nursing programs," the fan-outs included "NCLEX pass rates" and "CCNE accreditation." For "best SEO agency," they looked for Search Engine Land award winners. Agents are not just retrieving data — they are applying contextually appropriate authority heuristics to evaluate which sources and which data points to trust.</p>
+
+        <h2 id="ag-google">Google's Official <em>Agentic Guidance</em></h2>
+        <p>In May 2026, Google's new AI search documentation included a dedicated section on "agentic experiences" — the first time Google has officially addressed browser agents in its SEO documentation. Google frames agentic optimisation as "optional" and "forward-looking" rather than urgent for most businesses. But the inclusion signals that agentic search is now part of Google's strategic roadmap.</p>
+        <h3>Google's Agentic Recommendations</h3>
+        <p>Google's guidance for sites where agentic access is relevant includes: ensuring key content is accessible to automated agents without JavaScript-only rendering; providing clear, structured, machine-readable data for products and services; and considering how agent-accessible structured data can support task completion for users who delegate research to AI assistants.</p>
+        <h3>UCP (User-Centric Platform) Signals</h3>
+        <p>Google's documentation references "UCP" as a framework for agent-accessible web experiences. While the technical specification is still evolving, the principle is consistent with existing structured data best practices: provide enough machine-readable context that an agent can understand what you offer, at what terms, and whether it's a match for the user's need — without requiring a full browser session.</p>
+
+        <h2 id="ag-fintech">Agentic Search in <em>Fintech: The Stakes</em></h2>
+        <p>For fintech comparison platforms, agentic search is not a future consideration — it's a present reality with significant commercial implications. Consider this user journey: a user asks their AI assistant to "find the best credit card for international travel with no forex markup and a good lounge access benefit." The AI agent researches across multiple sources, synthesises a recommendation, and the user applies — never visiting a comparison website directly.</p>
+        <p>In this world, the comparison platform that wins is not the one with the best UX or the most SEO-optimised landing page. It's the one whose product data is most accurate, most machine-readable, most structured, and most efficiently retrievable by the agent conducting the research. Rate accuracy, data freshness, schema completeness, and server-side rendering of product specifications become the primary competitive levers.</p>
+
+        <h2 id="ag-tactics">Agentic SEO <em>Tactics for 2026</em></h2>
+        <h3>1. Server-Side Render Critical Product Data</h3>
+        <p>Interest rates, fees, eligibility criteria, product features, and comparison data must be present in the initial HTML response — not loaded via client-side JavaScript. Use server-side rendering (SSR) or static site generation for product data pages. An AI agent that cannot read your interest rate table cannot include your product in its recommendation.</p>
+        <h3>2. Implement Comprehensive Product Schema</h3>
+        <p>Use JSON-LD structured data to mark up all product data: FinancialProduct schema for credit cards, loans, and insurance products; Offer schema for current rates and fees; Review schema for user ratings; and FAQPage schema for eligibility and feature explanations. Machine-readable structured data is an agent's preferred input format.</p>
+        <h3>3. Ensure robots.txt Does Not Block AI Crawlers</h3>
+        <p>Review your robots.txt for unintended blocks on legitimate AI crawlers. Consider allowing GPTBot, ClaudeBot, Googlebot (for Gemini agents), and Bingbot (for Copilot) access to product pages. Some brands are experimenting with blocking AI crawlers for training data purposes — but this also blocks agentic retrieval, which has a direct commercial cost.</p>
+        <h3>4. Publish Machine-Readable Rate and Feature Tables</h3>
+        <p>Maintain HTML tables (not image-based or PDF-only) for current rates, fees, and feature comparisons. Update these on a schedule aligned with actual product changes. Freshness matters: an AI agent asked for "current home loan rates" will deprioritise stale data sources.</p>
+        <h3>5. Build Authority Signals Relevant to Your Product Category</h3>
+        <p>As GPT-5's behaviour demonstrates, agents apply category-specific authority heuristics. For fintech products, this includes: RBI registration and compliance signals, award recognitions from credible financial media, consumer trust ratings, and mentions in regulatory filings or official government resources. Identify the authority signals agents look for in your specific product category and proactively build them.</p>
+
+        <h2 id="ag-future">The Agentic Future <em>of Search</em></h2>
+        <p>Agentic SEO is early-stage but accelerating. The brands investing in machine-readable product data, structured data completeness, and agentic authority signals today are building infrastructure that will become a decisive competitive advantage as AI agents handle an increasing share of user research and product discovery.</p>
+        <p>The transition from "search engine optimisation" to "agent optimisation" does not require abandoning everything learned in traditional SEO. Authority, accuracy, structure, and trust remain the foundational signals. What changes is who — or what — is consuming your content, and what they need from it. Build for the agent browsing your product page on a user's behalf, and you will build something better for human visitors too.</p>
+        <div class="callout">
+          <div class="callout-label">✦ The Agentic Mandate</div>
+          <p>Agentic SEO is not optional for brands in high-consideration product categories. If an AI agent is researching credit cards, home loans, mutual funds, or insurance on behalf of a user, and your product data is not machine-readable, accurate, and structured — you are not in the consideration set. The conversion never happens. The traffic never appears. And you never know what you missed.</p>
+        </div>
+      </div>
+      <div class="article-footer-cta">
+        <p>Want to audit your agentic readiness and structured data completeness?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 8: SOCIAL SEARCH ══ -->
+  <div id="article-socialsearch" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Social Search</span>
+        <h1 class="blog-title">Social SEO: Why TikTok, Instagram <br><em>& Reddit Are Now Search Engines</em></h1>
+        <p class="blog-subtitle">Search no longer starts on a search engine for a huge share of users. Here's how discovery has fragmented across social platforms — and what optimising for it actually looks like.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · August 2026 · 9 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">Social SEO</span><span class="tag">TikTok Search</span><span class="tag">Reddit</span>
+        <span class="tag">Discovery</span><span class="tag">UGC</span><span class="tag">Community Content</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#ss-shift">The Shift Away from Traditional Search</a></li>
+          <li><a href="#ss-platforms">How Each Platform Is Becoming a Search Engine</a></li>
+          <li><a href="#ss-reddit">The Reddit Effect on Google Rankings</a></li>
+          <li><a href="#ss-tactics">Social SEO Tactics That Work</a></li>
+          <li><a href="#ss-measure">Measuring Social Search Performance</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">~40%</div><div class="stat-highlight-lbl">of Gen Z prefers TikTok/Instagram over Google for discovery search</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">6×</div><div class="stat-highlight-lbl">more Reddit citations appearing in Google's top results since 2023</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">2B+</div><div class="stat-highlight-lbl">monthly searches performed directly inside TikTok</div></div>
+        </div>
+
+        <h2 id="ss-shift">The Shift Away from <em>Traditional Search</em></h2>
+        <p>For a large and growing segment of users, "search" no longer means opening a search engine. It means typing a question into TikTok's search bar to find a review, scrolling Instagram Explore for product comparisons, or searching a brand name plus "reddit" to find an unfiltered opinion. This isn't users abandoning search — it's search fragmenting across platforms that each serve a different kind of trust.</p>
+        <p>The common thread: users increasingly want content from people, not brands. A polished landing page competes poorly against a short video of someone actually using the product, or a Reddit thread where real customers argue about which option is genuinely better.</p>
+
+        <div class="callout">
+          <div class="callout-label">💡 Key Definition</div>
+          <p>Social SEO is the practice of optimising content — video, captions, community posts — to be discoverable through each platform's own internal search and recommendation systems, rather than relying solely on traditional web search engines to drive discovery.</p>
+        </div>
+
+        <h2 id="ss-platforms">How Each Platform Is <em>Becoming a Search Engine</em></h2>
+        <h3>TikTok</h3>
+        <p>TikTok's search bar behaves increasingly like Google's — autocomplete suggestions, keyword-relevant results, and even AI-generated summaries for some queries. Optimising here means treating your video captions, on-screen text, and spoken audio as indexable content, since TikTok's algorithm reads all three.</p>
+        <h3>Instagram</h3>
+        <p>Instagram's Explore and Search increasingly favour keyword-rich captions and alt text over hashtags alone. Product tags, location tags, and collaborative posts all feed into what content surfaces for a given query.</p>
+        <h3>Reddit &amp; Quora</h3>
+        <p>These aren't new, but their weight in Google's own results has grown sharply. Users trust community-sourced answers more than brand content for comparison and "is X worth it" queries — and Google's ranking systems have adjusted to reflect that trust.</p>
+        <h3>YouTube</h3>
+        <p>Still the second-largest search engine globally. Long-form explainer and comparison videos with detailed, keyword-aligned titles and descriptions continue to rank both within YouTube and inside Google's video carousels.</p>
+
+        <h2 id="ss-reddit">The Reddit Effect on <em>Google Rankings</em></h2>
+        <p>Since Google's 2023–2024 core updates, Reddit and other community-forum threads have appeared dramatically more often in top organic results — particularly for comparison and recommendation queries. This reflects a broader signal: Google is rewarding content with visible, first-hand community consensus over single-author brand content for exactly the queries brands used to own.</p>
+        <div class="callout warning">
+          <div class="callout-label">⚠ What This Means for Brands</div>
+          <p>You can't directly "optimise" a Reddit thread the way you optimise your own page. What you can do is participate authentically in relevant communities, encourage genuine customer discussion, and make sure your product information is accurate enough that when Reddit users do discuss it, the consensus works in your favour.</p>
+        </div>
+
+        <h2 id="ss-tactics">Social SEO <em>Tactics That Work</em></h2>
+        <ul>
+          <li><strong>Write captions like search queries:</strong> Front-load the specific question or comparison your content answers, in plain language — not hashtags alone.</li>
+          <li><strong>Use on-screen and spoken text deliberately:</strong> Platforms increasingly transcribe and index audio and burned-in text, so say and show your key terms clearly.</li>
+          <li><strong>Build a genuine community presence:</strong> Participate in relevant subreddits and forums as a knowledgeable voice, not just a promoter — this is what earns favourable mentions over time.</li>
+          <li><strong>Repurpose long-form content into short-form search bait:</strong> Turn your best comparison or "how to" articles into 60-second videos answering the exact same question.</li>
+          <li><strong>Track branded + platform search volume:</strong> Monitor how often your brand is searched directly within TikTok and Instagram, not just Google Search Console.</li>
+        </ul>
+
+        <h2 id="ss-measure">Measuring <em>Social Search Performance</em></h2>
+        <p>Traditional organic traffic reports miss most of this activity entirely, since it happens inside each platform. Track platform-native search impressions and saves (a stronger discovery signal than likes), branded search volume across platforms, and referral traffic from social apps to your site as a blended view of social search health.</p>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>Search hasn't shrunk — it's multiplied. The brands winning discovery in 2026 treat every platform where their audience asks questions as a search engine worth optimising for, not just a distribution channel for content built elsewhere.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to build a social search strategy alongside your core SEO?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 9: PROGRAMMATIC SEO ══ -->
+  <div id="article-programmaticseo" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Programmatic SEO</span>
+        <h1 class="blog-title">Programmatic SEO at Scale in 2026:<br><em>Thousands of Pages Without Getting Penalised</em></h1>
+        <p class="blog-subtitle">Generating landing pages from structured data is one of the highest-leverage SEO plays available — and one of the fastest ways to trigger a quality update. Here's how to scale it responsibly.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · August 2026 · 11 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">Programmatic SEO</span><span class="tag">Scaled Content</span><span class="tag">Templates</span>
+        <span class="tag">Helpful Content</span><span class="tag">Internal Linking</span><span class="tag">Indexation</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#pseo-what">What Programmatic SEO Actually Is</a></li>
+          <li><a href="#pseo-risk">Why Most Programmatic SEO Gets Penalised</a></li>
+          <li><a href="#pseo-framework">The Quality-First Scaling Framework</a></li>
+          <li><a href="#pseo-linking">Internal Linking for Generated Pages</a></li>
+          <li><a href="#pseo-monitor">Monitoring Indexation Health</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">15K+</div><div class="stat-highlight-lbl">pages managed in a single programmatic SEO deployment</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">8,000+</div><div class="stat-highlight-lbl">duplicate URLs resolved via canonical restructuring in one project</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">18%</div><div class="stat-highlight-lbl">organic traffic recovered within 60 days after cleanup</div></div>
+        </div>
+
+        <h2 id="pseo-what">What Programmatic SEO <em>Actually Is</em></h2>
+        <p>Programmatic SEO means generating landing pages at scale from a structured data source and a page template — city + service pages, product comparison pages, IFSC/branch pages, or "best X for Y" combinations. Done well, it captures long-tail search demand that would take years to cover manually. Done poorly, it produces thousands of near-duplicate, low-value pages that Google's quality systems are specifically built to demote.</p>
+
+        <h2 id="pseo-risk">Why Most Programmatic SEO <em>Gets Penalised</em></h2>
+        <p>The failure pattern is consistent: a template with a swapped city or product name, but otherwise identical content, gets published across thousands of URLs. Google's helpful content systems are explicitly designed to detect this pattern — pages that exist primarily to rank rather than to serve a genuinely distinct user need.</p>
+        <div class="callout warning">
+          <div class="callout-label">⚠ The Core Test</div>
+          <p>Before publishing a programmatic page, ask: if a user landed here from search, would they get something they couldn't get from any other page in this set? If the honest answer is "not really," the page needs more unique data — or shouldn't exist.</p>
+        </div>
+
+        <h2 id="pseo-framework">The Quality-First <em>Scaling Framework</em></h2>
+        <ul>
+          <li><strong>Unique data per page:</strong> Each page should surface a genuinely distinct data point — live pricing, local availability, specific eligibility criteria — not just a swapped noun.</li>
+          <li><strong>Template variation by data depth:</strong> Build 2–3 template variants so pages with richer underlying data get correspondingly richer layouts, rather than forcing thin data into a full-length template.</li>
+          <li><strong>Minimum viable content threshold:</strong> Set a data-completeness bar a page must clear before it's generated and published at all — don't auto-publish every possible combination.</li>
+          <li><strong>Human-reviewed template copy:</strong> The template's non-variable sections should be written and reviewed like any other page, not generated on autopilot.</li>
+        </ul>
+
+        <h2 id="pseo-linking">Internal Linking <em>for Generated Pages</em></h2>
+        <p>A clear hub-and-spoke structure matters more at scale than on a handful of manually built pages. Build category hub pages that link out to relevant generated pages, and have generated pages link back to their hub and to genuinely related siblings — not an arbitrary "related pages" block. This gives crawlers a sane path through a large page set and helps distribute authority to pages that would otherwise sit several clicks deep.</p>
+
+        <h2 id="pseo-monitor">Monitoring <em>Indexation Health</em></h2>
+        <p>On a large programmatic deployment, indexation ratio is the earliest warning signal available. Track indexed-vs-crawled-not-indexed in Search Console by page template, not just site-wide — a rising gap for one specific template is a direct signal that template's pages aren't clearing Google's quality bar, well before rankings or traffic show the damage.</p>
+        <div class="compare-table-wrap"><table class="compare-table">
+          <thead><tr><th>Signal</th><th>What It Indicates</th><th>Where to Check</th></tr></thead>
+          <tbody>
+            <tr><td>Rising "crawled – not indexed"</td><td>Template quality below Google's bar</td><td>Search Console Pages report, filtered by URL pattern</td></tr>
+            <tr><td>Falling avg. time on page (by template)</td><td>Pages not matching user intent</td><td>GA4, segmented by template</td></tr>
+            <tr><td>Cannibalisation across near-duplicate pages</td><td>Insufficient differentiation between pages</td><td>Search Console query-to-page mapping</td></tr>
+            <tr><td>Sudden ranking drop across a template</td><td>Possible quality update impact on that page type</td><td>Rank tracking segmented by URL pattern</td></tr>
+          </tbody>
+        </table></div>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>Programmatic SEO isn't inherently risky — treating scale as a substitute for genuine usefulness is. The teams still winning with this approach in 2026 are the ones who scaled the data and the templates, but never scaled past the question of whether each page actually helps someone.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to scale programmatic SEO without risking a quality penalty?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 10: FIRST-PARTY DATA ══ -->
+  <div id="article-firstpartydata" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Privacy-First Marketing</span>
+        <h1 class="blog-title">First-Party Data & Privacy-First Marketing:<br><em>Winning Without Third-Party Cookies</em></h1>
+        <p class="blog-subtitle">Third-party cookies are effectively gone and privacy regulation keeps tightening. Here's the practical, non-theoretical playbook for building a first-party data strategy that actually holds up.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · August 2026 · 9 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">First-Party Data</span><span class="tag">Privacy</span><span class="tag">Zero-Party Data</span>
+        <span class="tag">CDP</span><span class="tag">Consent Management</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#fpd-landscape">The Privacy Landscape in 2026</a></li>
+          <li><a href="#fpd-vs">First-Party vs Zero-Party Data</a></li>
+          <li><a href="#fpd-collect">Building a First-Party Data Strategy</a></li>
+          <li><a href="#fpd-activate">Activating the Data You Collect</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">0</div><div class="stat-highlight-lbl">third-party cookies supported by default in most major browsers</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">140+</div><div class="stat-highlight-lbl">countries now with some form of active data protection law</div></div>
+        </div>
+
+        <h2 id="fpd-landscape">The Privacy Landscape <em>in 2026</em></h2>
+        <p>Third-party cookie deprecation, App Tracking Transparency, and an expanding patchwork of data protection regulation (GDPR, India's DPDP Act, and dozens of others) have permanently changed how marketers can identify and retarget users across the web. The brands still growing paid and personalised marketing performance made this shift years, not months, ago.</p>
+
+        <h2 id="fpd-vs">First-Party <em>vs Zero-Party Data</em></h2>
+        <p>First-party data is information you collect from a user's behaviour on your own properties — purchase history, on-site activity, email engagement. Zero-party data is what a user tells you directly and intentionally — preferences stated in a quiz, a survey, or an account setting. Both are collected with consent and owned by you; both are becoming central to targeting and personalisation that used to rely on third-party tracking.</p>
+        <div class="callout">
+          <div class="callout-label">💡 Key Distinction</div>
+          <p>Zero-party data is often higher-quality signal for personalisation than inferred first-party behaviour — a user who tells you they're shopping for a home loan is a stronger signal than a user whose browsing history merely suggests it.</p>
+        </div>
+
+        <h2 id="fpd-collect">Building a <em>First-Party Data Strategy</em></h2>
+        <ul>
+          <li><strong>Value-exchange collection:</strong> Give users a clear reason to share data — personalised recommendations, saved comparisons, early access — rather than asking for information with no visible benefit.</li>
+          <li><strong>Progressive profiling:</strong> Collect data incrementally across multiple touchpoints instead of one long form, reducing drop-off while still building a complete profile over time.</li>
+          <li><strong>Consent as infrastructure, not a checkbox:</strong> A proper consent management platform lets you track what each user has actually agreed to, which is essential once you start activating that data across channels.</li>
+          <li><strong>Server-side tracking:</strong> Move key conversion events to server-side tagging (via a CDP or tag management server) to reduce dependency on client-side scripts that ad blockers and browser privacy settings increasingly strip out.</li>
+        </ul>
+
+        <h2 id="fpd-activate">Activating <em>the Data You Collect</em></h2>
+        <p>Collected data only has value once it's activated. Feed first-party data into platform "advantage/enhanced" audience-matching tools (which use hashed data without exposing raw PII), build lookalike and retention audiences from your own CRM data, and personalise on-site experience and email using the same profile — so a user's stated preferences carry across every channel they encounter your brand in, not just the one where they gave you the data.</p>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>Privacy-first marketing isn't a constraint to work around — it's a forcing function toward marketing that's more relevant and less wasteful. The brands treating consented first-party data as their core targeting asset, rather than a stopgap for lost third-party tracking, are the ones building a durable advantage.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to build a first-party data and privacy-first marketing strategy?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 11: AI CONTENT DETECTION & E-E-A-T DEFENCE ══ -->
+  <div id="article-aicontentdetection" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Content Authenticity</span>
+        <h1 class="blog-title">AI Content Detection & E-E-A-T Defence:<br><em>Proving Your Content Is Genuinely Human-Led</em></h1>
+        <p class="blog-subtitle">AI writing tools are now part of most content workflows. Here's how to use them without triggering the quality signals Google's systems are specifically built to catch.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · August 2026 · 8 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">AI Content</span><span class="tag">E-E-A-T</span><span class="tag">Helpful Content</span>
+        <span class="tag">Editorial Process</span><span class="tag">Content Quality</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#acd-stance">Google's Actual Stance on AI Content</a></li>
+          <li><a href="#acd-signals">What Actually Gets Content Flagged</a></li>
+          <li><a href="#acd-workflow">A Responsible AI-Assisted Workflow</a></li>
+          <li><a href="#acd-experience">Proving Genuine Experience</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <h2 id="acd-stance">Google's Actual Stance <em>on AI Content</em></h2>
+        <p>Google has been consistent on this point: it doesn't penalise content for being AI-assisted, it penalises content that's unhelpful, regardless of how it was produced. The confusion comes from the fact that AI-generated content, published without meaningful editing or first-hand input, tends to score poorly on exactly the signals Google's helpful content systems were built to detect — generic phrasing, no original insight, no evidence of genuine experience.</p>
+
+        <div class="callout">
+          <div class="callout-label">💡 The Real Rule</div>
+          <p>The question was never "was AI used?" It's "does this add something a reader couldn't get from a dozen other pages on the same topic?" AI-assisted content can pass that test easily. Unedited AI output published at volume almost never does.</p>
+        </div>
+
+        <h2 id="acd-signals">What Actually <em>Gets Content Flagged</em></h2>
+        <ul>
+          <li><strong>Generic, interchangeable phrasing:</strong> Content that reads the same as thousands of other pages on the topic, with no specific detail unique to the author or brand.</li>
+          <li><strong>No verifiable first-hand claims:</strong> No specific numbers, screenshots, dates, or outcomes that suggest someone actually did the thing being described.</li>
+          <li><strong>Publishing volume mismatched to editorial capacity:</strong> A sudden spike in publishing volume with no corresponding increase in editorial oversight is a pattern quality systems are tuned to notice.</li>
+          <li><strong>Absent or generic authorship:</strong> No named author, no bio, no demonstrated expertise behind the byline.</li>
+        </ul>
+
+        <h2 id="acd-workflow">A Responsible <em>AI-Assisted Workflow</em></h2>
+        <p>Use AI for what it's genuinely good at — first drafts, structural outlines, summarising research, generating variations to test — and route every piece through a human editor who adds the parts AI can't: a real example, a specific number from actual work, a judgment call informed by experience. The output should read like it was written by someone who could defend every claim in it under questioning, because that's effectively the bar Google's systems are approximating.</p>
+
+        <h2 id="acd-experience">Proving <em>Genuine Experience</em></h2>
+        <p>The strongest defence against being lumped in with generic AI content is concrete, specific, first-hand detail that a general-purpose model couldn't fabricate convincingly — a screenshot of your own dashboard, a number from a project you actually ran, a mistake you made and what you learned from it. This is also, not coincidentally, what makes content genuinely more useful to readers.</p>
+
+        <div class="callout warning">
+          <div class="callout-label">⚠ Common Mistake</div>
+          <p>Adding a disclaimer that says "written with AI assistance" doesn't fix unhelpful content, and removing the disclaimer doesn't fix it either. Google's systems evaluate the content itself, not the production method disclosed or undisclosed.</p>
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>AI tools are now a permanent part of the content workflow — resisting that is no longer a realistic strategy. The differentiator isn't whether you use AI, it's whether a real person with real expertise stood behind every piece before it published.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to audit your content workflow for E-E-A-T resilience?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ARTICLE 12: MARKETING AUTOMATION WITH AI AGENTS ══ -->
+  <div id="article-marketingautomation" style="display:none;">
+    <div class="blog-wrap">
+      <div class="blog-header">
+        <span class="blog-tag">Marketing Automation</span>
+        <h1 class="blog-title">Marketing Automation with AI Agents:<br><em>n8n, Workflows & the End of Manual Reporting</em></h1>
+        <p class="blog-subtitle">The marketers scaling fastest in 2026 aren't working more hours — they've built AI-agent pipelines that handle the reporting, tracking, and first-draft work automatically. Here's what to automate first.</p>
+        <div class="blog-byline">
+          <div class="byline-avatar">MP</div>
+          <div>
+            <div class="byline-name">Maheswari P</div>
+            <div class="byline-meta">Assistant Manager – SEO · BankBazaar · August 2026 · 10 min read</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag-strip">
+        <span class="tag">Marketing Automation</span><span class="tag">n8n</span><span class="tag">AI Agents</span>
+        <span class="tag">Workflow Automation</span><span class="tag">Reporting</span>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ol>
+          <li><a href="#ma-shift">From Manual Marketing to Agent Pipelines</a></li>
+          <li><a href="#ma-priorities">What to Automate First</a></li>
+          <li><a href="#ma-stack">A Practical Automation Stack</a></li>
+          <li><a href="#ma-human">Where Humans Still Matter Most</a></li>
+        </ol>
+      </div>
+
+      <div class="blog-body">
+
+        <div class="stat-highlight">
+          <div class="stat-highlight-item"><div class="stat-highlight-num">30+</div><div class="stat-highlight-lbl">manual hours per month saved via automated ranking and reporting pipelines</div></div>
+          <div class="stat-highlight-item"><div class="stat-highlight-num">80%</div><div class="stat-highlight-lbl">reduction in audit time using an AI-powered SEO audit toolkit</div></div>
+        </div>
+
+        <h2 id="ma-shift">From Manual Marketing <em>to Agent Pipelines</em></h2>
+        <p>Weekly rank tracking, monthly performance decks, keyword clustering, and first-draft content briefs used to consume a huge share of a marketing team's time — not because the work was hard, but because it was repetitive and manual. Workflow automation platforms combined with AI models have turned most of this into infrastructure that runs on a schedule instead of a to-do list.</p>
+
+        <h2 id="ma-priorities">What to <em>Automate First</em></h2>
+        <ul>
+          <li><strong>Recurring reporting:</strong> Weekly and monthly performance summaries pulled automatically from GA4, Search Console, and rank-tracking APIs — the highest time-cost, lowest-judgment task on most teams' plates.</li>
+          <li><strong>Alerting over static reports:</strong> Push ranking drops, traffic anomalies, or crawl errors to Slack or email in near real time rather than waiting to notice them in a weekly deck.</li>
+          <li><strong>First-draft content briefs:</strong> AI-assisted competitor gap analysis and outline generation, reviewed and finalised by a strategist rather than built from scratch each time.</li>
+          <li><strong>Data cleanup and QA:</strong> Automated checks for broken links, missing metadata, or duplicate content across large sites, flagged before they compound into ranking issues.</li>
+        </ul>
+
+        <h2 id="ma-stack">A Practical <em>Automation Stack</em></h2>
+        <p>A workflow automation tool (like n8n) acts as the connective layer between data sources — Search Console, GA4, SEMrush or Ahrefs APIs, Google Sheets — and an AI model that summarises or triages what comes through. The pattern that works well: scheduled trigger → pull data from source APIs → AI model summarises or flags anomalies → structured output pushed to Slack, email, or a shared sheet. None of the individual pieces are exotic; the value is in wiring them together so the whole pipeline runs unattended.</p>
+
+        <h2 id="ma-human">Where Humans <em>Still Matter Most</em></h2>
+        <p>Automation handles the parts of marketing that are repetitive and rule-based well. It handles poorly the parts that require judgment — deciding which anomaly actually matters, which content gap is worth pursuing, which brand voice choice fits a specific audience. The teams getting the most value from automation are the ones using the time it frees up for exactly that kind of judgment work, not the ones trying to automate the judgment itself.</p>
+
+        <div class="callout">
+          <div class="callout-label">✦ Final Thought</div>
+          <p>The goal of marketing automation isn't fewer marketers — it's marketers spending their time on the 20% of the work that actually requires a human decision, instead of the 80% that never did.</p>
+        </div>
+
+      </div><!-- /blog-body -->
+
+      <div class="article-footer-cta">
+        <p>Want to build an AI-agent automation pipeline for your marketing team?</p>
+        <a href="resume.html#contact">Connect with Maheswari →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /article-overlay -->
+
+<footer style="background:var(--ink); color:rgba(245,243,239,0.4); padding:1.8rem 4rem; display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; letter-spacing:0.05em; flex-wrap:wrap; gap:0.5rem;">
+  <span>© 2026 Maheswari P · SEO &amp; AI Automation Expert</span>
+  <a href="resume.html" style="color:var(--gold-light); text-decoration:none;">View Resume →</a>
+</footer>
+
+<script>
+// ── Open / Close Article ─────────────────────────────────────
+function openArticle(id) {
+  const overlay = document.getElementById('article-overlay');
+  ['aeo','geo','zeroclicksearch','llmo','aimode','brandauthority','agenticseo','socialsearch','programmaticseo','firstpartydata','aicontentdetection','marketingautomation'].forEach(function(a){
+    var el = document.getElementById('article-' + a);
+    if(el) el.style.display = 'none';
+  });
+  document.getElementById('article-' + id).style.display = 'block';
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArticle() {
+  document.getElementById('article-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Reading Progress Bar ─────────────────────────────────────
+document.getElementById('article-overlay').addEventListener('scroll', function() {
+  const el = this;
+  const scrollable = el.scrollHeight - el.clientHeight;
+  const scrolled = el.scrollTop;
+  const pct = scrollable > 0 ? (scrolled / scrollable) * 100 : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// ── Keyboard close ───────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeArticle();
+});
+
+// ── Scroll reveal for article cards ─────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.article-card').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(22px)';
+  el.style.transition = `opacity 0.55s ease ${i * 0.12}s, transform 0.55s ease ${i * 0.12}s`;
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>

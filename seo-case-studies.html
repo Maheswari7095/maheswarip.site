@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Case Studies — Maheswari P | SEO & AI Automation Expert</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #f5f3ef;
+    --bg-mid:       #edeae3;
+    --bg-light:     #e4e0d6;
+    --border:       #ccc6b8;
+    --gold:         #a0742a;
+    --gold-light:   #b8893a;
+    --gold-glow:    rgba(160,116,42,0.10);
+    --ink:          #1c1812;
+    --ink-muted:    #5c5040;
+    --ink-body:     #3a3228;
+    --white-card:   #ffffff;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 4rem;
+    background: rgba(245,243,239,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--bg-light); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.06em; flex-shrink: 0;
+    text-decoration: none;
+  }
+  nav ul { list-style: none; display: flex; gap: 2.2rem; align-items: center; }
+  nav ul a {
+    text-decoration: none; color: var(--ink-muted);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  nav ul a:hover { color: var(--gold); }
+  .nav-contact-btn {
+    background: var(--gold); color: var(--bg);
+    padding: 0.45rem 1.2rem; border-radius: 2px;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+  }
+  .nav-contact-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer;
+    padding: 4px; z-index: 300;
+  }
+  .nav-hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--ink); border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 250;
+    background: rgba(245,243,239,0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2rem;
+    padding-top: 5rem;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    text-decoration: none; color: var(--ink-muted);
+    font-size: 1.1rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-mobile-menu a:hover { color: var(--gold); }
+  .nav-mobile-menu .nav-contact-btn { margin-top: 0.5rem; }
+
+  /* ── PAGE HERO ── */
+  #page-hero {
+    padding: 9.5rem 4rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(160,116,42,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(160,116,42,0.06) 1px, transparent 1px);
+    background-size: 60px 60px; z-index: 0;
+  }
+  .hero-glow {
+    position: absolute; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(160,116,42,0.08) 0%, transparent 65%);
+    top: -180px; right: -150px; z-index: 0;
+  }
+  .page-hero-inner { position: relative; z-index: 1; max-width: 780px; }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; color: var(--gold);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .section-tag::after {
+    content: ''; flex: 1; max-width: 60px; height: 1px;
+    background: rgba(160,116,42,0.4);
+  }
+  h1.page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--ink); margin-bottom: 1.1rem;
+  }
+  h1.page-title em { font-style: italic; color: var(--gold); }
+  .page-lede {
+    font-size: 1rem; color: var(--ink-muted);
+    max-width: 620px; line-height: 1.85;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    margin-top: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; color: var(--gold);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(160,116,42,0.3);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .back-link:hover { color: var(--gold-light); border-color: var(--gold-light); }
+
+  /* ── CASE STUDY LIST (jump nav) ── */
+  #case-nav {
+    padding: 0 4rem 2rem;
+  }
+  .case-nav-row {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.4rem 0;
+  }
+  .case-nav-item {
+    display: flex; align-items: baseline; gap: 0.6rem;
+    text-decoration: none;
+    padding: 0.6rem 1.1rem;
+    background: var(--white-card);
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .case-nav-item:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .case-nav-num {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--gold); letter-spacing: 0.08em;
+  }
+  .case-nav-label {
+    font-size: 0.82rem; color: var(--ink-body); font-weight: 500;
+  }
+
+  /* ── CASE STUDY ── */
+  .case-study {
+    padding: 4.5rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .case-study:last-of-type { border-bottom: none; }
+  .case-inner { max-width: 900px; margin: 0 auto; }
+
+  .case-eyebrow {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.4rem;
+  }
+  .case-num-badge {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--bg-light); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .case-focus {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; color: var(--ink-muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .case-focus strong { color: var(--gold); font-weight: 600; }
+
+  h2.case-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700; color: var(--ink); line-height: 1.25;
+    margin-bottom: 2.2rem;
+    max-width: 760px;
+  }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .case-block {
+    background: var(--white-card);
+    border: 1px solid var(--border);
+    padding: 1.8rem 1.8rem;
+  }
+  .case-block.full { grid-column: 1 / -1; }
+  .case-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: var(--gold);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 0.9rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .case-block-text {
+    font-size: 0.88rem; color: var(--ink-body); line-height: 1.75;
+  }
+  .case-approach-list {
+    list-style: none; display: flex; flex-direction: column; gap: 0.65rem;
+  }
+  .case-approach-list li {
+    font-size: 0.87rem; color: var(--ink-body);
+    padding-left: 1.3rem; position: relative; line-height: 1.65;
+  }
+  .case-approach-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--gold); font-size: 0.75rem; top: 0.22rem;
+  }
+
+  .case-tools-flex { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .case-tool-tag {
+    font-size: 0.74rem; color: var(--ink-body);
+    background: rgba(160,116,42,0.07);
+    border: 1px solid rgba(160,116,42,0.18);
+    padding: 0.3rem 0.75rem; border-radius: 1px;
+  }
+
+  .case-results-band {
+    background: var(--ink); color: rgba(245,243,239,0.92);
+    padding: 2rem 2.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-results-band::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .case-results-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: var(--gold-light);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .case-results-text {
+    font-size: 0.92rem; line-height: 1.85; color: rgba(245,243,239,0.85);
+  }
+  .case-results-text strong { color: var(--gold-light); font-weight: 600; }
+
+  .case-takeaway {
+    border-left: 3px solid var(--gold);
+    padding: 0.3rem 0 0.3rem 1.6rem;
+  }
+  .case-takeaway-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: var(--gold);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .case-takeaway-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.08rem; color: var(--ink); line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .case-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── CTA ── */
+  #cta {
+    padding: 5rem 4rem;
+    text-align: center;
+  }
+  .cta-box {
+    max-width: 620px; margin: 0 auto;
+    background: var(--white-card);
+    border: 1px solid var(--border);
+    padding: 3.2rem 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .cta-box::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .cta-box h2 { margin-bottom: 1rem; }
+  .cta-box p { color: var(--ink-muted); font-size: 0.88rem; margin-bottom: 1.8rem; line-height: 1.8; }
+  .btn-gold {
+    background: var(--gold); color: var(--bg);
+    padding: 0.78rem 2rem; border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; text-decoration: none; display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(245,243,239,0.45);
+    padding: 1.8rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.78rem; letter-spacing: 0.06em;
+  }
+  footer a { color: var(--gold-light); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0.85rem 1.5rem; }
+    nav ul { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-contact-btn { display: none; }
+    #page-hero { padding: 7rem 1.5rem 3rem; }
+    #case-nav { padding: 0 1.5rem 1.5rem; }
+    .case-study { padding: 3rem 1.5rem; }
+    #cta { padding: 3.5rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+  @media (max-width: 600px) {
+    .case-results-band, .case-block { padding: 1.4rem 1.3rem; }
+    .cta-box { padding: 2.2rem 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">MP</a>
+  <ul>
+    <li><a href="index.html#achievements">Impact</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#certifications">Credentials</a></li>
+    <li><a href="seo-case-studies.html" style="color:var(--gold);font-weight:600;">Case Studies</a></li>
+    <li><a href="seo-articles.html" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600;">SEO Articles ↗</a></li>
+    <li><a href="seo-tools.html" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600;">SEO Tools ↗</a></li>
+  </ul>
+  <a href="index.html" class="nav-contact-btn" style="text-decoration:none;">Back to Portfolio</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Nav Menu -->
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="index.html#achievements" onclick="closeMobileMenu()">Impact</a>
+  <a href="index.html#experience" onclick="closeMobileMenu()">Experience</a>
+  <a href="index.html#skills" onclick="closeMobileMenu()">Skills</a>
+  <a href="index.html#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="index.html#certifications" onclick="closeMobileMenu()">Credentials</a>
+  <a href="seo-case-studies.html" style="color:var(--gold);font-weight:600;" onclick="closeMobileMenu()">Case Studies</a>
+  <a href="seo-articles.html" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600;" onclick="closeMobileMenu()">SEO Articles ↗</a>
+  <a href="seo-tools.html" target="_blank" rel="noopener" style="color:var(--gold);font-weight:600;" onclick="closeMobileMenu()">SEO Tools ↗</a>
+  <a href="index.html" class="nav-contact-btn" style="text-decoration:none;margin-top:0.5rem;" onclick="closeMobileMenu()">Back to Portfolio</a>
+</div>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section id="page-hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="section-tag">Proof of Work</div>
+    <h1 class="page-title">SEO <em>Case Studies</em></h1>
+    <p class="page-lede">
+      A closer look at two projects from my time leading SEO at BankBazaar — resolving duplicate content across
+      thousands of pages, and restructuring content to earn citations from Google AI Overviews, ChatGPT, and Perplexity.
+    </p>
+    <a href="index.html" class="back-link">← Back to Portfolio</a>
+  </div>
+</section>
+
+<!-- ═══ CASE STUDY JUMP NAV ═══ -->
+<section id="case-nav">
+  <div class="case-nav-row">
+    <a href="#case-1" class="case-nav-item">
+      <span class="case-nav-num">01</span>
+      <span class="case-nav-label">Recovering 18% Organic Traffic — Duplicate Content Fix</span>
+    </a>
+    <a href="#case-2" class="case-nav-item">
+      <span class="case-nav-num">02</span>
+      <span class="case-nav-label">Winning AI Overviews — AEO/GEO Restructuring</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ CASE STUDY 1 ═══ -->
+<section class="case-study" id="case-1">
+  <div class="case-inner">
+    <div class="case-eyebrow">
+      <div class="case-num-badge">01</div>
+      <div class="case-focus">Focus Area: <strong>Technical SEO · Canonicalisation · Site Architecture</strong></div>
+    </div>
+    <h2 class="case-title">Recovering 18% Organic Traffic by Fixing Duplicate Content Across 8,000+ IFSC Pages</h2>
+
+    <div class="case-grid">
+      <div class="case-block">
+        <div class="case-block-label">The Challenge</div>
+        <div class="case-block-text">
+          BankBazaar's IFSC code lookup section had grown to more than 8,000 near-identical bank-branch pages.
+          Each page followed a similar template with only branch-level details changing, which search engines
+          increasingly treated as duplicate or thin content. Google was inconsistently indexing and ranking these
+          pages, splitting authority across near-duplicate URLs, and organic traffic to this high-volume section
+          had begun to decline.
+        </div>
+      </div>
+      <div class="case-block">
+        <div class="case-block-label">Tools Used</div>
+        <div class="case-tools-flex">
+          <span class="case-tool-tag">Google Search Console</span>
+          <span class="case-tool-tag">Google Analytics</span>
+          <span class="case-tool-tag">Canonical Tag Implementation</span>
+          <span class="case-tool-tag">Internal Log File Analysis</span>
+          <span class="case-tool-tag">URL Restructuring</span>
+        </div>
+      </div>
+      <div class="case-block full">
+        <div class="case-block-label">My Approach</div>
+        <ul class="case-approach-list">
+          <li>Audited the full IFSC URL set to identify duplicate, near-duplicate, and thin-content patterns using crawl data from Search Console and internal log files.</li>
+          <li>Mapped canonical relationships across the 8,000+ URLs, identifying the authoritative version for each duplicate cluster.</li>
+          <li>Implemented canonical tags at scale and restructured the URL hierarchy for clearer, more logical groupings by state, bank, and branch.</li>
+          <li>Improved internal linking between related IFSC pages to consolidate link equity and support crawl efficiency.</li>
+          <li>Monitored indexation status and crawl budget allocation in Search Console throughout the rollout to catch regressions early.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case-results-band">
+      <div class="case-results-label">Results</div>
+      <div class="case-results-text">
+        Within 60 days of rolling out the canonicalisation and URL restructuring, organic traffic to the affected
+        section recovered and grew by <strong>18%</strong>. Crawl budget was redirected toward the canonical,
+        authoritative pages, and indexation of duplicate variants dropped sharply — freeing up crawl capacity for
+        other high-value sections of the site.
+      </div>
+    </div>
+
+    <div class="case-takeaway">
+      <div class="case-takeaway-label">Key Takeaway</div>
+      <div class="case-takeaway-text">
+        "At scale, duplicate content isn't just a ranking issue — it's a crawl-budget and indexation issue.
+        Fixing it required thinking in terms of URL architecture and canonical signals across thousands of
+        pages at once, not one-off page edits."
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CASE STUDY 2 ═══ -->
+<section class="case-study" id="case-2">
+  <div class="case-inner">
+    <div class="case-eyebrow">
+      <div class="case-num-badge">02</div>
+      <div class="case-focus">Focus Area: <strong>AEO · GEO · Structured Data</strong></div>
+    </div>
+    <h2 class="case-title">Winning AI Overviews — AEO/GEO Restructuring for Google AI, ChatGPT & Perplexity Citations</h2>
+
+    <div class="case-grid">
+      <div class="case-block">
+        <div class="case-block-label">The Challenge</div>
+        <div class="case-block-text">
+          As search behaviour shifted toward AI-driven answers — Google AI Overviews, ChatGPT, and Perplexity —
+          BankBazaar's product pages, written primarily for traditional blue-link SERPs, were not being surfaced
+          or cited in AI-generated responses. Competitors with more structured, entity-rich content were
+          increasingly appearing as the cited source for financial product queries, putting BankBazaar's organic
+          visibility for high-intent, top-of-funnel queries at risk.
+        </div>
+      </div>
+      <div class="case-block">
+        <div class="case-block-label">Tools Used</div>
+        <div class="case-tools-flex">
+          <span class="case-tool-tag">FAQPage Schema</span>
+          <span class="case-tool-tag">FinancialProduct Schema</span>
+          <span class="case-tool-tag">BreadcrumbList</span>
+          <span class="case-tool-tag">HowTo Schema</span>
+          <span class="case-tool-tag">Google Search Console</span>
+          <span class="case-tool-tag">Content Architecture Redesign</span>
+          <span class="case-tool-tag">Manual AI-Citation Tracking</span>
+        </div>
+      </div>
+      <div class="case-block full">
+        <div class="case-block-label">My Approach</div>
+        <ul class="case-approach-list">
+          <li>Audited top commercial and informational pages across Credit Cards, Loans, Insurance, and Savings to identify gaps between existing content and how AI engines extract and cite answers.</li>
+          <li>Restructured key pages around clear, entity-based content blocks and direct-answer formatting that AI systems could parse and cite easily.</li>
+          <li>Implemented FAQPage, FinancialProduct, BreadcrumbList, and HowTo structured data sitewide to strengthen entity relationships and earn rich results.</li>
+          <li>Rewrote high-priority FAQ and comparison sections to directly answer common user questions in concise, extractable language.</li>
+          <li>Tracked citation appearances in Google AI Overviews, ChatGPT, and Perplexity manually and via prompt-based monitoring to validate impact.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case-results-band">
+      <div class="case-results-label">Results</div>
+      <div class="case-results-text">
+        Following the restructuring, BankBazaar's product and informational pages began appearing as
+        <strong>cited sources within Google AI Overviews, ChatGPT, and Perplexity</strong> responses for target
+        financial queries — establishing an early foothold in AI-driven search discovery alongside continued
+        growth in traditional organic visibility (<strong>5M+ monthly organic visitors</strong> sitewide).
+      </div>
+    </div>
+
+    <div class="case-takeaway">
+      <div class="case-takeaway-label">Key Takeaway</div>
+      <div class="case-takeaway-text">
+        "Ranking in traditional SERPs and being cited by AI answer engines require overlapping but distinct
+        signals. Structured data and entity clarity earn the crawl and comprehension; concise, direct-answer
+        content earns the citation."
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section id="cta">
+  <div class="cta-box">
+    <div class="section-tag" style="justify-content:center;">Let's Connect</div>
+    <h2 class="page-title" style="font-size:1.8rem;">Have a similar <em>problem to solve?</em></h2>
+    <p>I'm currently driving 5M+ organic visitors/month at BankBazaar and open to senior roles in SEO, Organic Growth & AI Automation.</p>
+    <a href="mailto:p.maheswari418@gmail.com" class="btn-gold">Get in Touch</a>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>© 2025 Maheswari P &nbsp;·&nbsp; SEO &amp; AI Automation Expert</div>
+  <div style="display:flex; gap:1.5rem; align-items:center;">
+    <span>Bangalore, India</span>
+    <a href="mailto:p.maheswari418@gmail.com">p.maheswari418@gmail.com</a>
+  </div>
+</footer>
+
+<script>
+function toggleMobileMenu() {
+  const menu = document.getElementById('nav-mobile-menu');
+  const btn = document.getElementById('nav-hamburger');
+  const isOpen = menu.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+function closeMobileMenu() {
+  document.getElementById('nav-mobile-menu').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+
+</body>
+</html>
